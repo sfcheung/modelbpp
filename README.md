@@ -6,6 +6,8 @@
 [![R-CMD-check](https://github.com/sfcheung/modelbpp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/modelbpp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
+*UNDER DEVELOPMENT NOT YET READY PLEASE DO NOT INSTALL*
+
 (Version 0.0.0.9000, updated on 2023-06-18, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
 
 # modelbpp: Model posterior probability and related measures
