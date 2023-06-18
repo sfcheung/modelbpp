@@ -15,4 +15,28 @@ template:
     heading_font: {google: "Average Sans"}
     code_font: {google: "Cutive Mono"}
 
-
+navbar:
+  bg: primary
+  structure:
+    left:  [intro, articles, reference, tutorials, news]
+    right: [search, github]
+  components:
+    articles:
+      text: Articles
+      menu:
+      - text: "<General>"
+      - text: Get Started
+        href: articles/modelbpp.html
+reference:
+- title: Main Functions
+- contents:
+  - model_set
+  - fit_many
+- title: Helpers
+- contents:
+  - get_add
+  - get_drop
+- title: Datasets
+  desc: Datasets used in examples.
+- contents:
+  - has_keyword("datasets")

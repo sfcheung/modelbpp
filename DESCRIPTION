@@ -23,7 +23,10 @@ Suggests:
     testthat (>= 3.0.0)
 Depends:
     R (>= 4.0.0)
+Imports:
+    lavaan
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Config/testthat/parallel: true
 URL: https://sfcheung.github.io/modelbpp/
+LazyData: true

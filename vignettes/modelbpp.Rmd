@@ -1,8 +1,8 @@
 ---
-title: "modelbpp"
+title: "Get Started"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{modelbpp}
+  %\VignetteIndexEntry{Get Started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,8 +12,186 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(width = 132)
+options(scipen = 5)
 ```
 
 ```{r setup}
 library(modelbpp)
+library(lavaan)
 ```
+
+# Introduction
+
+This package is used to implement the
+method presented in Wu, Cheung, and
+Leung (2020) to compute the posterior
+probabilities for a set of models in
+structural equation modelling (SEM).
+
+# Workflow
+
+1. The user fits an SEM model, the
+    target model, as usual in `lavaan`.
+
+2. Use `model_set()` to enumerate the
+    neighboring models of the target
+    model fitted in Step 1. A
+    neighboring model is a model that
+    can be formed by adding one or more
+    free parameters to the target model,
+    or by fixing one or more free
+    parameters to zero in the target
+    model. The user can specify the
+    maximum difference in degrees of
+    freedom in the search.
+
+3. The function `model_set)` will return
+    the list of the neighboring models
+    and the target model. The following
+    results will also be returned:
+
+  * The `lavaan` results of fitting each
+    of the model.
+
+  * The BIC of each model.
+
+  * The posterior probability of each
+    model, being normalized over the
+    list of models being compared and
+    assuming unbiased priors.
+
+# Examples
+
+## A path model
+
+This is a sample dataset with four
+variables:
+
+```{r}
+head(dat_path_model)
+```
+
+We fit this target model, a serial
+mediation model:
+
+```{r}
+mod <-
+"
+x2 ~ x1
+x3 ~ x2
+x4 ~ x3
+"
+fit <- sem(mod, dat_path_model)
+```
+
+We then find the neighoring models with
+at most 2 degrees of freedom away from
+the target model.
+
+```{r}
+out <- model_set(sem_out = fit,
+                 df_change_add = 2,
+                 df_change_drop = 2)
+```
+
+The output is a list. The element `bic`
+is a named vector of the BIC of each
+model. This can be displayed by
+converting it to a data frame:
+
+```{r}
+data.frame(model = names(out$bic),
+           bic = out$bic)
+```
+
+The posterior probabilities are stored
+in the element `postprob`:
+
+```{r}
+data.frame(model = names(out$bic),
+           postprob = out$postprob)
+```
+
+We can also sort the models based on
+their posterior probabilities:
+
+```{r}
+out_postprob <- data.frame(model = names(out$postprob),
+                           postprob = out$postprob)
+out_sorted <- out_postprob[order(out_postprob$postprob,
+                           decreasing = TRUE), ]
+out_sorted$postprob <- round(out_sorted$postprob, 4)
+print(out_sorted, right = FALSE)
+```
+
+The posterior probabilities suggest that
+the original model is not the most
+probable model among the list. Instead,
+four other models, each with one or two
+parameters added, have similar posterior
+probabilities.
+
+## A serial mediation model
+
+This is a sample dataset with four
+variables:
+
+```{r}
+head(dat_serial_4)
+```
+
+We fit this target model, a partial
+serial mediation model:
+
+```{r}
+mod <-
+"
+m1 ~ x
+m2 ~ m1 + x
+y  ~ m2 + x
+"
+fit <- sem(mod, dat_serial_4)
+```
+
+This is the summary of goodness of fit
+of this model:
+
+```{r}
+fitMeasures(fit, output = "text")
+```
+
+This model fits satisfactorily. However,
+if we examine the parameter estimates,
+two of the paths, from `x` to `m2` and
+from `x` to `y`, are not significant:
+
+```{r}
+parameterEstimates(fit)
+```
+
+We find the neighoring models with at
+most 2 degrees of freedom away from the
+target model.
+
+```{r}
+out <- model_set(sem_out = fit,
+                 df_change_add = 2,
+                 df_change_drop = 2)
+```
+
+We then examine the posterior
+probabilities:
+
+```{r}
+out_postprob <- data.frame(model = names(out$postprob),
+                           postprob = out$postprob)
+out_sorted <- out_postprob[order(out_postprob$postprob,
+                   decreasing = TRUE), ]
+out_sorted$postprob <- round(out_sorted$postprob, 4)
+print(out_sorted, right = FALSE)
+```
+
+The results suggest that, in this set
+of models, the model with the two paths
+dropped is the most probable model.
