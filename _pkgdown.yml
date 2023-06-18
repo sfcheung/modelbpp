@@ -1,4 +1,18 @@
+destination: docs
+
 url: https://sfcheung.github.io/modelbpp/
+
 template:
   bootstrap: 5
+  bootswatch: zephyr
+  theme: a11y-light
+  bslib:
+    pkgdown-nav-height: 80px
+    bg: "#EFEFEF"
+    fg: "#000000"
+    primary: "#907E4F"
+    base_font: {google: "Average Sans"}
+    heading_font: {google: "Average Sans"}
+    code_font: {google: "Cutive Mono"}
+
 
