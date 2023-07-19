@@ -21,4 +21,12 @@ length(mod_to_add)
 head(mod_to_add)
 names(mod_to_add)
 
-mod_to_add <- get_add(fit, df_change = 3)
+all_loadings <- sapply(paste0("f", 1:4),
+                 function(x) {paste0(x, "=~", paste0("x", 1:16))})
+mod_to_add <- get_add(fit,
+                      must_not_add = all_loadings,
+                      df_change = 2)
+length(mod_to_add)
+head(mod_to_add)
+names(mod_to_add)
+attributes(mod_to_add[[10]])
