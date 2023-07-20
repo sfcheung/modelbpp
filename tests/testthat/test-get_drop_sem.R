@@ -23,3 +23,4 @@ mod_to_drop <- get_drop(fit,
 length(mod_to_drop)
 head(mod_to_drop)
 names(mod_to_drop)
+attributes(mod_to_drop[[92]])

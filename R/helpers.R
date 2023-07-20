@@ -19,7 +19,10 @@ syntax_to_add_list <- function(x) {
                         model.syntax = x,
                         as.data.frame. = TRUE,
                         warn = FALSE)
-    x1 <- mapply(c, x0$lhs, x0$op, x0$rhs,
+    x1 <- mapply(c,
+                 lhs = x0$lhs,
+                 op = x0$op,
+                 rhs = x0$rhs,
                  USE.NAMES = FALSE,
                  SIMPLIFY = FALSE)
     x1

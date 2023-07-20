@@ -123,7 +123,11 @@ gen_pt_drop <- function(x, pt, to, source_df = NA) {
     p_to_drop <- sapply(x, function(x)
         paste0(pt[x, "lhs"], pt[x, "op"], pt[x, "rhs"])
       )
+    p_to_drop_out <- lapply(x, function(x) {
+        c(lhs = pt[x, "lhs"], op = pt[x, "op"], rhs = pt[x, "rhs"])
+      })
     attr(pt, "parameters_dropped") <- p_to_drop
+    attr(pt, "parameters_dropped_list") <- p_to_drop_out
     attr(pt, "ids_dropped") <- x
     attr(pt, "to") <- to
     attr(pt, "df_expected") <- source_df + 1

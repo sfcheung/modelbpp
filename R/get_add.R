@@ -103,7 +103,10 @@ get_add <- function(sem_out,
 
     # Identify parameters to be added
     mt1_op <- paste0(mt1$lhs, mt1$op, mt1$rhs)
-    mt1_op2 <- mapply(c, mt1$lhs, mt1$op, mt1$rhs,
+    mt1_op2 <- mapply(c,
+                      lhs = mt1$lhs,
+                      op = mt1$op,
+                      rhs = mt1$rhs,
                       SIMPLIFY = FALSE,
                       USE.NAMES = FALSE)
 
@@ -141,7 +144,10 @@ get_add <- function(sem_out,
     # Identify parameters constrained to be equal by labels
     i_eq <- pt$op == "=="
     row_eq <- which(i_eq)
-    row_eq_op2 <- mapply(c, pt[row_eq, ]$lhs, pt[row_eq, ]$op, pt[row_eq, ]$rhs,
+    row_eq_op2 <- mapply(c,
+                        lhs = pt[row_eq, ]$lhs,
+                        op = pt[row_eq, ]$op,
+                        rhs = pt[row_eq, ]$rhs,
                         SIMPLIFY = FALSE,
                         USE.NAMES = FALSE)
 
@@ -176,7 +182,6 @@ get_add <- function(sem_out,
           }
         x[!x_to_remove]
       })
-
     out <- lapply(sets_to_gen2_ok, gen_pt_add, pt = pt, sem_out = sem_out,
                   from = model_id)
     out_names <- sapply(out, function(x) {
