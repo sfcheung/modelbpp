@@ -230,9 +230,13 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
         x_constr_str <- sapply(x_constr, paste, collapse = "")
         x_constr_str <- paste0(x_constr_str, collapse = ";")
         x_constr_names <- paste(x_constr_names, collapse = ";")
+        x_constr_out <- lapply(x_constr,
+                               constr_to_lor,
+                               ptable = pt)
       } else {
         x_constr_str <- NULL
         x_constr_names <- NULL
+        x_constr_out <- NULL
       }
     # Add free parameters
     if (length(x_free) > 0) {
@@ -252,6 +256,8 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
     attr(pt_update, "parameters_added") <- x_free_str
     attr(pt_update, "constraints_released") <- x_constr_str
     attr(pt_update, "constraints_released_names") <- x_constr_names
+    attr(pt_update, "constraints_list") <- x_constr_out
+    attr(pt_update, "parameters_added_list") <- x_free
     attr(pt_update, "from") <- from
     attr(pt_update, "df_expected") <- lavaan::fitMeasures(sem_out, "df") - 1
     pt_update

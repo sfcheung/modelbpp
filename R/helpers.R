@@ -53,3 +53,18 @@ add_list_clean_duplicated_cov <- function(x) {
                    })
     x[x0]
   }
+
+#' @noRd
+
+constr_to_lor <- function(x,
+                          ptable) {
+    rowid1 <- (ptable$plabel == x[1])
+    rowid2 <- (ptable$plabel == x[3])
+    lor1 <- c(ptable$lhs[rowid1],
+              ptable$op[rowid1],
+              ptable$rhs[rowid1])
+    lor2 <- c(ptable$lhs[rowid2],
+              ptable$op[rowid2],
+              ptable$rhs[rowid2])
+    list(lor1, lor2)
+  }
