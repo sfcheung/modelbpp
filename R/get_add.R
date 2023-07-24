@@ -82,17 +82,9 @@ get_add <- function(sem_out,
     mt <- lavaan::modificationIndices(sem_out,
                     standardized = FALSE,
                     power = FALSE)
-    mt_lhs <- mt$lhs
-    mt_rhs <- mt$rhs
 
     # Remove those already in the parameter tables
-    mt_in_pt1 <- paste(mt_lhs, mt_rhs, sep = ".") %in%
-                    paste(pt$lhs, pt$rhs, sep = ".")
-    mt_in_pt2 <- paste(mt_rhs, mt_lhs, sep = ".") %in%
-                    paste(pt$lhs, pt$rhs, sep = ".")
-    mt_exclude_in_pt2 <- mt_in_pt1 | mt_in_pt2
-
-    mt1 <- mt[!mt_exclude_in_pt2, ]
+    mt1 <- mt_exclude_existing_pars(mt = mt, pt = pt)
 
     # Remove those convert an IV to a DV
     user_v <- unique(c(pt$lhs[pt$user %in% c(1, 0)],
