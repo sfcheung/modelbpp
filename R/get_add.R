@@ -87,11 +87,7 @@ get_add <- function(sem_out,
     mt1 <- mt_exclude_existing_pars(mt = mt, pt = pt)
 
     # Remove those convert an IV to a DV
-    user_v <- unique(c(pt$lhs[pt$user %in% c(1, 0)],
-                      pt$rhs[pt$user %in% c(1, 0)]))
-    i_iv <- user_v[!user_v %in% pt$lhs[pt$op == "~"]]
-    mt_exclude_iv_to_dv <- (mt1$op == "~") & (mt1$lhs %in% i_iv)
-    mt1 <- mt1[!mt_exclude_iv_to_dv, ]
+    mt1 <- mt_exclude_reversed(mt = mt1, pt = pt)
 
     # Identify parameters to be added
     mt1_op <- paste0(mt1$lhs, mt1$op, mt1$rhs)
