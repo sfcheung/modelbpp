@@ -176,3 +176,25 @@ lor_to_list <- function(x) {
                   USE.NAMES = FALSE)
     return(out)
   }
+
+#' @noRd
+
+sets_remove_inadmissible <- function(sets) {
+    out <- lapply(sets, function(x) {
+        i <- length(x)
+        x_to_remove <- rep(FALSE, i)
+        x_lr <- lapply(x, function(y) y[c("lhs", "rhs")])
+        for (j in seq_len(i)) {
+            if (j > 1) {
+                for (k in seq_len(j - 1)) {
+                  if (all(x_lr[[j]] == x_lr[[k]]) |
+                      all(x_lr[[j]] == x_lr[[k]][c("rhs", "lhs")])) {
+                      x_to_remove[j] <- TRUE
+                    }
+                }
+              }
+          }
+        x[!x_to_remove]
+      })
+    return(out)
+  }

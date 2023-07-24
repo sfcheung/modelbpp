@@ -127,22 +127,9 @@ get_add <- function(sem_out,
     sets_to_gen2 <- unlist(sets_to_gen2, recursive = FALSE)
 
     # Clean up inadmissible modification
-    sets_to_gen2_ok <- lapply(sets_to_gen2, function(x) {
-        i <- length(x)
-        x_to_remove <- rep(FALSE, i)
-        x_lr <- lapply(x, function(y) y[c(1, 3)])
-        for (j in seq_len(i)) {
-            if (j > 1) {
-                for (k in seq_len(j - 1)) {
-                  if (all(x_lr[[j]] == x_lr[[k]]) |
-                      all(x_lr[[j]] == x_lr[[k]][c(2, 1)])) {
-                      x_to_remove[j] <- TRUE
-                    }
-                }
-              }
-          }
-        x[!x_to_remove]
-      })
+    sets_to_gen2_ok <- sets_remove_inadmissible(sets_to_gen2)
+
+    # Generate parameter tables
     out <- lapply(sets_to_gen2_ok, gen_pt_add, pt = pt, sem_out = sem_out,
                   from = model_id)
     out_names <- sapply(out, function(x) {
