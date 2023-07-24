@@ -115,17 +115,8 @@ get_add <- function(sem_out,
 
     # Remove error covariances between indicators
     if (exclude_error_cov) {
-        ind <- lavaan::lavNames(sem_out, "ov.ind")
-        ind_cov <- sapply(mt1_op2, function(x, indnames) {
-                            if ((x[1] %in% indnames) &&
-                                (x[2] == "~~") &&
-                                (x[3] %in% indnames)) {
-                                  return(FALSE)
-                                } else {
-                                  return(TRUE)
-                                }
-                          }, indnames = ind)
-        mt1_op2 <- mt1_op2[ind_cov]
+        mt1_op2 <- mt_remove_error_cov(mt_list = mt1_op2,
+                                       sem_out = sem_out)
       }
 
 
