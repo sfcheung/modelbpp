@@ -186,7 +186,7 @@ get_add <- function(sem_out,
                   from = model_id)
     out_names <- sapply(out, function(x) {
         out <- paste0(c(attr(x, "parameters_added"),
-              attr(x, "constraints_released_names")), collapse = ";")
+              attr(x, "constraints_released")), collapse = ";")
         paste("add:", out)
       })
     names(out) <- out_names
@@ -199,70 +199,47 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
     # Generate pt
     # Collects free parameters to add
     x_free <- x[sapply(x,
-                  function(y) {
-                    y[2] != "=="
-                  })]
+                       function(y) {y["op"] != "=="})]
     # Collects constraints to release
     x_constr <- x[sapply(x,
-                  function(y) {
-                    y[2] == "=="
-                  })]
-    # Form constraint names
-    x_constr_names <- sapply(x_constr, function(z, pt) {
-        id_x <- which((pt$lhs == z[1]) & (pt$op == z[2]) & (pt$rhs == z[3]))
-        i_lhs <- which(pt$plabel == pt[id_x, "lhs"])
-        i_rhs <- which(pt$plabel == pt[id_x, "rhs"])
-        p_lhs <- paste0("(",
-                        paste(pt[i_lhs, c("lhs", "op", "rhs")],
-                              collapse = ""),
-                        ")")
-        p_rhs <- paste0("(",
-                        paste(pt[i_rhs, c("lhs", "op", "rhs")],
-                              collapse = ""),
-                        ")")
-        paste0(p_lhs, ",", p_rhs)
-      }, pt = pt)
+                         function(y) {y["op"] == "=="})]
+    # Form constraint in parameter names (lhs-op-rhs)
+    x_constr_pars <- constr_pars(constr = x_constr,
+                                 pt = pt)
     # Loop and release constraints
     if (length(x_constr) > 0) {
-        for (j in x_constr) {
-            i <- which((pt$lhs == j[1]) & (pt$op == j[2]) & (pt$rhs == j[3]))
-            dot_p <- c(pt[i, "lhs"], pt[i, "rhs"])
-            p_others <- unique(c(pt[-i, "lhs"], pt[-i, "rhs"]))
-            dot_p_out <- dot_p[!(dot_p %in% p_others)]
-            pt <- pt[-i, ]
-            pt[pt$plabel %in% dot_p_out, "label"] <- ""
-          }
-        x_constr_str <- sapply(x_constr, paste, collapse = "")
-        x_constr_str <- paste0(x_constr_str, collapse = ";")
-        x_constr_names <- paste(x_constr_names, collapse = ";")
+        pt <- release_constr(x_constr, pt = pt)
+        x_constr_labels <- paste0(sapply(x_constr,
+                                         paste,
+                                         collapse = ""),
+                                  collapse = ";")
+        x_constr_str <- paste(x_constr_pars, collapse = ";")
         x_constr_out <- lapply(x_constr,
                                constr_to_lor,
-                               ptable = pt)
+                               pt = pt)
       } else {
+        x_constr_labels <- NULL
         x_constr_str <- NULL
-        x_constr_names <- NULL
         x_constr_out <- NULL
       }
     # Add free parameters
     if (length(x_free) > 0) {
-        x_free_str <- sapply(x_free, paste, collapse = "")
-        x_free_str <- paste0(x_free_str, collapse = ";")
+        x_free_str <- par_names(pars_list = x_free)
         sem_out_update <- lavaan::update(sem_out,
-                                          pt,
-                                          add = x_free_str,
-                                          do.fit = FALSE,
-                                          evaluate = FALSE)
-        # pt_update <- lavaan::parameterTable(sem_out_update)
+                                         pt,
+                                         add = x_free_str,
+                                         do.fit = FALSE,
+                                         evaluate = FALSE)
         pt_update <- data.frame(sem_out_update$model)
       } else {
         x_free_str <- NULL
         pt_update <- pt
       }
     attr(pt_update, "parameters_added") <- x_free_str
-    attr(pt_update, "constraints_released") <- x_constr_str
-    attr(pt_update, "constraints_released_names") <- x_constr_names
-    attr(pt_update, "constraints_list") <- x_constr_out
     attr(pt_update, "parameters_added_list") <- x_free
+    attr(pt_update, "constraints_released_labels") <- x_constr_labels
+    attr(pt_update, "constraints_released") <- x_constr_str
+    attr(pt_update, "constraints_released_list") <- x_constr_out
     attr(pt_update, "from") <- from
     attr(pt_update, "df_expected") <- lavaan::fitMeasures(sem_out, "df") - 1
     pt_update

@@ -33,7 +33,7 @@ attributes(mod_to_add[[45]])
 
 mod_to_add <- get_add(fit,
                       must_not_add = all_loadings,
-                      df_change = 3)
+                      df_change = 4)
 length(mod_to_add)
 head(mod_to_add)
 names(mod_to_add)
