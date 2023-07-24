@@ -130,6 +130,7 @@ gen_pt_drop <- function(x, pt, to, source_df = NA) {
     attr(pt, "parameters_dropped_list") <- p_to_drop_out
     attr(pt, "ids_dropped") <- x
     attr(pt, "to") <- to
-    attr(pt, "df_expected") <- source_df + 1
+    attr(pt, "df_expected") <- source_df +
+                               length(x)
     pt
   }
