@@ -115,3 +115,64 @@ release_constr <- function(constr, pt) {
       }
     return(pt)
   }
+
+#' @noRd
+
+mt_exclude_existing_pars <- function(mt, pt) {
+    # Remove those already in the parameter tables
+    mt_in_pt1 <- mapply(function(x, y) {
+                            any((pt$lhs == x) & (pt$rhs == y))
+                          },
+                        x = mt$lhs,
+                        y = mt$rhs,
+                        USE.NAMES = FALSE)
+    mt_in_pt2 <- mapply(function(x, y) {
+                            any((pt$lhs == x) & (pt$rhs == y))
+                          },
+                        x = mt$rhs,
+                        y = mt$lhs,
+                        USE.NAMES = FALSE)
+    mt_exclude_in_pt2 <- mt_in_pt1 | mt_in_pt2
+    out <- mt[!mt_exclude_in_pt2, ]
+    return(out)
+  }
+
+#' @noRd
+
+mt_exclude_reversed <- function(mt, pt) {
+    user_v <- unique(c(pt$lhs[pt$user %in% c(1, 0)],
+                       pt$rhs[pt$user %in% c(1, 0)]))
+    i_iv <- user_v[!user_v %in% pt$lhs[pt$op == "~"]]
+    mt_exclude_iv_to_dv <- (mt$op == "~") & (mt$lhs %in% i_iv)
+    out <- mt[!mt_exclude_iv_to_dv, ]
+    return(out)
+  }
+
+#' @noRd
+
+mt_remove_error_cov <- function(mt_list, sem_out) {
+    ind <- lavaan::lavNames(sem_out, "ov.ind")
+    ind_cov <- sapply(mt_list, function(x, indnames) {
+                        if ((x[1] %in% indnames) &&
+                            (x[2] == "~~") &&
+                            (x[3] %in% indnames)) {
+                              return(FALSE)
+                            } else {
+                              return(TRUE)
+                            }
+                      }, indnames = ind)
+    out <- mt_list[ind_cov]
+    return(out)
+  }
+
+#' @noRd
+
+lor_to_list <- function(x) {
+    out <- mapply(c,
+                  lhs = x[, "lhs"],
+                  op = x[, "op"],
+                  rhs = x[, "rhs"],
+                  SIMPLIFY = FALSE,
+                  USE.NAMES = FALSE)
+    return(out)
+  }
