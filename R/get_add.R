@@ -90,7 +90,6 @@ get_add <- function(sem_out,
     mt1 <- mt_exclude_reversed(mt = mt1, pt = pt)
 
     # Identify parameters to be added
-    mt1_op <- paste0(mt1$lhs, mt1$op, mt1$rhs)
     mt1_op2 <- lor_to_list(mt1)
 
     # Add must_add
@@ -120,12 +119,6 @@ get_add <- function(sem_out,
     row_eq_op2 <- lor_to_list(pt[row_eq, ])
 
     # Determine the sets of changes
-    sets_to_gen <- lapply(seq_len(df_change),
-                function(x) {
-                    utils::combn(c(mt1_op, row_eq), x, simplify = FALSE)
-                  }
-              )
-    sets_to_gen <- unlist(sets_to_gen, recursive = FALSE)
     sets_to_gen2 <- lapply(seq_len(df_change),
                 function(x) {
                     utils::combn(c(mt1_op2, row_eq_op2), x, simplify = FALSE)
