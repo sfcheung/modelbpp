@@ -201,10 +201,35 @@ sets_remove_inadmissible <- function(sets) {
 
 #' @noRd
 
-pt_remove_user_defined <- function(pt) {
+pt_remove_user_defined <- function(pt,
+                                   remove_constrained = TRUE,
+                                   return_id = FALSE) {
     i1 <- pt$op == ":="
     i1_labels <- pt[i1, "lhs"]
     i2 <- (pt$lhs %in% i1_labels) & (pt$op == "==")
-    i0 <- i1 | i2
-    pt[!i0, ]
+    if (remove_constrained) {
+        i0 <- i1 | i2
+      } else {
+        i0 <- i1 & !i2
+      }
+    if (return_id) {
+        return(i0)
+      } else {
+        return(pt[!i0, ])
+      }
+  }
+
+#' @noRd
+
+pt_remove_constrained_equal <- function(pt,
+                                        return_id = FALSE) {
+    i1 <- pt$op == "=="
+    id_eq <- c(pt$lhs[i1], pt$rhs[i1])
+    id_eq <- unique(id_eq)
+    id_exclude_eq <- pt$plabel %in% id_eq
+    if (return_id) {
+        return(id_exclude_eq)
+      } else {
+        return(pt[!id_exclude_eq, ])
+      }
   }

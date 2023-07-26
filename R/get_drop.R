@@ -64,13 +64,10 @@ get_drop <- function(sem_out,
         stop("sem_out is not a lavaan-class object.")
       }
     pt <- lavaan::parameterTable(sem_out)
-    # Remove all user-defined parameters
-    pt <- pt_remove_user_defined(pt)
+    # Remove all user-defined parameters unless constrained
+    pt <- pt_remove_user_defined(pt, remove_constrained = FALSE)
     # Exclude all parameters already constrained to be equal
-    i_eq <- pt$op == "=="
-    id_eq <- c(pt$lhs[i_eq], pt$rhs[i_eq])
-    id_eq <- unique(id_eq)
-    id_exclude_eq <- pt$plabel %in% id_eq
+    id_exclude_eq <- pt_remove_constrained_equal(pt, return_id = TRUE)
     # Exclude the variances of exogenous variables
     tmp1 <- (pt$exo > 0) & (pt$op == "~~")
     tmp2 <- (pt$lhs == pt$rhs)
