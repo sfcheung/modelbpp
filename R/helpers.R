@@ -213,7 +213,7 @@ pt_remove_user_defined <- function(pt,
         i0 <- i1 & !i2
       }
     if (return_id) {
-        return(i0)
+        return(!i0)
       } else {
         return(pt[!i0, ])
       }
@@ -226,11 +226,11 @@ pt_remove_constrained_equal <- function(pt,
     i1 <- pt$op == "=="
     id_eq <- c(pt$lhs[i1], pt$rhs[i1])
     id_eq <- unique(id_eq)
-    id_exclude_eq <- pt$plabel %in% id_eq
+    i0 <- pt$plabel %in% id_eq
     if (return_id) {
-        return(id_exclude_eq)
+        return(!i0)
       } else {
-        return(pt[!id_exclude_eq, ])
+        return(pt[!i0, ])
       }
   }
 
@@ -242,8 +242,22 @@ pt_remove_exo_var <- function(pt,
     i2 <- (pt$lhs == pt$rhs)
     i0 <- i1 & i2
     if (return_id) {
-        return(i0)
+        return(!i0)
       } else {
-        return(pt[i0, ])
+        return(pt[!i0, ])
+      }
+  }
+
+#' @noRd
+
+pt_remove_end_var <- function(pt,
+                              return_id = FALSE) {
+    i1 <- (pt$exo == 0) & (pt$op == "~~")
+    i2 <- (pt$lhs == pt$rhs)
+    i0 <- i1 & i2
+    if (return_id) {
+        return(!i0)
+      } else {
+        return(pt[!i0, ])
       }
   }

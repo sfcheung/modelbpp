@@ -71,14 +71,12 @@ get_drop <- function(sem_out,
     # Exclude the variances of exogenous variables
     id_exclude_exo_var <- pt_remove_exo_var(pt, return_id = TRUE)
     # Exclude error variances of endogenous variables
-    tmp1 <- (pt$exo == 0) & (pt$op == "~~")
-    tmp2 <- (pt$lhs == pt$rhs)
-    id_exclude_end_var <- tmp1 & tmp2
+    id_exclude_end_var <- pt_remove_end_var(pt, return_id = TRUE)
     # Determine the candidate lists
     id_to_drop <- pt$free > 0
-    id_to_drop <- id_to_drop & !id_exclude_eq
-    id_to_drop <- id_to_drop & !id_exclude_exo_var
-    id_to_drop <- id_to_drop & !id_exclude_end_var
+    id_to_drop <- id_to_drop & id_exclude_eq
+    id_to_drop <- id_to_drop & id_exclude_exo_var
+    id_to_drop <- id_to_drop & id_exclude_end_var
     # User specified parameters
     if (!is.null(must_drop)) {
         id_must_drop <- syntax_to_id(must_drop, ptable = pt)
