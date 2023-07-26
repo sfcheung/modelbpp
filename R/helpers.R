@@ -233,3 +233,17 @@ pt_remove_constrained_equal <- function(pt,
         return(pt[!id_exclude_eq, ])
       }
   }
+
+#' @noRd
+
+pt_remove_exo_var <- function(pt,
+                              return_id = FALSE) {
+    i1 <- (pt$exo > 0) & (pt$op == "~~")
+    i2 <- (pt$lhs == pt$rhs)
+    i0 <- i1 & i2
+    if (return_id) {
+        return(i0)
+      } else {
+        return(pt[i0, ])
+      }
+  }

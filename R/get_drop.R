@@ -69,9 +69,7 @@ get_drop <- function(sem_out,
     # Exclude all parameters already constrained to be equal
     id_exclude_eq <- pt_remove_constrained_equal(pt, return_id = TRUE)
     # Exclude the variances of exogenous variables
-    tmp1 <- (pt$exo > 0) & (pt$op == "~~")
-    tmp2 <- (pt$lhs == pt$rhs)
-    id_exclude_exo_var <- tmp1 & tmp2
+    id_exclude_exo_var <- pt_remove_exo_var(pt, return_id = TRUE)
     # Exclude error variances of endogenous variables
     tmp1 <- (pt$exo == 0) & (pt$op == "~~")
     tmp2 <- (pt$lhs == pt$rhs)
