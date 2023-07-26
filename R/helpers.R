@@ -198,3 +198,13 @@ sets_remove_inadmissible <- function(sets) {
       })
     return(out)
   }
+
+#' @noRd
+
+pt_remove_user_defined <- function(pt) {
+    i1 <- pt$op == ":="
+    i1_labels <- pt[i1, "lhs"]
+    i2 <- (pt$lhs %in% i1_labels) & (pt$op == "==")
+    i0 <- i1 | i2
+    pt[!i0, ]
+  }

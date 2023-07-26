@@ -65,7 +65,7 @@ get_drop <- function(sem_out,
       }
     pt <- lavaan::parameterTable(sem_out)
     # Remove all user-defined parameters
-    pt <- pt[pt$op != ":=", ]
+    pt <- pt_remove_user_defined(pt)
     # Exclude all parameters already constrained to be equal
     i_eq <- pt$op == "=="
     id_eq <- c(pt$lhs[i_eq], pt$rhs[i_eq])
