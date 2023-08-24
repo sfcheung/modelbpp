@@ -95,7 +95,7 @@ get_drop <- function(sem_out,
     sets_to_gen <- unlist(sets_to_gen, recursive = FALSE)
     df0 <- lavaan::fitMeasures(sem_out, "df")
     out <- lapply(sets_to_gen, gen_pt_drop, pt = pt, to = model_id,
-                  source_df = df0)
+                  source_df = df0, sem_out = sem_out)
     out_names <- sapply(out, function(x) {
         paste("drop:",
               paste(attr(x, "parameters_dropped"), collapse = ";"))
@@ -106,7 +106,7 @@ get_drop <- function(sem_out,
 
 #' @noRd
 
-gen_pt_drop <- function(x, pt, to, source_df = NA) {
+gen_pt_drop <- function(x, pt, to, source_df = NA, sem_out) {
     # Function to generate pt
     for (i in x) {
         pt[i, "free"] <- 0
@@ -119,11 +119,25 @@ gen_pt_drop <- function(x, pt, to, source_df = NA) {
     p_to_drop_out <- lapply(x, function(x) {
         c(lhs = pt[x, "lhs"], op = pt[x, "op"], rhs = pt[x, "rhs"])
       })
-    attr(pt, "parameters_dropped") <- p_to_drop
-    attr(pt, "parameters_dropped_list") <- p_to_drop_out
-    attr(pt, "ids_dropped") <- x
-    attr(pt, "to") <- to
-    attr(pt, "df_expected") <- source_df +
+    suppressWarnings(sem_out_update <- lavaan::update(sem_out,
+                                     pt,
+                                     do.fit = TRUE,
+                                     optim.force.converged = TRUE,
+                                     warn = FALSE,
+                                     se = "none",
+                                     baseline = FALSE,
+                                     check.start = FALSE,
+                                     check.post = FALSE,
+                                     check.vcov = FALSE,
+                                     control = list(max.iter = 1)))
+    pt_update <- lavaan::parameterTable(sem_out_update)
+    attr(pt_update, "parameters_dropped") <- p_to_drop
+    attr(pt_update, "parameters_dropped_list") <- p_to_drop_out
+    attr(pt_update, "ids_dropped") <- x
+    attr(pt_update, "to") <- to
+    attr(pt_update, "df_expected") <- unname(source_df) +
                                length(x)
-    pt
+    attr(pt_update, "df_actual") <- unname(lavaan::fitMeasures(sem_out_update,
+                                                        fit.measures = "df"))
+    pt_update
   }
