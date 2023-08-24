@@ -9,7 +9,8 @@ get_drop(
   must_drop = NULL,
   must_not_drop = NULL,
   df_change = 1,
-  model_id = NA
+  model_id = NA,
+  keep_correct_df_change = TRUE
 )
 }
 \arguments{
@@ -42,6 +43,10 @@ included. Default is 1.}
 number of the starting model.
 Default is \code{NA}, no identification
 number.}
+
+\item{keep_correct_df_change}{Keep
+only tables with actual \emph{df} change
+equal to expected \emph{df} change.}
 }
 \value{
 A named list of parameter

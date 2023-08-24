@@ -18,13 +18,30 @@
 #' [get_drop()] to generate the list of
 #' models.
 #'
-#' @param parallel (TODO)
+#' @param parallel If `TRUE`, parallel
+#' processing will be used to fit the
+#' models. Default is `FALSE`.
 #'
-#' @param ncores (TODO)
+#' @param ncores Numeric. The number of
+#' CPU cores to be used if `parallel`
+#' is `TRUE`.
 #'
-#' @param make_cluster_args (TODO)
+#' @param make_cluster_args A list of
+#' named arguments to be passed to
+#' `parallel::makeCluster()`. Used by
+#' advanced users to configure the
+#' cluster if `parallel` is `TRUE`.
+#' Default is `list()`.
 #'
-#' @param progress (TODO)
+#' @param progress Whether a progress
+#' bar will be displayed, implemented
+#' by the `pbapply` package. Default
+#' is `TRUE`.
+#'
+#' @param verbose Whether additional
+#' messages will be displayed, such
+#' as the expected processing time.
+#' Default is `TRUE`.
 #'
 #' @return A list with the following elements:
 #'
@@ -64,27 +81,117 @@
 
 fit_many <- function(model_list,
                      sem_out,
-                     parallel = TRUE,
+                     parallel = FALSE,
                      ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
                      make_cluster_args = list(),
-                     progress = TRUE) {
+                     progress = TRUE,
+                     verbose = TRUE) {
   if (missing(model_list)) stop("model_list is not supplied.")
   if (missing(sem_out)) stop("sem_out is not supplied.")
   if (!inherits(sem_out, "lavaan")) {
       stop("sem_out is not a lavaan-class object.")
     }
 
+  p_models <- length(model_list)
+
   slot_opt <- sem_out@Options
   slot_smp <- sem_out@SampleStats
   slot_dat <- sem_out@Data
   slot_opt$se <- "none"
+  slot_opt$baseline <- FALSE
+  slot_opt$verbose <- FALSE
 
-  fit_list <- lapply(model_list, function(x) {
-                  lavaan::lavaan(model = x,
-                                 slotOptions = slot_opt,
-                                 slotSampleStats = slot_smp,
-                                 slotData = slot_dat)
-                })
+  fit_i <- function(x) {
+      lavaan::lavaan(model = x,
+                     slotOptions = slot_opt,
+                     slotSampleStats = slot_smp,
+                     slotData = slot_dat)
+    }
+
+  # Check ncores
+  # Adapted from manymome::fit2boot_out_do_boot()
+  ft <- as.numeric(lavaan::lavInspect(sem_out, "timing")$total)
+  if (parallel) {
+        if (is.numeric(ncores)) {
+            ncores0 <- parallel::detectCores()
+            if (ncores == ncores0) {
+                warning(paste0("'ncores' >= The number of detected cores (",
+                                ncores0,"). The computer may not be responsive",
+                                " when models are estimated."),
+                        immediate. = TRUE)
+                utils::flush.console()
+              }
+            if (ncores > ncores0) {
+                ncores <- max(ncores0 - 1, 1L)
+              }
+          } else {
+            ncores <- 1L
+          }
+    } else {
+      ncores <- 1L
+    }
+  # Set has_cl
+  # Adapted from manymome::fit2boot_out_do_boot()
+  if (ncores > 1L) {
+      make_cluster_args <- utils::modifyList(make_cluster_args,
+                                      list(spec = ncores))
+      tmp <- tryCatch({cl <- do.call(parallel::makeCluster,
+                                    make_cluster_args)},
+                      error = function(e) e)
+      has_cl <- !inherits(tmp, "error")
+    } else {
+      has_cl <- FALSE
+    }
+  # Do the analysis.
+  # Adapted from manymome::fit2boot_out_do_boot()
+  if (has_cl) {
+      texp <-  1.2 * p_models * ft / length(cl)
+      if (verbose) {
+          message(paste0(length(cl), " processes started to run model fitting."))
+          message(paste0("The expected CPU time is about ",
+                          round(texp, 2),
+                          " second(s)."))
+          utils::flush.console()
+        }
+      pkgs <- .packages()
+      pkgs <- rev(pkgs)
+      parallel::clusterExport(cl, "pkgs", envir = environment())
+      parallel::clusterEvalQ(cl, {
+                      sapply(pkgs,
+                      function(x) {
+                          # Packages temporarily loaded are excluded
+                          try(library(x, character.only = TRUE),
+                                      silent = TRUE)
+                        })
+                    })
+      if (progress) {
+          op_old <- pbapply::pboptions(type = "timer")
+          tmp <- tryCatch({rt <- system.time(fit_list <- suppressWarnings(
+                            pbapply::pblapply(model_list,
+                                              fit_i,
+                                              cl = cl)))},
+                            error = function(e) e)
+          pbapply::pboptions(op_old)
+        } else {
+          tmp <- tryCatch({rt <- system.time(fit_list <- suppressWarnings(
+                            parallel::parLapplyLB(cl,
+                                                  model_list,
+                                                  fit_i)))},
+                            error = function(e) e)
+        }
+      if (inherits(tmp, "error")) {
+          try(parallel::stopCluster(cl), silent = TRUE)
+          stop("Running in parallel failed. Please set 'parallel' to FALSE.")
+        }
+      parallel::stopCluster(cl)
+    } else {
+      if (progress) {
+          rt <- system.time(fit_list <- suppressWarnings(pbapply::pblapply(model_list, fit_i)))
+        } else {
+          rt <- system.time(fit_list <- suppressWarnings(lapply(model_list, fit_i)))
+        }
+    }
+
   sem_out_df <- as.numeric(lavaan::fitMeasures(sem_out, "df"))
   change_list <- sapply(fit_list,
       function(x) sem_out_df - as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))

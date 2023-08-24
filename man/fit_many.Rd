@@ -4,7 +4,15 @@
 \alias{fit_many}
 \title{Fit a List of Models}
 \usage{
-fit_many(model_list, sem_out)
+fit_many(
+  model_list,
+  sem_out,
+  parallel = FALSE,
+  ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
+  make_cluster_args = list(),
+  progress = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{model_list}{A list of parameter
@@ -20,6 +28,31 @@ function. Currently support
 the one used in \code{\link[=get_add]{get_add()}} or
 \code{\link[=get_drop]{get_drop()}} to generate the list of
 models.}
+
+\item{parallel}{If \code{TRUE}, parallel
+processing will be used to fit the
+models. Default is \code{FALSE}.}
+
+\item{ncores}{Numeric. The number of
+CPU cores to be used if \code{parallel}
+is \code{TRUE}.}
+
+\item{make_cluster_args}{A list of
+named arguments to be passed to
+\code{parallel::makeCluster()}. Used by
+advanced users to configure the
+cluster if \code{parallel} is \code{TRUE}.
+Default is \code{list()}.}
+
+\item{progress}{Whether a progress
+bar will be displayed, implemented
+by the \code{pbapply} package. Default
+is \code{TRUE}.}
+
+\item{verbose}{Whether additional
+messages will be displayed, such
+as the expected processing time.
+Default is \code{TRUE}.}
 }
 \value{
 A list with the following elements:
