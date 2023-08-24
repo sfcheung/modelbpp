@@ -18,6 +18,14 @@
 #' [get_drop()] to generate the list of
 #' models.
 #'
+#' @param parallel (TODO)
+#'
+#' @param ncores (TODO)
+#'
+#' @param make_cluster_args (TODO)
+#'
+#' @param progress (TODO)
+#'
 #' @return A list with the following elements:
 #'
 #' * `fit`: A named list of
@@ -55,8 +63,11 @@
 #' @export
 
 fit_many <- function(model_list,
-                     sem_out
-                     ) {
+                     sem_out,
+                     parallel = TRUE,
+                     ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
+                     make_cluster_args = list(),
+                     progress = TRUE) {
   if (missing(model_list)) stop("model_list is not supplied.")
   if (missing(sem_out)) stop("sem_out is not supplied.")
   if (!inherits(sem_out, "lavaan")) {
@@ -64,8 +75,6 @@ fit_many <- function(model_list,
     }
 
   slot_opt <- sem_out@Options
-  slot_pat <- sem_out@ParTable
-  slot_mod <- sem_out@Model
   slot_smp <- sem_out@SampleStats
   slot_dat <- sem_out@Data
   slot_opt$se <- "none"
