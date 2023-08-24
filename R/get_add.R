@@ -199,7 +199,7 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
     attr(pt_update, "constraints_released") <- x_constr_str
     attr(pt_update, "constraints_released_list") <- x_constr_out
     attr(pt_update, "from") <- from
-    attr(pt_update, "df_expected") <- lavaan::fitMeasures(sem_out, "df") -
+    attr(pt_update, "df_expected") <- unname(lavaan::fitMeasures(sem_out, "df")) -
                                       length(x)
     attr(pt_update, "df_actual") <- pt_update_df
     pt_update
