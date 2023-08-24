@@ -176,12 +176,17 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
         sem_out_update <- lavaan::update(sem_out,
                                          pt,
                                          add = x_free_str,
-                                         do.fit = FALSE,
-                                         evaluate = FALSE)
-        pt_update <- data.frame(sem_out_update$model)
+                                         do.fit = TRUE,
+                                         control = list(max.iter = 1))
+        pt_update <- lavaan::parameterTable(sem_out_update)
+        pt_update$se <- NA
+        pt_update_df <- unname(lavaan::fitMeasures(sem_out_update,
+                                                   fit.measures = "df"))
       } else {
         x_free_str <- NULL
         pt_update <- pt
+        pt_update$se <- NA
+        pt_update_df <- NA
       }
     attr(pt_update, "parameters_added") <- x_free_str
     attr(pt_update, "parameters_added_list") <- x_free
@@ -191,5 +196,6 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
     attr(pt_update, "from") <- from
     attr(pt_update, "df_expected") <- lavaan::fitMeasures(sem_out, "df") -
                                       length(x)
+    attr(pt_update, "df_actual") <- pt_update_df
     pt_update
   }
