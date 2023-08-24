@@ -48,6 +48,10 @@
 #' Default is `NA`, no identification
 #' number.
 #'
+#' @param keep_correct_df_change Keep
+#' only tables with actual *df* change
+#' equal to expected *df* change.
+#'
 #' @return A named list of parameter
 #' tables to be used by
 #' [lavaan::lavaan()] or [update()]
@@ -67,7 +71,8 @@ get_add <- function(sem_out,
                      remove_constraints = TRUE,
                      exclude_error_cov = TRUE,
                      df_change = 1,
-                     model_id = NA
+                     model_id = NA,
+                     keep_correct_df_change = TRUE
                     ) {
     if (missing(sem_out)) stop("sem_out is not supplied.")
     if (!inherits(sem_out, "lavaan")) {
@@ -132,6 +137,14 @@ get_add <- function(sem_out,
     # Generate parameter tables
     out <- lapply(sets_to_gen2_ok, gen_pt_add, pt = pt, sem_out = sem_out,
                   from = model_id)
+
+    # Keep tables with expected df only?
+    if (keep_correct_df_change) {
+        chk1 <- sapply(out, attr, which = "df_actual")
+        chk2 <- sapply(out, attr, which = "df_expected")
+        out <- out[chk1 == chk2]
+      }
+
     out_names <- sapply(out, function(x) {
         out <- paste0(c(attr(x, "parameters_added"),
               attr(x, "constraints_released")), collapse = ";")
