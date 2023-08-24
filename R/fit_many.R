@@ -62,7 +62,20 @@ fit_many <- function(model_list,
   if (!inherits(sem_out, "lavaan")) {
       stop("sem_out is not a lavaan-class object.")
     }
-  fit_list <- lapply(model_list, function(x) lavaan::update(sem_out, x))
+
+  slot_opt <- sem_out@Options
+  slot_pat <- sem_out@ParTable
+  slot_mod <- sem_out@Model
+  slot_smp <- sem_out@SampleStats
+  slot_dat <- sem_out@Data
+  slot_opt$se <- "none"
+
+  fit_list <- lapply(model_list, function(x) {
+                  lavaan::lavaan(model = x,
+                                 slotOptions = slot_opt,
+                                 slotSampleStats = slot_smp,
+                                 slotData = slot_dat)
+                })
   sem_out_df <- as.numeric(lavaan::fitMeasures(sem_out, "df"))
   change_list <- sapply(fit_list,
       function(x) sem_out_df - as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
