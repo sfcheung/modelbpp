@@ -24,3 +24,7 @@ length(mod_to_drop)
 head(mod_to_drop)
 names(mod_to_drop)
 attributes(mod_to_drop[[92]])
+
+tmp1 <- sapply(mod_to_drop, attr, "df_expected")
+tmp2 <- sapply(mod_to_drop, attr, "df_actual")
+all.equal(tmp1, tmp2)

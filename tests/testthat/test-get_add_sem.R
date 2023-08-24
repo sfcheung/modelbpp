@@ -31,6 +31,10 @@ attributes(mod_to_add[[35]])
 attributes(mod_to_add[[36]])
 attributes(mod_to_add[[45]])
 
+tmp1 <- sapply(mod_to_add, attr, "df_expected")
+tmp2 <- sapply(mod_to_add, attr, "df_actual")
+all.equal(tmp1, tmp2)
+
 mod_to_add <- get_add(fit,
                       must_not_add = all_loadings,
                       df_change = 4)
