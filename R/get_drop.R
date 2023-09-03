@@ -44,8 +44,9 @@
 #' only tables with actual *df* change
 #' equal to expected *df* change.
 #'
-#' @return A named list of parameter
-#' tables to be used by
+#' @return An object of the class
+#' `partables`, a named list of parameter
+#' tables, each of them to be used by
 #' [lavaan::lavaan()] or [update()]
 #' for fitting a model with the added
 #' parameters.
@@ -114,6 +115,7 @@ get_drop <- function(sem_out,
               paste(attr(x, "parameters_dropped"), collapse = ";"))
       })
     names(out) <- out_names
+    class(out) <- c("partables", class(out))
     out
   }
 

@@ -43,7 +43,9 @@
 #' as the expected processing time.
 #' Default is `TRUE`.
 #'
-#' @return A list with the following elements:
+#' @return An object of class
+#' `sem_outs`, a list with the
+#' following elements:
 #'
 #' * `fit`: A named list of
 #'    [lavaan::lavaan()] output objects or
@@ -199,8 +201,10 @@ fit_many <- function(model_list,
       function(x) lavaan::lavInspect(x, "converged"))
   post_check_list <- sapply(fit_list,
       function(x) lavaan::lavInspect(x, "post.check"))
-  list(fit = fit_list,
-       change = change_list,
-       converged = converged_list,
-       post_check = post_check_list)
+  out <- list(fit = fit_list,
+              change = change_list,
+              converged = converged_list,
+              post_check = post_check_list)
+  class(out) <- c("sem_outs", class(out))
+  out
 }

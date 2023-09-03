@@ -1,4 +1,4 @@
-# modelbpp 0.0.0.9002
+# modelbpp 0.0.0.9003
 
 - Migrating. (0.0.0.9001)
 - Initial setup. (0.0.0.9001)
@@ -8,3 +8,6 @@
   as lists instead of strings. (0.0.0.9002)
 - Factored some lines from `get_add()`
   and `get_drop()` to internal helpers.
+  (0.0.0.9002)
+- Main functions now return custom
+  S3 class objects. (0.0.0.9003)

@@ -61,7 +61,8 @@
 #' number will be included. Default is
 #' 1.
 #'
-#' @return A list with the following
+#' @return An object of the class
+#' `model_set`, a list with the following
 #' elements:
 #'
 #' * `model`: A named list of parameter
