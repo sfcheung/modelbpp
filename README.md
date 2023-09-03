@@ -8,7 +8,7 @@
 
 *UNDER DEVELOPMENT NOT YET READY PLEASE DO NOT INSTALL*
 
-(Version 0.0.0.9003, updated on 2023-09-03, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
+(Version 0.0.0.9004, updated on 2023-09-03, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
 
 # modelbpp: Model posterior probability and related measures
 

@@ -72,3 +72,7 @@ test_that("Generated difference matches the names", {
         all(sapply(mod_to_drop, get_diff, pt_no_user) == names(mod_to_drop))
       )
   })
+
+# Test Print
+
+mod_to_drop

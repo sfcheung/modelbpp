@@ -28,3 +28,8 @@ attributes(mod_to_drop[[92]])
 tmp1 <- sapply(mod_to_drop, attr, "df_expected")
 tmp2 <- sapply(mod_to_drop, attr, "df_actual")
 all.equal(tmp1, tmp2)
+
+# Test Print
+
+mod_to_drop
+print(mod_to_drop, max_tables = 25)

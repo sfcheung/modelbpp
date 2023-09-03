@@ -73,7 +73,8 @@ number will be included. Default is
 1.}
 }
 \value{
-A list with the following
+An object of the class
+\code{model_set}, a list with the following
 elements:
 \itemize{
 \item \code{model}: A named list of parameter

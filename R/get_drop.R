@@ -115,6 +115,8 @@ get_drop <- function(sem_out,
               paste(attr(x, "parameters_dropped"), collapse = ";"))
       })
     names(out) <- out_names
+    attr(out, "call") <- match.call()
+    attr(out, "sem_out") <- sem_out
     class(out) <- c("partables", class(out))
     out
   }

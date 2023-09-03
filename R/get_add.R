@@ -152,6 +152,8 @@ get_add <- function(sem_out,
         paste("add:", out)
       })
     names(out) <- out_names
+    attr(out, "call") <- match.call()
+    attr(out, "sem_out") <- sem_out
     class(out) <- c("partables", class(out))
     out
   }

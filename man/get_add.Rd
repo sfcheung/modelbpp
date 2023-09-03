@@ -60,8 +60,9 @@ only tables with actual \emph{df} change
 equal to expected \emph{df} change.}
 }
 \value{
-A named list of parameter
-tables to be used by
+An object of the class
+\code{partables}, a named list of parameter
+tables, each of them to be used by
 \code{\link[lavaan:lavaan]{lavaan::lavaan()}} or \code{\link[=update]{update()}}
 for fitting a model with the added
 parameters.

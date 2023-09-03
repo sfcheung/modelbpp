@@ -1,4 +1,4 @@
-# modelbpp 0.0.0.9003
+# modelbpp 0.0.0.9004
 
 - Migrating. (0.0.0.9001)
 - Initial setup. (0.0.0.9001)
@@ -11,3 +11,5 @@
   (0.0.0.9002)
 - Main functions now return custom
   S3 class objects. (0.0.0.9003)
+- Add a print method for
+  `partables`-class objects. (0.0.0.9004)

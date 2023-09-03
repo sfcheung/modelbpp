@@ -55,7 +55,9 @@ as the expected processing time.
 Default is \code{TRUE}.}
 }
 \value{
-A list with the following elements:
+An object of class
+\code{sem_outs}, a list with the
+following elements:
 \itemize{
 \item \code{fit}: A named list of
 \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output objects or

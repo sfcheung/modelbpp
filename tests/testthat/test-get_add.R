@@ -2,7 +2,7 @@ library(lavaan)
 
 dat <- dat_path_model
 
-mod <- 
+mod <-
 "
 x3 ~ a*x1 + b*x2
 x4 ~ a*x1
@@ -79,14 +79,14 @@ anova_add <- lapply(fit_add, function(x) anova(fit, x))
 
 test_that("Parameters to drop as expected", {
     expect_true(
-        all(names(mod_to_add) %in% 
+        all(names(mod_to_add) %in%
           c("add: x4~x2", "add: (x3~x1),(x4~x1)", "add: x4~x2;(x3~x1),(x4~x1)"))
       )
   })
 
 test_that("All df differences are one", {
     expect_true(
-        all(sapply(anova_add, function(x) x[2, "Df diff"]) == 
+        all(sapply(anova_add, function(x) x[2, "Df diff"]) ==
            c(1, 1, 2))
       )
   })
@@ -96,3 +96,7 @@ test_that("Generated difference matches the names", {
         all(sapply(mod_to_add, get_diff, pt_no_user) == names(mod_to_add))
       )
   })
+
+# Test Print
+
+mod_to_add

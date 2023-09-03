@@ -43,3 +43,8 @@ head(mod_to_add)
 names(mod_to_add)
 attributes(mod_to_add[[128]])
 attributes(mod_to_add[[78]])
+
+# Test Print
+
+mod_to_add
+print(mod_to_add, max_tables = 25)
