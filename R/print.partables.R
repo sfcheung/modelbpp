@@ -12,7 +12,13 @@
 #' Called for its side effect.
 #'
 #' @param x A `partables`-class object.
+#'
+#' @param max_tables The maximum number
+#' of modifications to be printed.
+#' Default is 10.
+#'
 #' @param ...  Optional arguments.
+#' Ignored.
 #'
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
@@ -39,11 +45,11 @@ print.partables <- function(x,
     cat("Call:\n")
     print(x_call)
     cat("\n")
-    cat("Number of Parameter Tables: ", x_n, "\n", sep = "")
+    cat("Number of parameter tables: ", x_n, "\n", sep = "")
     cat("\n")
     if (x_n > max_tables) {
         x_tmp <- x_names[seq_len(max_tables)]
-        cat("The first 10 modification(s):\n")
+        cat("The first", max_tables, "modification(s):\n")
       } else {
         x_tmp <- x_names
         cat("The modifications:\n")

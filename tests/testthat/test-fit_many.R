@@ -23,6 +23,11 @@ test_that("df changes as expected", {
       )
   })
 
+# Test Print
+
+out
+print(out, max_models = 2)
+
 skip("Parallel processing: Test in an interactive session")
 
 mod_to_add <- get_add(fit, df_change = 2)
@@ -36,3 +41,4 @@ test_that("df changes as expected", {
         ignore_attr = TRUE
       )
   })
+

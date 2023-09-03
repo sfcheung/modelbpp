@@ -204,7 +204,8 @@ fit_many <- function(model_list,
   out <- list(fit = fit_list,
               change = change_list,
               converged = converged_list,
-              post_check = post_check_list)
+              post_check = post_check_list,
+              call = match.call())
   class(out) <- c("sem_outs", class(out))
   out
 }

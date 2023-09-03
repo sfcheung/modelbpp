@@ -9,7 +9,12 @@
 \arguments{
 \item{x}{A \code{partables}-class object.}
 
-\item{...}{Optional arguments.}
+\item{max_tables}{The maximum number
+of modifications to be printed.
+Default is 10.}
+
+\item{...}{Optional arguments.
+Ignored.}
 }
 \value{
 \code{x} is returned invisibly.
