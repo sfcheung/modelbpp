@@ -1,4 +1,4 @@
-# modelbpp 0.0.0.9005
+# modelbpp 0.0.0.9006
 
 - Migrating. (0.0.0.9001)
 - Initial setup. (0.0.0.9001)
@@ -15,3 +15,5 @@
   `partables`-class objects. (0.0.0.9004)
 - Add a print method for
   `sem_outs`-class objects. (0.0.0.9005)
+- Add a print method for
+  `model_set`-class objects. (0.0.0.9006)

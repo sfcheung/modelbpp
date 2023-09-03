@@ -14,7 +14,12 @@ model_set(
   remove_constraints = TRUE,
   exclude_error_cov = TRUE,
   df_change_add = 1,
-  df_change_drop = 1
+  df_change_drop = 1,
+  parallel = FALSE,
+  ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
+  make_cluster_args = list(),
+  progress = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -71,6 +76,31 @@ parameters. All models with \emph{df}
 change less than or equal to this
 number will be included. Default is
 1.}
+
+\item{parallel}{If \code{TRUE}, parallel
+processing will be used to fit the
+models. Default is \code{FALSE}.}
+
+\item{ncores}{Numeric. The number of
+CPU cores to be used if \code{parallel}
+is \code{TRUE}.}
+
+\item{make_cluster_args}{A list of
+named arguments to be passed to
+\code{parallel::makeCluster()}. Used by
+advanced users to configure the
+cluster if \code{parallel} is \code{TRUE}.
+Default is \code{list()}.}
+
+\item{progress}{Whether a progress
+bar will be displayed, implemented
+by the \code{pbapply} package. Default
+is \code{TRUE}.}
+
+\item{verbose}{Whether additional
+messages will be displayed, such
+as the expected processing time.
+Default is \code{TRUE}.}
 }
 \value{
 An object of the class
