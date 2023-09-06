@@ -2,8 +2,8 @@
 % Please edit documentation in R/model_set.R
 \name{model_set}
 \alias{model_set}
-\title{Assessment of a Set of
-Neighboring Models}
+\title{Bayesian Posterior Probabilities
+of Neighboring Models}
 \usage{
 model_set(
   sem_out,
@@ -14,7 +14,12 @@ model_set(
   remove_constraints = TRUE,
   exclude_error_cov = TRUE,
   df_change_add = 1,
-  df_change_drop = 1
+  df_change_drop = 1,
+  parallel = FALSE,
+  ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
+  make_cluster_args = list(),
+  progress = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -71,9 +76,35 @@ parameters. All models with \emph{df}
 change less than or equal to this
 number will be included. Default is
 1.}
+
+\item{parallel}{If \code{TRUE}, parallel
+processing will be used to fit the
+models. Default is \code{FALSE}.}
+
+\item{ncores}{Numeric. The number of
+CPU cores to be used if \code{parallel}
+is \code{TRUE}.}
+
+\item{make_cluster_args}{A list of
+named arguments to be passed to
+\code{parallel::makeCluster()}. Used by
+advanced users to configure the
+cluster if \code{parallel} is \code{TRUE}.
+Default is \code{list()}.}
+
+\item{progress}{Whether a progress
+bar will be displayed, implemented
+by the \code{pbapply} package. Default
+is \code{TRUE}.}
+
+\item{verbose}{Whether additional
+messages will be displayed, such
+as the expected processing time.
+Default is \code{TRUE}.}
 }
 \value{
-A list with the following
+An object of the class
+\code{model_set}, a list with the following
 elements:
 \itemize{
 \item \code{model}: A named list of parameter
@@ -113,14 +144,69 @@ or not. Checked by
 \description{
 Identify neighboring
 models, fit them, and return the
-posterior probabilities.
+Bayesian posterior probabilities.
 }
 \details{
-(TO-DO)
+It computes the Bayesian
+posterior probabilities of a set
+of models by the method presented
+in Wu, Cheung, and Leung (2020).
+
+First, a list of model is identified
+based on user-specified criteria.
+By default, models differ from a fitted
+model by one degree of freedom,
+the 1-df-away \emph{neighboring} models,
+will be found using \code{\link[=get_add]{get_add()}}
+and \link{get_drop}.
+
+Second, these models will be fitted
+to the sample dataset, and their
+BICs will be computed.
+
+Third, their Bayesian posterior
+probabilities will be computed
+using their BICs. Equal prior
+probabilities for all the models
+being fitted will be assumed in
+the current version.
+
+The results can then be printed,
+with the models sorted by descending
+order of Bayesian posterior
+probabilities.
 }
 \examples{
-# To Do
 
+library(lavaan)
+
+dat <- dat_path_model
+
+mod <-
+"
+x3 ~ a*x1 + b*x2
+x4 ~ a*x1
+ab := a*b
+"
+
+fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+
+out <- model_set(fit)
+out
+
+}
+\references{
+Wu, H., Cheung, S. F., & Leung, S. O.
+(2020). Simple use of BIC to assess
+model selection uncertainty: An
+illustration using mediation and
+moderation models.
+\emph{Multivariate Behavioral Research},
+\emph{55}(1), 1--16.
+\doi{10.1080/00273171.2019.1574546}
+}
+\seealso{
+\code{\link[=print.model_set]{print.model_set()}}
 }
 \author{
 Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}

@@ -25,7 +25,8 @@ library(lavaan)
 
 This package is used to implement the
 method presented in Wu, Cheung, and
-Leung (2020) to compute the posterior
+Leung (2020) to compute the Bayesian
+posterior
 probabilities for a set of models in
 structural equation modelling (SEM).
 
@@ -56,7 +57,8 @@ structural equation modelling (SEM).
 
   * The BIC of each model.
 
-  * The posterior probability of each
+  * The Bayesian posterior probability
+    of each
     model, being normalized over the
     list of models being compared and
     assuming unbiased priors.
@@ -85,52 +87,31 @@ x4 ~ x3
 fit <- sem(mod, dat_path_model)
 ```
 
-We then find the neighoring models with
-at most 2 degrees of freedom away from
+We then find the neighboring models with
+at most one degree of freedom away from
 the target model.
 
 ```{r}
-out <- model_set(sem_out = fit,
-                 df_change_add = 2,
-                 df_change_drop = 2)
+out <- model_set(sem_out = fit)
 ```
 
-The output is a list. The element `bic`
-is a named vector of the BIC of each
-model. This can be displayed by
-converting it to a data frame:
+The output is a `model_set`-class
+object with a print method.
 
 ```{r}
-data.frame(model = names(out$bic),
-           bic = out$bic)
+out
 ```
 
-The posterior probabilities are stored
-in the element `postprob`:
-
-```{r}
-data.frame(model = names(out$bic),
-           postprob = out$postprob)
-```
-
-We can also sort the models based on
-their posterior probabilities:
-
-```{r}
-out_postprob <- data.frame(model = names(out$postprob),
-                           postprob = out$postprob)
-out_sorted <- out_postprob[order(out_postprob$postprob,
-                           decreasing = TRUE), ]
-out_sorted$postprob <- round(out_sorted$postprob, 4)
-print(out_sorted, right = FALSE)
-```
-
-The posterior probabilities suggest that
+The Bayesian posterior probabilities
+(BPP) suggest that
 the original model is not the most
 probable model among the list. Instead,
-four other models, each with one or two
-parameters added, have similar posterior
-probabilities.
+five other models, each with one
+parameters added or removed, have higher
+Bayesian posterior probabilities. The
+model with the direct path `x3~x1` added
+has substantially large Bayesian posterior
+probability then other models examined.
 
 ## A serial mediation model
 
@@ -148,7 +129,7 @@ serial mediation model:
 mod <-
 "
 m1 ~ x
-m2 ~ m1 + x
+m2 ~ m1
 y  ~ m2 + x
 "
 fit <- sem(mod, dat_serial_4)
@@ -170,28 +151,33 @@ from `x` to `y`, are not significant:
 parameterEstimates(fit)
 ```
 
-We find the neighoring models with at
-most 2 degrees of freedom away from the
+We find the neighboring models with at
+most one degrees of freedom away from the
 target model.
 
 ```{r}
-out <- model_set(sem_out = fit,
-                 df_change_add = 2,
-                 df_change_drop = 2)
+out <- model_set(sem_out = fit)
 ```
 
-We then examine the posterior
+We then examine the Bayesian posterior
 probabilities:
 
 ```{r}
-out_postprob <- data.frame(model = names(out$postprob),
-                           postprob = out$postprob)
-out_sorted <- out_postprob[order(out_postprob$postprob,
-                   decreasing = TRUE), ]
-out_sorted$postprob <- round(out_sorted$postprob, 4)
-print(out_sorted, right = FALSE)
+out
 ```
 
 The results suggest that, in this set
-of models, the model with the two paths
-dropped is the most probable model.
+of models, the model with one path
+dropped (`y~x`) is more probable than
+the fitted model.
+
+# References
+
+Wu, H., Cheung, S. F., & Leung, S. O.
+(2020). Simple use of BIC to assess
+model selection uncertainty: An
+illustration using mediation and
+moderation models.
+*Multivariate Behavioral Research*,
+*55*(1), 1--16.
+https://doi.org/10.1080/00273171.2019.1574546

@@ -11,7 +11,8 @@ get_add(
   remove_constraints = TRUE,
   exclude_error_cov = TRUE,
   df_change = 1,
-  model_id = NA
+  model_id = NA,
+  keep_correct_df_change = TRUE
 )
 }
 \arguments{
@@ -53,28 +54,62 @@ included. Default is 1.}
 number of the starting model.
 Default is \code{NA}, no identification
 number.}
+
+\item{keep_correct_df_change}{Keep
+only tables with actual \emph{df} change
+equal to expected \emph{df} change.}
 }
 \value{
-A named list of parameter
-tables to be used by
+An object of the class
+\code{partables}, a named list of parameter
+tables, each of them to be used by
 \code{\link[lavaan:lavaan]{lavaan::lavaan()}} or \code{\link[=update]{update()}}
 for fitting a model with the added
 parameters.
 }
 \description{
-Generate the list of
-models with one more free
-parameter (and one less degree of
-freedom).
+Generate a list of
+models with one or more fixed
+parameter freed.
 }
 \details{
-Generate the list of models
-with one more free parameter (and one
-less degree of freedom, \emph{df}).
+Generate a list of models
+with one or more fixed parameter
+freed (and the degrees of freedom, \emph{df},
+increases by one or more). If a
+model has equality constraints, models
+with one or more of the constraints
+released will also be included.
+
+Conceptually, paths or covariances
+are "added" to form the list of models.
+
+The models to be included are
+identified by
+\code{\link[lavaan:modificationIndices]{lavaan::modificationIndices()}}.
+
+The models will be checked by \code{lavaan}
+to make sure that the increase in
+model degrees of freedom is of the
+expected value.
 }
 \examples{
-# To Do
 
+library(lavaan)
+dat <- dat_path_model
+mod <-
+"
+x3 ~ a*x1 + b*x2
+x4 ~ a*x1
+ab := a*b
+"
+fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+mod_to_add <- get_add(fit)
+mod_to_add
+
+}
+\seealso{
+\code{\link[=print.partables]{print.partables()}}
 }
 \author{
 Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}

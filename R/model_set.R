@@ -1,11 +1,38 @@
-#' @title Assessment of a Set of
-#' Neighboring Models
+#' @title Bayesian Posterior Probabilities
+#' of Neighboring Models
 #'
 #' @description Identify neighboring
 #' models, fit them, and return the
-#' posterior probabilities.
+#' Bayesian posterior probabilities.
 #'
-#' @details (TO-DO)
+#' @details It computes the Bayesian
+#' posterior probabilities of a set
+#' of models by the method presented
+#' in Wu, Cheung, and Leung (2020).
+#'
+#' First, a list of model is identified
+#' based on user-specified criteria.
+#' By default, models differ from a fitted
+#' model by one degree of freedom,
+#' the 1-df-away *neighboring* models,
+#' will be found using [get_add()]
+#' and [get_drop].
+#'
+#' Second, these models will be fitted
+#' to the sample dataset, and their
+#' BICs will be computed.
+#'
+#' Third, their Bayesian posterior
+#' probabilities will be computed
+#' using their BICs. Equal prior
+#' probabilities for all the models
+#' being fitted will be assumed in
+#' the current version.
+#'
+#' The results can then be printed,
+#' with the models sorted by descending
+#' order of Bayesian posterior
+#' probabilities.
 #'
 #' @param sem_out The output from an
 #' SEM function. Currently support
@@ -61,7 +88,33 @@
 #' number will be included. Default is
 #' 1.
 #'
-#' @return A list with the following
+#' @param parallel If `TRUE`, parallel
+#' processing will be used to fit the
+#' models. Default is `FALSE`.
+#'
+#' @param ncores Numeric. The number of
+#' CPU cores to be used if `parallel`
+#' is `TRUE`.
+#'
+#' @param make_cluster_args A list of
+#' named arguments to be passed to
+#' `parallel::makeCluster()`. Used by
+#' advanced users to configure the
+#' cluster if `parallel` is `TRUE`.
+#' Default is `list()`.
+#'
+#' @param progress Whether a progress
+#' bar will be displayed, implemented
+#' by the `pbapply` package. Default
+#' is `TRUE`.
+#'
+#' @param verbose Whether additional
+#' messages will be displayed, such
+#' as the expected processing time.
+#' Default is `TRUE`.
+#'
+#' @return An object of the class
+#' `model_set`, a list with the following
 #' elements:
 #'
 #' * `model`: A named list of parameter
@@ -105,8 +158,35 @@
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
+#' @references
+#' Wu, H., Cheung, S. F., & Leung, S. O.
+#' (2020). Simple use of BIC to assess
+#' model selection uncertainty: An
+#' illustration using mediation and
+#' moderation models.
+#' *Multivariate Behavioral Research*,
+#' *55*(1), 1--16.
+#' \doi{10.1080/00273171.2019.1574546}
+#'
+#' @seealso [print.model_set()]
+#'
 #' @examples
-#' # To Do
+#'
+#' library(lavaan)
+#'
+#' dat <- dat_path_model
+#'
+#' mod <-
+#' "
+#' x3 ~ a*x1 + b*x2
+#' x4 ~ a*x1
+#' ab := a*b
+#' "
+#'
+#' fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+#'
+#' out <- model_set(fit)
+#' out
 #'
 #' @export
 
@@ -118,8 +198,12 @@ model_set <- function(sem_out,
                       remove_constraints = TRUE,
                       exclude_error_cov = TRUE,
                       df_change_add = 1,
-                      df_change_drop = 1
-                     ) {
+                      df_change_drop = 1,
+                      parallel = FALSE,
+                      ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
+                      make_cluster_args = list(),
+                      progress = TRUE,
+                      verbose = TRUE) {
   if (missing(sem_out)) stop("sem_out is not supplied.")
   if (!inherits(sem_out, "lavaan")) {
       stop("sem_out is not a lavaan-class object.")
@@ -136,7 +220,13 @@ model_set <- function(sem_out,
                           df_change = df_change_drop)
   pt0 <- lavaan::parameterTable(sem_out)
   mod_to_fit <- c(mod_to_add, mod_to_drop, list(`original` = pt0))
-  out <- fit_many(mod_to_fit, sem_out)
+  out <- fit_many(model_list = mod_to_fit,
+                  sem_out = sem_out,
+                  parallel = parallel,
+                  ncores = ncores,
+                  make_cluster_args = make_cluster_args,
+                  progress = progress,
+                  verbose = verbose)
   out$model <- mod_to_fit
   bic_list <- sapply(out$fit,
         function(x) as.numeric(lavaan::fitMeasures(x, "bic")))
@@ -145,6 +235,7 @@ model_set <- function(sem_out,
   postprob_list <- sapply(bic_list, function(x) exp(-1 * x / 2))
   postprob_list <- postprob_list / sum(postprob_list)
   out$postprob <- postprob_list
+  out$model_set_call <- match.call()
   class(out) <- c("model_set", class(out))
   out
 }

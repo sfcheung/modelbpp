@@ -52,3 +52,7 @@ test_that("BIC as expected", {
         ignore_attr = TRUE
       )
   })
+
+# Test print
+
+out

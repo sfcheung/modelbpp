@@ -9,7 +9,8 @@ get_drop(
   must_drop = NULL,
   must_not_drop = NULL,
   df_change = 1,
-  model_id = NA
+  model_id = NA,
+  keep_correct_df_change = TRUE
 )
 }
 \arguments{
@@ -42,29 +43,60 @@ included. Default is 1.}
 number of the starting model.
 Default is \code{NA}, no identification
 number.}
+
+\item{keep_correct_df_change}{Keep
+only tables with actual \emph{df} change
+equal to expected \emph{df} change.}
 }
 \value{
-A named list of parameter
-tables to be used by
+An object of the class
+\code{partables}, a named list of parameter
+tables, each of them to be used by
 \code{\link[lavaan:lavaan]{lavaan::lavaan()}} or \code{\link[=update]{update()}}
 for fitting a model with the added
 parameters.
 }
 \description{
-Generate the list of
-models with one less free parameter
-or constraint (and one more
-degree of freedom).
+Generate a list of
+models with one or more free parameter
+dropped (fixed to zero).
 }
 \details{
-Generate the list of models
-with one less free parameter
-or constraint (and one more degree
-of freedom).
+Generate a list of models
+with one or more free parameters
+dropped, that is, fixed to zero
+(with degrees of freedom,
+\emph{df}, increases by one or more).
+
+All free parameters are included in
+the pool of candidates, except for
+those explicitly requested to be
+kept.
+
+The models will be checked by \code{lavaan}
+to make sure that the increase in
+model degrees of freedom is of the
+expected value.
 }
 \examples{
-# To Do
 
+library(lavaan)
+
+dat <- dat_path_model
+mod <-
+"
+x3 ~ a*x1 + b*x2
+x4 ~ a*x1 + x2
+ab := a*b
+"
+
+fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+mod_to_drop <- get_drop(fit)
+mod_to_drop
+
+}
+\seealso{
+\code{\link[=print.partables]{print.partables()}}
 }
 \author{
 Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}
