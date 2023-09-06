@@ -1,4 +1,4 @@
-# modelbpp 0.0.0.9006
+# modelbpp 0.0.0.9007
 
 - Migrating. (0.0.0.9001)
 - Initial setup. (0.0.0.9001)
@@ -11,9 +11,11 @@
   (0.0.0.9002)
 - Main functions now return custom
   S3 class objects. (0.0.0.9003)
-- Add a print method for
+- Added a print method for
   `partables`-class objects. (0.0.0.9004)
-- Add a print method for
+- Added a print method for
   `sem_outs`-class objects. (0.0.0.9005)
-- Add a print method for
+- Added a print method for
   `model_set`-class objects. (0.0.0.9006)
+- Updated the help pages of functions
+  (0.0.0.9007)
