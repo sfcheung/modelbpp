@@ -95,6 +95,9 @@ mod_to_drop <- get_drop(fit)
 mod_to_drop
 
 }
+\seealso{
+\code{\link[=print.partables]{print.partables()}}
+}
 \author{
 Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}
 }

@@ -3,9 +3,9 @@
 #' @description Print the content of
 #' an `sem_outs`-class object
 #'
-#' @details Details
-#'   (Include subjects for verbs.)
-#'   (Use 3rd person forms for verbs.)
+#' @details
+#' The print method for the output
+#' of `fit_many()`.
 #'
 #' @return
 #' `x` is returned invisibly.
@@ -27,8 +27,19 @@
 #'
 #' @examples
 #'
-#' x <- 123
-#' print(x)
+#' library(lavaan)
+#' dat <- dat_path_model
+#' mod <-
+#' "
+#' x3 ~ a*x1 + b*x2
+#' x4 ~ a*x1
+#' ab := a*b
+#' "
+#' fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+#' mod_to_add <- get_add(fit)
+#' out <- fit_many(mod_to_add, fit)
+#' out
+#' print(out, max_models = 1)
 #'
 #' @export
 

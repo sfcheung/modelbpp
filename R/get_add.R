@@ -76,6 +76,8 @@
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
+#' @seealso [print.partables()]
+#'
 #' @examples
 #'
 #' library(lavaan)

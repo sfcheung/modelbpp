@@ -1,11 +1,38 @@
-#' @title Assessment of a Set of
-#' Neighboring Models
+#' @title Bayesian Posterior Probabilities
+#' of Neighboring Models
 #'
 #' @description Identify neighboring
 #' models, fit them, and return the
-#' posterior probabilities.
+#' Bayesian posterior probabilities.
 #'
-#' @details (TO-DO)
+#' @details It computes the Bayesian
+#' posterior probabilities of a set
+#' of models by the method presented
+#' in Wu, Cheung, and Leung (2020).
+#'
+#' First, a list of model is identified
+#' based on user-specified criteria.
+#' By default, models differ from a fitted
+#' model by one degree of freedom,
+#' the 1-df-away *neighboring* models,
+#' will be found using [get_add()]
+#' and [get_drop].
+#'
+#' Second, these models will be fitted
+#' to the sample dataset, and their
+#' BICs will be computed.
+#'
+#' Third, their Bayesian posterior
+#' probabilities will be computed
+#' using their BICs. Equal prior
+#' probabilities for all the models
+#' being fitted will be assumed in
+#' the current version.
+#'
+#' The results can then be printed,
+#' with the models sorted by descending
+#' order of Bayesian posterior
+#' probabilities.
 #'
 #' @param sem_out The output from an
 #' SEM function. Currently support
@@ -131,8 +158,35 @@
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
+#' @references
+#' Wu, H., Cheung, S. F., & Leung, S. O.
+#' (2020). Simple use of BIC to assess
+#' model selection uncertainty: An
+#' illustration using mediation and
+#' moderation models.
+#' *Multivariate Behavioral Research*,
+#' *55*(1), 1--16.
+#' \doi{10.1080/00273171.2019.1574546}
+#'
+#' @seealso [print.model_set()]
+#'
 #' @examples
-#' # To Do
+#'
+#' library(lavaan)
+#'
+#' dat <- dat_path_model
+#'
+#' mod <-
+#' "
+#' x3 ~ a*x1 + b*x2
+#' x4 ~ a*x1
+#' ab := a*b
+#' "
+#'
+#' fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+#'
+#' out <- model_set(fit)
+#' out
 #'
 #' @export
 

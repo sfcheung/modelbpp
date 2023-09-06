@@ -108,6 +108,9 @@ mod_to_add <- get_add(fit)
 mod_to_add
 
 }
+\seealso{
+\code{\link[=print.partables]{print.partables()}}
+}
 \author{
 Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}
 }
