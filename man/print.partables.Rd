@@ -22,17 +22,29 @@ Called for its side effect.
 }
 \description{
 Print the content of
-an \code{partables}-class object
+a \code{partables}-class object
 }
 \details{
-Details
-(Include subjects for verbs.)
-(Use 3rd person forms for verbs.)
+The print method for the output
+of \code{get_add()} and \code{get_drop()}.
 }
 \examples{
 
-x <- 123
-print(x)
+library(lavaan)
+dat <- dat_path_model
+mod <-
+"
+x3 ~ a*x1 + b*x2
+x4 ~ a*x1
+ab := a*b
+"
+fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+mod_to_add <- get_add(fit)
+mod_to_add
+print(mod_to_add, max_tables = 1)
+mod_to_drop <- get_drop(fit)
+mod_to_drop
+print(mod_to_drop, max_tables = 1)
 
 }
 \seealso{

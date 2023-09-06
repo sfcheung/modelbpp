@@ -57,19 +57,42 @@ for fitting a model with the added
 parameters.
 }
 \description{
-Generate the list of
-models with one less free parameter
-or constraint (and one more
-degree of freedom).
+Generate a list of
+models with one or more free parameter
+dropped (fixed to zero).
 }
 \details{
-Generate the list of models
-with one less free parameter
-or constraint (and one more degree
-of freedom).
+Generate a list of models
+with one or more free parameters
+dropped, that is, fixed to zero
+(with degrees of freedom,
+\emph{df}, increases by one or more).
+
+All free parameters are included in
+the pool of candidates, except for
+those explicitly requested to be
+kept.
+
+The models will be checked by \code{lavaan}
+to make sure that the increase in
+model degrees of freedom is of the
+expected value.
 }
 \examples{
-# To Do
+
+library(lavaan)
+
+dat <- dat_path_model
+mod <-
+"
+x3 ~ a*x1 + b*x2
+x4 ~ a*x1 + x2
+ab := a*b
+"
+
+fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+mod_to_drop <- get_drop(fit)
+mod_to_drop
 
 }
 \author{

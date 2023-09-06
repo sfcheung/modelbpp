@@ -1,13 +1,28 @@
 #' @title Models That Are Less Restricted
 #'
-#' @description Generate the list of
-#' models with one more free
-#' parameter (and one less degree of
-#' freedom).
+#' @description Generate a list of
+#' models with one or more fixed
+#' parameter freed.
 #'
-#' @details Generate the list of models
-#' with one more free parameter (and one
-#' less degree of freedom, *df*).
+#' @details Generate a list of models
+#' with one or more fixed parameter
+#' freed (and the degrees of freedom, *df*,
+#' increases by one or more). If a
+#' model has equality constraints, models
+#' with one or more of the constraints
+#' released will also be included.
+#'
+#' Conceptually, paths or covariances
+#' are "added" to form the list of models.
+#'
+#' The models to be included are
+#' identified by
+#' [lavaan::modificationIndices()].
+#'
+#' The models will be checked by `lavaan`
+#' to make sure that the increase in
+#' model degrees of freedom is of the
+#' expected value.
 #'
 #' @param sem_out The output from an
 #' structural equation modeling
@@ -62,7 +77,18 @@
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
 #' @examples
-#' # To Do
+#'
+#' library(lavaan)
+#' dat <- dat_path_model
+#' mod <-
+#' "
+#' x3 ~ a*x1 + b*x2
+#' x4 ~ a*x1
+#' ab := a*b
+#' "
+#' fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+#' mod_to_add <- get_add(fit)
+#' mod_to_add
 #'
 #' @export
 
