@@ -41,6 +41,11 @@
 #' [get_drop()] to generate the
 #' list of models.
 #'
+#' @param prior_sem_out The prior of the
+#' model fitted in `sem_out`. Default
+#' is `NULL`, and all models will have
+#' equal prior probabilities.
+#'
 #' @param must_add A character vector
 #' of parameters, named in
 #' [lavaan::lavaan()] style (e.g.,
@@ -191,6 +196,7 @@
 #' @export
 
 model_set <- function(sem_out,
+                      prior_sem_out = NULL,
                       must_add = NULL,
                       must_not_add = NULL,
                       must_drop = NULL,
@@ -231,8 +237,16 @@ model_set <- function(sem_out,
   bic_list <- sapply(out$fit,
         function(x) as.numeric(lavaan::fitMeasures(x, "bic")))
   out$bic <- bic_list
-  # Assume unbiased priors for all models
-  out$prior <- rep(1 / length(out$bic), length(out$bic))
+  if (!is.null(prior_sem_out)) {
+      p <- length(out$bic)
+      i_original <- which(names(out$model) == "original")
+      prior_tmp <- rep((1 - prior_sem_out) / (p - 1), p)
+      prior_tmp[i_original] <- prior_sem_out
+      out$prior <- prior_tmp
+    } else {
+      # Assume unbiased priors for all models
+      out$prior <- rep(1 / length(out$bic), length(out$bic))
+    }
   out$postprob <- bpp(bic = out$bic,
                       prior = out$prior)
   out$model_set_call <- match.call()

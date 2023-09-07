@@ -56,3 +56,33 @@ test_that("BIC as expected", {
 # Test print
 
 out
+
+# User Prior
+
+mod <-
+"
+x2 ~ x3 + 0*x4
+x1 ~ x3
+"
+
+fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+
+prior0 <- .50
+out <- model_set(fit,
+                 prior_sem_out = prior0)
+bic <- out$bic
+i <- which(names(bic) == "original")
+p <- length(bic)
+prior <- rep((1 - prior0) / (p - 1), p)
+prior[i] <- prior0
+d <- exp(-.5 * (bic - bic[1])) * prior
+chk_bpp <- d / sum(d)
+
+test_that("Posterior probability as expected: User prior", {
+    expect_equal(
+        out$postprob,
+        chk_bpp,
+        ignore_attr = TRUE
+      )
+  })
+
