@@ -122,7 +122,7 @@
 #' `model_set`, a list with the following
 #' elements:
 #'
-#' * `model`: A named list of parameter
+#' * `models`: A named list of parameter
 #'    tables. Each represent the models
 #'    identified.
 #'
@@ -233,13 +233,13 @@ model_set <- function(sem_out,
                   make_cluster_args = make_cluster_args,
                   progress = progress,
                   verbose = verbose)
-  out$model <- mod_to_fit
+  out$models <- mod_to_fit
   bic_list <- sapply(out$fit,
         function(x) as.numeric(lavaan::fitMeasures(x, "bic")))
   out$bic <- bic_list
   if (!is.null(prior_sem_out)) {
       p <- length(out$bic)
-      i_original <- which(names(out$model) == "original")
+      i_original <- which(names(out$models) == "original")
       prior_tmp <- rep((1 - prior_sem_out) / (p - 1), p)
       prior_tmp[i_original] <- prior_sem_out
       out$prior <- prior_tmp
