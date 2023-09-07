@@ -86,6 +86,34 @@ test_that("Posterior probability as expected: User prior", {
       )
   })
 
+# Test previous output
+
+out0 <- model_set(fit)
+out1 <- model_set(model_set_out = out0,
+                  prior = .50)
+out2 <- model_set(fit,
+                  prior_sem_out = .50)
+
+test_that("User supplied model_set", {
+    expect_identical(out1$postprob,
+                     out2$postprob)
+  })
+
+# Test user partables
+
+out0 <- model_set(fit)
+tmp <- out0$models[-5]
+class(tmp) <- "partables"
+out1 <- model_set(fit,
+                  partables = tmp)
+
+test_that("User supplied model_set", {
+    expect_identical(out0$bic,
+                     out1$bic)
+    expect_identical(out0$postprob,
+                     out1$postprob)
+  })
+
 # Test no fit
 
 
