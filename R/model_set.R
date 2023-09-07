@@ -232,10 +232,24 @@ model_set <- function(sem_out,
         function(x) as.numeric(lavaan::fitMeasures(x, "bic")))
   out$bic <- bic_list
   # Assume unbiased priors for all models
-  postprob_list <- sapply(bic_list, function(x) exp(-1 * x / 2))
-  postprob_list <- postprob_list / sum(postprob_list)
-  out$postprob <- postprob_list
+  out$prior <- rep(1 / length(out$bic), length(out$bic))
+  out$postprob <- bpp(bic = out$bic,
+                      prior = out$prior)
   out$model_set_call <- match.call()
   class(out) <- c("model_set", class(out))
   out
 }
+
+#' @title BIC Posterior Probabilities
+#' @noRd
+
+bpp <- function(bic,
+                prior = NULL) {
+    k <- length(bic)
+    if (is.null(prior)) {
+        prior <- rep(1 / k, k)
+      }
+    di <- exp(-.5 * (bic - bic[1])) * prior
+    out <- di / sum(di)
+    out
+  }
