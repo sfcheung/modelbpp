@@ -1,8 +1,8 @@
 ---
-title: "modelbpp"
+title: "Get Started"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{modelbpp}
+  %\VignetteIndexEntry{Get Started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,8 +12,172 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(width = 132)
+options(scipen = 5)
 ```
 
 ```{r setup}
 library(modelbpp)
+library(lavaan)
 ```
+
+# Introduction
+
+This package is used to implement the
+method presented in Wu, Cheung, and
+Leung (2020) to compute the Bayesian
+posterior
+probabilities for a set of models in
+structural equation modelling (SEM).
+
+# Workflow
+
+1. The user fits an SEM model, the
+    target model, as usual in `lavaan`.
+
+2. Use `model_set()` to enumerate the
+    neighboring models of the target
+    model fitted in Step 1. A
+    neighboring model is a model that
+    can be formed by adding one or more
+    free parameters to the target model,
+    or by fixing one or more free
+    parameters to zero in the target
+    model. The user can specify the
+    maximum difference in degrees of
+    freedom in the search.
+
+3. The function `model_set)` will return
+    the list of the neighboring models
+    and the target model. The following
+    results will also be returned:
+
+  * The `lavaan` results of fitting each
+    of the model.
+
+  * The BIC of each model.
+
+  * The Bayesian posterior probability
+    of each
+    model, being normalized over the
+    list of models being compared and
+    assuming unbiased priors.
+
+# Examples
+
+## A path model
+
+This is a sample dataset with four
+variables:
+
+```{r}
+head(dat_path_model)
+```
+
+We fit this target model, a serial
+mediation model:
+
+```{r}
+mod <-
+"
+x2 ~ x1
+x3 ~ x2
+x4 ~ x3
+"
+fit <- sem(mod, dat_path_model)
+```
+
+We then find the neighboring models with
+at most one degree of freedom away from
+the target model.
+
+```{r}
+out <- model_set(sem_out = fit)
+```
+
+The output is a `model_set`-class
+object with a print method.
+
+```{r}
+out
+```
+
+The Bayesian posterior probabilities
+(BPP) suggest that
+the original model is not the most
+probable model among the list. Instead,
+five other models, each with one
+parameters added or removed, have higher
+Bayesian posterior probabilities. The
+model with the direct path `x3~x1` added
+has substantially large Bayesian posterior
+probability then other models examined.
+
+## A serial mediation model
+
+This is a sample dataset with four
+variables:
+
+```{r}
+head(dat_serial_4)
+```
+
+We fit this target model, a partial
+serial mediation model:
+
+```{r}
+mod <-
+"
+m1 ~ x
+m2 ~ m1
+y  ~ m2 + x
+"
+fit <- sem(mod, dat_serial_4)
+```
+
+This is the summary of goodness of fit
+of this model:
+
+```{r}
+fitMeasures(fit, output = "text")
+```
+
+This model fits satisfactorily. However,
+if we examine the parameter estimates,
+two of the paths, from `x` to `m2` and
+from `x` to `y`, are not significant:
+
+```{r}
+parameterEstimates(fit)
+```
+
+We find the neighboring models with at
+most one degrees of freedom away from the
+target model.
+
+```{r}
+out <- model_set(sem_out = fit)
+```
+
+We then examine the Bayesian posterior
+probabilities:
+
+```{r}
+out
+```
+
+The results suggest that, in this set
+of models, the model with one path
+dropped (`y~x`) is more probable than
+the fitted model.
+
+# References
+
+Wu, H., Cheung, S. F., & Leung, S. O.
+(2020). Simple use of BIC to assess
+model selection uncertainty: An
+illustration using mediation and
+moderation models.
+*Multivariate Behavioral Research*,
+*55*(1), 1--16.
+https://doi.org/10.1080/00273171.2019.1574546
