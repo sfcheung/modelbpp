@@ -20,17 +20,25 @@
 #'
 #' @param bpp_digits The number of
 #' decimal places to be displayed
-#' for Bayesian posterior probability.
+#' for BIC posterior probability.
 #' Default is 3.
 #'
 #' @param sort_models Whether the models
-#' will be sorted by Bayesian posterior
+#' will be sorted by BIC posterior
 #' probability.
 #' Default is `TRUE`.
 #'
 #' @param max_models The maximum number
 #' of models to be printed. Default is
 #' 10.
+#'
+#' @param bpp_target The desired
+#' BIC probability. Used to compute
+#' and print
+#' the minimum prior probability
+#' of the target model required to
+#' achieve `bpp_target`. Default
+#' is `NULL`.
 #'
 #' @param ...  Optional arguments.
 #' Ignored.
@@ -65,18 +73,35 @@ print.model_set <- function(x,
                             bpp_digits = 3,
                             sort_models = TRUE,
                             max_models = 10,
+                            bpp_target = NULL,
                             ...) {
-    fit_n <- length(x$fit)
-    fit_names <- names(x$fit)
-    fit_many_call <- x$call
+    fit_n <- length(x$models)
+    fit_names <- names(x$models)
+    models_fitted <- !is.null(x$fit)
     model_set_call <- x$model_set_call
-    k_converged <- sum(sapply(x$converged, isTRUE))
-    k_post_check <- sum(sapply(x$post_check, isTRUE))
-    out_table <- data.frame(modification = names(x$bic),
-                            df = x$change,
-                            BIC = x$bic,
-                            BPP = x$postprob)
-    if (sort_models) {
+    if (!models_fitted) {
+        fit_many_call <- NULL
+        k_converged <- NA
+        k_post_check <- NA
+      } else {
+        fit_many_call <- x$call
+        k_converged <- sum(sapply(x$converged, isTRUE))
+        k_post_check <- sum(sapply(x$post_check, isTRUE))
+      }
+    if (!models_fitted) {
+        change_tmp <- rep(NA, fit_n)
+        bic_tmp <- rep(NA, fit_n)
+        postprob_tmp <- rep(NA, fit_n)
+      } else {
+        change_tmp <- x$change
+        bic_tmp <- x$bic
+        postprob_tmp <- x$postprob
+      }
+    out_table <- data.frame(modification = fit_names,
+                            df = change_tmp,
+                            BIC = bic_tmp,
+                            BPP = postprob_tmp)
+    if (sort_models && models_fitted) {
         i <- order(out_table$BPP,
                    decreasing = TRUE)
         out_table <- out_table[i, ]
@@ -106,14 +131,42 @@ print.model_set <- function(x,
     cat("Call:\n")
     print(model_set_call)
     cat("\n")
-    cat("Number of model(s) fitted: ", fit_n, "\n", sep = "")
-    cat("Number of model(s) converged: ", k_converged, "\n", sep = "")
-    cat("Number of model(s) passed post.check: ", k_post_check, "\n", sep = "")
-    cat("\n")
+    if (models_fitted) {
+        cat("Number of model(s) fitted: ", fit_n, "\n", sep = "")
+        cat("Number of model(s) converged: ", k_converged, "\n", sep = "")
+        cat("Number of model(s) passed post.check: ", k_post_check, "\n", sep = "")
+        if (!is.null(bpp_target)) {
+            bpp_min <- min_prior(x$bic,
+                                 bpp_target = bpp_target,
+                                 target_name = "original")
+            tmp <- data.frame(x = c(
+                      formatC(bpp_target, digits = bpp_digits, format = "f"),
+                      formatC(bpp_min, digits = bpp_digits, format = "f"),
+                      formatC(x$postprob["original"], digits = bpp_digits, format = "f")))
+            colnames(tmp) <- "Target Model"
+            rownames(tmp) <- c("Desired minimum BIC posterior probability:",
+                               "Required minimum prior probability:",
+                               "Current BIC posterior probability:")
+            print(tmp)
+            # cat("Desired minimum BIC posterior probability of the target model: ",
+            #     formatC(bpp_target, digits = bpp_digits, format = "f"),
+            #     "\n", sep = "")
+            # cat("Required minimum prior probability of the target model: ",
+            #     formatC(bpp_min, digits = bpp_digits, format = "f"),
+            #     "\n", sep = "")
+            # cat("Current BIC posterior probability of the target model: ",
+            #     formatC(x$postprob["original"], digits = bpp_digits, format = "f"),
+            #     "\n", sep = "")
+          }
+      } else {
+        cat("Models are not fitted.")
+        cat("\n")
+      }
     cat("\n")
     tmp1 <- ifelse(sort_models,
                    " (sorted by BPP)",
                    "")
+    if (!models_fitted) tmp1 <- ""
     if (fit_n > max_models) {
         cat("The first ",
             max_models,
@@ -123,15 +176,16 @@ print.model_set <- function(x,
       } else {
         cat("The models",
             tmp1,
-            "\n", sep = "")
+            ":\n", sep = "")
       }
+    rownames(x_tmp) <- x_tmp$modification
     x_tmp$modification <- NULL
     print(x_tmp)
     cat("\nNote:\n")
     cat("- BIC: Bayesian Information Criterion.\n")
-    cat("- BPP: Bayesian posterior probability.\n")
+    cat("- BPP: BIC posterior probability.\n")
     if (sort_models) {
-        cat("- BPP Cumulative: Cumulative Bayesian posterior probability.\n")
+        cat("- BPP Cumulative: Cumulative BIC posterior probability.\n")
       }
     invisible(x)
   }
