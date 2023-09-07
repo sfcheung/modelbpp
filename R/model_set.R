@@ -261,6 +261,7 @@ model_set <- function(sem_out,
               stop("partables is not a partables-class object.")
             }
           mod_all <- partables
+          mod_all <- unique_models(mod_all)
         } else {
           mod_to_add <- get_add(sem_out,
                                 must_add = must_add,
@@ -273,6 +274,7 @@ model_set <- function(sem_out,
                                   must_not_drop = must_not_drop,
                                   df_change = df_change_drop)
           mod_all <- c(mod_to_add, mod_to_drop)
+          mod_all <- unique_models(mod_all)
         }
       pt0 <- lavaan::parameterTable(sem_out)
       mod_to_fit <- c(mod_all, list(`original` = pt0))

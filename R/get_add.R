@@ -183,6 +183,7 @@ get_add <- function(sem_out,
     attr(out, "call") <- match.call()
     attr(out, "sem_out") <- sem_out
     class(out) <- c("partables", class(out))
+    out <- unique_models(out)
     out
   }
 
