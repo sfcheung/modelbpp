@@ -22,6 +22,45 @@
     <loc>https://sfcheung.github.io/modelbpp/news/index.html</loc>
   </url>
   <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/dat_cfa.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/dat_path_model.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/dat_path_model_p06.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/dat_sem.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/dat_serial_4.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/fit_many.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/get_add.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/get_drop.html</loc>
+  </url>
+  <url>
     <loc>https://sfcheung.github.io/modelbpp/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/model_set.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/modelbpp-package.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/print.model_set.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/print.partables.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/print.sem_outs.html</loc>
   </url>
 </urlset>
