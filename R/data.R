@@ -107,3 +107,27 @@
 #' ```
 #'
 "dat_sem"
+
+
+#' A sample dataset based on a serial mediation path model
+#' with weak paths (for
+#' testing)
+#'
+#' Generated from the following path model, n = 100
+#'
+#' The model used to generate this dataset:
+#'
+#' ```
+#' m1 ~ x
+#' m2 ~ m1 + x
+#' y  ~ m2 + m1 + x
+#' ```
+#'
+#' @format A data frame with four variables:
+#' \describe{
+#'  \item{x}{Predictor}
+#'  \item{m1}{Mediator}
+#'  \item{m2}{Mediator}
+#'  \item{y}{Outcome}
+#' }
+"dat_serial_4_weak"
