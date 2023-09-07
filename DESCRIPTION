@@ -1,5 +1,5 @@
 Package: modelbpp
-Title: Model Bayesian Posterior Probability and Related Measures
+Title: Model BIC Posterior Probability and Related Measures
 Version: 0.0.0.9007
 Authors@R:
     person(given = "Shu Fai",

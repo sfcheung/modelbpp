@@ -4,7 +4,7 @@
 \name{modelbpp-package}
 \alias{modelbpp}
 \alias{modelbpp-package}
-\title{modelbpp: Model Bayesian Posterior Probability and Related Measures}
+\title{modelbpp: Model BIC Posterior Probability and Related Measures}
 \description{
 Fits the neighboring models of a fitted structural equation model and assesses the model uncertainty of the fitted model. Currently supports BIC posterior probabilities (Wu, Cheung, and Leung, 2020, \doi{10.1080/00273171.2019.1574546}) but may support other measures in the future.
 }

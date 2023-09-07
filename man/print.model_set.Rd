@@ -23,11 +23,11 @@ Default is 3.}
 
 \item{bpp_digits}{The number of
 decimal places to be displayed
-for Bayesian posterior probability.
+for BIC posterior probability.
 Default is 3.}
 
 \item{sort_models}{Whether the models
-will be sorted by Bayesian posterior
+will be sorted by BIC posterior
 probability.
 Default is \code{TRUE}.}
 

@@ -25,7 +25,7 @@ library(lavaan)
 
 This package is used to implement the
 method presented in Wu, Cheung, and
-Leung (2020) to compute the Bayesian
+Leung (2020) to compute the BIC
 posterior
 probabilities for a set of models in
 structural equation modelling (SEM).
@@ -57,7 +57,7 @@ structural equation modelling (SEM).
 
   * The BIC of each model.
 
-  * The Bayesian posterior probability
+  * The BIC posterior probability
     of each
     model, being normalized over the
     list of models being compared and
@@ -102,15 +102,15 @@ object with a print method.
 out
 ```
 
-The Bayesian posterior probabilities
+The BIC posterior probabilities
 (BPP) suggest that
 the original model is not the most
 probable model among the list. Instead,
 five other models, each with one
 parameters added or removed, have higher
-Bayesian posterior probabilities. The
+BIC posterior probabilities. The
 model with the direct path `x3~x1` added
-has substantially large Bayesian posterior
+has substantially large BIC posterior
 probability then other models examined.
 
 ## A serial mediation model
@@ -159,7 +159,7 @@ target model.
 out <- model_set(sem_out = fit)
 ```
 
-We then examine the Bayesian posterior
+We then examine the BIC posterior
 probabilities:
 
 ```{r}

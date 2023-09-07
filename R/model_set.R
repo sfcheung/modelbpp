@@ -1,11 +1,11 @@
-#' @title Bayesian Posterior Probabilities
+#' @title BIC Posterior Probabilities
 #' of Neighboring Models
 #'
 #' @description Identify neighboring
 #' models, fit them, and return the
-#' Bayesian posterior probabilities.
+#' BIC posterior probabilities.
 #'
-#' @details It computes the Bayesian
+#' @details It computes the BIC
 #' posterior probabilities of a set
 #' of models by the method presented
 #' in Wu, Cheung, and Leung (2020).
@@ -22,7 +22,7 @@
 #' to the sample dataset, and their
 #' BICs will be computed.
 #'
-#' Third, their Bayesian posterior
+#' Third, their BIC posterior
 #' probabilities will be computed
 #' using their BICs. Equal prior
 #' probabilities for all the models
@@ -31,7 +31,7 @@
 #'
 #' The results can then be printed,
 #' with the models sorted by descending
-#' order of Bayesian posterior
+#' order of BIC posterior
 #' probabilities.
 #'
 #' @param sem_out The output from an
@@ -162,7 +162,7 @@
 #'
 #' * `postprob`: A numeric vector, of
 #'    the same length as `model`. The
-#'    posterior probability of each
+#'    BIC posterior probability of each
 #'    model.
 #'
 #' * `fit`: A named list of

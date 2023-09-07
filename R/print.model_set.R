@@ -20,11 +20,11 @@
 #'
 #' @param bpp_digits The number of
 #' decimal places to be displayed
-#' for Bayesian posterior probability.
+#' for BIC posterior probability.
 #' Default is 3.
 #'
 #' @param sort_models Whether the models
-#' will be sorted by Bayesian posterior
+#' will be sorted by BIC posterior
 #' probability.
 #' Default is `TRUE`.
 #'
@@ -152,9 +152,9 @@ print.model_set <- function(x,
     print(x_tmp)
     cat("\nNote:\n")
     cat("- BIC: Bayesian Information Criterion.\n")
-    cat("- BPP: Bayesian posterior probability.\n")
+    cat("- BPP: BIC posterior probability.\n")
     if (sort_models) {
-        cat("- BPP Cumulative: Cumulative Bayesian posterior probability.\n")
+        cat("- BPP Cumulative: Cumulative BIC posterior probability.\n")
       }
     invisible(x)
   }
