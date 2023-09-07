@@ -93,6 +93,14 @@
 #' number will be included. Default is
 #' 1.
 #'
+#' @param fit_models If `TRUE`, the
+#' default, the
+#' models will be fitted to the data
+#' and BIC probabilities will be computed.
+#' If `FALSE`, the models will be returned
+#' as is, in the element `models`
+#' of the output.
+#'
 #' @param parallel If `TRUE`, parallel
 #' processing will be used to fit the
 #' models. Default is `FALSE`.
@@ -205,6 +213,7 @@ model_set <- function(sem_out,
                       exclude_error_cov = TRUE,
                       df_change_add = 1,
                       df_change_drop = 1,
+                      fit_models = TRUE,
                       parallel = FALSE,
                       ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
                       make_cluster_args = list(),
@@ -226,29 +235,45 @@ model_set <- function(sem_out,
                           df_change = df_change_drop)
   pt0 <- lavaan::parameterTable(sem_out)
   mod_to_fit <- c(mod_to_add, mod_to_drop, list(`original` = pt0))
-  out <- fit_many(model_list = mod_to_fit,
-                  sem_out = sem_out,
-                  parallel = parallel,
-                  ncores = ncores,
-                  make_cluster_args = make_cluster_args,
-                  progress = progress,
-                  verbose = verbose)
-  out$models <- mod_to_fit
-  bic_list <- sapply(out$fit,
-        function(x) as.numeric(lavaan::fitMeasures(x, "bic")))
-  out$bic <- bic_list
-  if (!is.null(prior_sem_out)) {
-      p <- length(out$bic)
-      i_original <- which(names(out$models) == "original")
-      prior_tmp <- rep((1 - prior_sem_out) / (p - 1), p)
-      prior_tmp[i_original] <- prior_sem_out
-      out$prior <- prior_tmp
+  if (fit_models) {
+      out <- fit_many(model_list = mod_to_fit,
+                      sem_out = sem_out,
+                      parallel = parallel,
+                      ncores = ncores,
+                      make_cluster_args = make_cluster_args,
+                      progress = progress,
+                      verbose = verbose)
     } else {
-      # Assume unbiased priors for all models
-      out$prior <- rep(1 / length(out$bic), length(out$bic))
+      # Create an object of the class "sem_outs"
+      # Not a good solution but do not have a better one for now
+      out <- list(fit = NULL,
+                  change = NULL,
+                  converged = NULL,
+                  post_check = NULL,
+                  call = NULL)
+      class(out) <- c("sem_outs", class(out))
     }
-  out$postprob <- bpp(bic = out$bic,
-                      prior = out$prior)
+  out$models <- mod_to_fit
+  if (fit_models) {
+      bic_list <- sapply(out$fit,
+            function(x) as.numeric(lavaan::fitMeasures(x, "bic")))
+      out$bic <- bic_list
+      if (!is.null(prior_sem_out)) {
+          p <- length(out$bic)
+          i_original <- which(names(out$models) == "original")
+          prior_tmp <- rep((1 - prior_sem_out) / (p - 1), p)
+          prior_tmp[i_original] <- prior_sem_out
+          out$prior <- prior_tmp
+        } else {
+          # Assume unbiased priors for all models
+          out$prior <- rep(1 / length(out$bic), length(out$bic))
+        }
+      out$postprob <- bpp(bic = out$bic,
+                          prior = out$prior)
+    } else {
+      out$bic <- NULL
+      out$postprob <- NULL
+    }
   out$model_set_call <- match.call()
   class(out) <- c("model_set", class(out))
   out

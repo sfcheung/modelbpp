@@ -86,3 +86,15 @@ test_that("Posterior probability as expected: User prior", {
       )
   })
 
+# Test no fit
+
+
+mod <-
+"
+x2 ~ x3 + 0*x4
+x1 ~ x3
+"
+
+fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+out <- model_set(fit, fit_models = FALSE)
+out

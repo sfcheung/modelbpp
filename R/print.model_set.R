@@ -66,17 +66,33 @@ print.model_set <- function(x,
                             sort_models = TRUE,
                             max_models = 10,
                             ...) {
-    fit_n <- length(x$fit)
-    fit_names <- names(x$fit)
-    fit_many_call <- x$call
+    fit_n <- length(x$models)
+    fit_names <- names(x$models)
+    models_fitted <- !is.null(x$fit)
     model_set_call <- x$model_set_call
-    k_converged <- sum(sapply(x$converged, isTRUE))
-    k_post_check <- sum(sapply(x$post_check, isTRUE))
-    out_table <- data.frame(modification = names(x$bic),
-                            df = x$change,
-                            BIC = x$bic,
-                            BPP = x$postprob)
-    if (sort_models) {
+    if (!models_fitted) {
+        fit_many_call <- NULL
+        k_converged <- NA
+        k_post_check <- NA
+      } else {
+        fit_many_call <- x$call
+        k_converged <- sum(sapply(x$converged, isTRUE))
+        k_post_check <- sum(sapply(x$post_check, isTRUE))
+      }
+    if (!models_fitted) {
+        change_tmp <- rep(NA, fit_n)
+        bic_tmp <- rep(NA, fit_n)
+        postprob_tmp <- rep(NA, fit_n)
+      } else {
+        change_tmp <- x$change
+        bic_tmp <- x$bic
+        postprob_tmp <- x$postprob
+      }
+    out_table <- data.frame(modification = fit_names,
+                            df = change_tmp,
+                            BIC = bic_tmp,
+                            BPP = postprob_tmp)
+    if (sort_models && models_fitted) {
         i <- order(out_table$BPP,
                    decreasing = TRUE)
         out_table <- out_table[i, ]
@@ -106,14 +122,20 @@ print.model_set <- function(x,
     cat("Call:\n")
     print(model_set_call)
     cat("\n")
-    cat("Number of model(s) fitted: ", fit_n, "\n", sep = "")
-    cat("Number of model(s) converged: ", k_converged, "\n", sep = "")
-    cat("Number of model(s) passed post.check: ", k_post_check, "\n", sep = "")
-    cat("\n")
+    if (models_fitted) {
+        cat("Number of model(s) fitted: ", fit_n, "\n", sep = "")
+        cat("Number of model(s) converged: ", k_converged, "\n", sep = "")
+        cat("Number of model(s) passed post.check: ", k_post_check, "\n", sep = "")
+        cat("\n")
+      } else {
+        cat("Models are not fitted.")
+        cat("\n")
+      }
     cat("\n")
     tmp1 <- ifelse(sort_models,
                    " (sorted by BPP)",
                    "")
+    if (!models_fitted) tmp1 <- ""
     if (fit_n > max_models) {
         cat("The first ",
             max_models,
@@ -125,6 +147,7 @@ print.model_set <- function(x,
             tmp1,
             "\n", sep = "")
       }
+    rownames(x_tmp) <- x_tmp$modification
     x_tmp$modification <- NULL
     print(x_tmp)
     cat("\nNote:\n")
