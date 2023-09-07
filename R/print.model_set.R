@@ -32,6 +32,14 @@
 #' of models to be printed. Default is
 #' 10.
 #'
+#' @param bpp_target The desired
+#' BIC probability. Used to compute
+#' and print
+#' the minimum prior probability
+#' of the target model required to
+#' achieve `bpp_target`. Default
+#' is `NULL`.
+#'
 #' @param ...  Optional arguments.
 #' Ignored.
 #'
@@ -65,6 +73,7 @@ print.model_set <- function(x,
                             bpp_digits = 3,
                             sort_models = TRUE,
                             max_models = 10,
+                            bpp_target = NULL,
                             ...) {
     fit_n <- length(x$models)
     fit_names <- names(x$models)
@@ -126,7 +135,29 @@ print.model_set <- function(x,
         cat("Number of model(s) fitted: ", fit_n, "\n", sep = "")
         cat("Number of model(s) converged: ", k_converged, "\n", sep = "")
         cat("Number of model(s) passed post.check: ", k_post_check, "\n", sep = "")
-        cat("\n")
+        if (!is.null(bpp_target)) {
+            bpp_min <- min_prior(x$bic,
+                                 bpp_target = bpp_target,
+                                 target_name = "original")
+            tmp <- data.frame(x = c(
+                      formatC(bpp_target, digits = bpp_digits, format = "f"),
+                      formatC(bpp_min, digits = bpp_digits, format = "f"),
+                      formatC(x$postprob["original"], digits = bpp_digits, format = "f")))
+            colnames(tmp) <- "Target Model"
+            rownames(tmp) <- c("Desired minimum BIC posterior probability:",
+                               "Required minimum prior probability:",
+                               "Current BIC posterior probability:")
+            print(tmp)
+            # cat("Desired minimum BIC posterior probability of the target model: ",
+            #     formatC(bpp_target, digits = bpp_digits, format = "f"),
+            #     "\n", sep = "")
+            # cat("Required minimum prior probability of the target model: ",
+            #     formatC(bpp_min, digits = bpp_digits, format = "f"),
+            #     "\n", sep = "")
+            # cat("Current BIC posterior probability of the target model: ",
+            #     formatC(x$postprob["original"], digits = bpp_digits, format = "f"),
+            #     "\n", sep = "")
+          }
       } else {
         cat("Models are not fitted.")
         cat("\n")
@@ -145,7 +176,7 @@ print.model_set <- function(x,
       } else {
         cat("The models",
             tmp1,
-            "\n", sep = "")
+            ":\n", sep = "")
       }
     rownames(x_tmp) <- x_tmp$modification
     x_tmp$modification <- NULL

@@ -10,6 +10,7 @@
   bpp_digits = 3,
   sort_models = TRUE,
   max_models = 10,
+  bpp_target = NULL,
   ...
 )
 }
@@ -34,6 +35,14 @@ Default is \code{TRUE}.}
 \item{max_models}{The maximum number
 of models to be printed. Default is
 10.}
+
+\item{bpp_target}{The desired
+BIC probability. Used to compute
+and print
+the minimum prior probability
+of the target model required to
+achieve \code{bpp_target}. Default
+is \code{NULL}.}
 
 \item{...}{Optional arguments.
 Ignored.}
