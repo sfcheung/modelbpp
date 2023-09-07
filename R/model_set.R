@@ -335,3 +335,19 @@ bpp <- function(bic,
     out <- di / sum(di)
     out
   }
+
+#' @title Minimum Prior
+#' @noRd
+
+min_prior <- function(bic,
+                      bpp_target,
+                      target_name = "original") {
+    e <- exp(-.5 * (bic - bic[target_name]))
+    i <- which(names(bic) == target_name)
+    e1 <- e[i]
+    estar <- sum(e[-i])
+    k <- length(e)
+    p1 <- (1 / (k - 1)) * bpp_target * estar /
+            (e1 * (1 - bpp_target) + bpp_target * estar / (k - 1))
+    unname(p1)
+  }
