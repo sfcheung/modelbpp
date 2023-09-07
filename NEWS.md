@@ -1,4 +1,4 @@
-# modelbpp 0.0.0.9007
+# modelbpp 0.0.0.9008
 
 - Migrating. (0.0.0.9001)
 - Initial setup. (0.0.0.9001)
@@ -19,3 +19,11 @@
   `model_set`-class objects. (0.0.0.9006)
 - Updated the help pages of functions
   (0.0.0.9007)
+- Users can set the prior probability
+  of the target model. (0.0.0.9008)
+- Users can reuse model list from the
+  output of `model_se()`. (0.0.0.9008)
+- Added `min_prior()` for computing
+  the minimum prior required to achieve
+  the desired minimum BIC posterior
+  probability. (0.0.0.9008)
