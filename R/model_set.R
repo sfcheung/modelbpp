@@ -123,6 +123,10 @@
 #' as is, in the element `models`
 #' of the output.
 #'
+#' @param remove_duplicated If `TRUE`,
+#' the default, duplicated models are
+#' removed.
+#'
 #' @param parallel If `TRUE`, parallel
 #' processing will be used to fit the
 #' models. Default is `FALSE`.
@@ -238,6 +242,7 @@ model_set <- function(sem_out,
                       df_change_add = 1,
                       df_change_drop = 1,
                       fit_models = TRUE,
+                      remove_duplicated = TRUE,
                       parallel = FALSE,
                       ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
                       make_cluster_args = list(),
@@ -261,19 +266,22 @@ model_set <- function(sem_out,
               stop("partables is not a partables-class object.")
             }
           mod_all <- partables
-          mod_all <- unique_models(mod_all)
         } else {
           mod_to_add <- get_add(sem_out,
                                 must_add = must_add,
                                 must_not_add = must_not_add,
                                 remove_constraints = remove_constraints,
                                 exclude_error_cov = exclude_error_cov,
-                                df_change = df_change_add)
+                                df_change = df_change_add,
+                                remove_duplicated = remove_duplicated)
           mod_to_drop <- get_drop(sem_out,
                                   must_drop = must_drop,
                                   must_not_drop = must_not_drop,
-                                  df_change = df_change_drop)
+                                  df_change = df_change_drop,
+                                  remove_duplicated = remove_duplicated)
           mod_all <- c(mod_to_add, mod_to_drop)
+        }
+      if (remove_duplicated) {
           mod_all <- unique_models(mod_all)
         }
       pt0 <- lavaan::parameterTable(sem_out)

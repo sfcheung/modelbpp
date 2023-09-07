@@ -58,6 +58,10 @@
 #' or equal to this number will be
 #' included. Default is 1.
 #'
+#' @param remove_duplicated If `TRUE`,
+#' the default, duplicated models are
+#' removed.
+#'
 #' @param model_id The identification
 #' number of the starting model.
 #' Default is `NA`, no identification
@@ -101,7 +105,8 @@ get_add <- function(sem_out,
                      exclude_error_cov = TRUE,
                      df_change = 1,
                      model_id = NA,
-                     keep_correct_df_change = TRUE
+                     keep_correct_df_change = TRUE,
+                     remove_duplicated = TRUE
                     ) {
     if (missing(sem_out)) stop("sem_out is not supplied.")
     if (!inherits(sem_out, "lavaan")) {
@@ -183,7 +188,9 @@ get_add <- function(sem_out,
     attr(out, "call") <- match.call()
     attr(out, "sem_out") <- sem_out
     class(out) <- c("partables", class(out))
-    out <- unique_models(out)
+    if (remove_duplicated) {
+        out <- unique_models(out)
+      }
     out
   }
 

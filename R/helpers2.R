@@ -19,8 +19,18 @@ unique_models <- function(partables) {
 added <- function(partables) {
     i1 <- sapply(partables, attr,
                  which = "parameters_added")
+
     i2 <- sapply(partables, attr,
                  which = "constraints_released")
+    # i2 <- sapply(i2, function(x) {
+    #           if (length(x) > 0) {
+    #               strsplit(x[[1]],
+    #                        split = ";",
+    #                        fixed = TRUE)[[1]]
+    #             } else {
+    #               return(NULL)
+    #             }
+    #         })
     i <- mapply(c, i1, i2)
     i <- lapply(i, unlist)
     i
@@ -31,6 +41,15 @@ added <- function(partables) {
 dropped <- function(partables) {
     i <- sapply(partables, attr,
                 which = "parameters_dropped")
+    # i <- sapply(i, function(x) {
+    #           if (length(x) > 0) {
+    #               strsplit(x[[1]],
+    #                        split = ";",
+    #                        fixed = TRUE)[[1]]
+    #             } else {
+    #               return(NULL)
+    #             }
+    #         })
     i <- lapply(i, unlist)
     i
   }

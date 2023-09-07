@@ -54,6 +54,10 @@
 #' only tables with actual *df* change
 #' equal to expected *df* change.
 #'
+#' @param remove_duplicated If `TRUE`,
+#' the default, duplicated models are
+#' removed.
+#'
 #' @return An object of the class
 #' `partables`, a named list of parameter
 #' tables, each of them to be used by
@@ -88,7 +92,8 @@ get_drop <- function(sem_out,
                      must_not_drop = NULL,
                      df_change = 1,
                      model_id = NA,
-                     keep_correct_df_change = TRUE
+                     keep_correct_df_change = TRUE,
+                     remove_duplicated = TRUE
                     ) {
     if (missing(sem_out)) stop("sem_out is not supplied.")
     if (!inherits(sem_out, "lavaan")) {
@@ -143,7 +148,9 @@ get_drop <- function(sem_out,
     attr(out, "call") <- match.call()
     attr(out, "sem_out") <- sem_out
     class(out) <- c("partables", class(out))
-    out <- unique_models(out)
+    if (remove_duplicated) {
+        out <- unique_models(out)
+      }
     out
   }
 

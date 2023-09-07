@@ -19,6 +19,7 @@ model_set(
   df_change_add = 1,
   df_change_drop = 1,
   fit_models = TRUE,
+  remove_duplicated = TRUE,
   parallel = FALSE,
   ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
   make_cluster_args = list(),
@@ -115,6 +116,10 @@ and BIC probabilities will be computed.
 If \code{FALSE}, the models will be returned
 as is, in the element \code{models}
 of the output.}
+
+\item{remove_duplicated}{If \code{TRUE},
+the default, duplicated models are
+removed.}
 
 \item{parallel}{If \code{TRUE}, parallel
 processing will be used to fit the
