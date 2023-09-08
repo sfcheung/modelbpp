@@ -3,8 +3,58 @@
 #' @description Generate an 'igraph' object from a
 #' 'model_set' object.
 #'
+#' @details
+#' It extract the model list stored
+#' in `object`, create an adjacency
+#' matrix, and the create an `igraph`
+#' object customized for visualizing
+#' model relations.
+#'
+#' ## Details of the Graph
+#'
+#' - Each model is connected by an
+#'  arrow, pointing from one model to
+#'  a model that is formed by
+#'
+#'    a. adding one free parameter, or
+#'
+#'    b, releasing one equality constraint
+#'  between two parameters.
+#'
+#' - By default, the size of the node
+#'  for each model is scaled by its
+#'  BIC posterior probability, if
+#'  available. See *The Size of a Node*
+#'  below.
+#'
+#' - The original model, the models with
+#'  more degrees of freedom,
+#'  and the models with fewer degrees
+#'  of freedom are colored differently.
+#'
+#' - The default layout is the tree
+#'  layout, with simpler models (models
+#'  with fewer degrees of freedom) on
+#'  the top. The lower a model is in
+#'  the network, the more the degrees
+#'  of freedom it has.
+#'
+#' The output is an `igraph` object.
+#' Users can customize it in anyway
+#' they want using functions from
+#' the `igraph` package.
+#'
+#' ## The Size of a Node
+#'
+#' When a model is scaled by `x`,
+#' which usually is the BIC posterior
+#' probability, its size is determined
+#' by:
+#'
+#' `max_size * (x - min(x))/(max(x) - min(x)) + min_size`
+#'
 #' @return
-#' A `model_graph`-class object that is
+#' A `model_graph`-class object that
 #' can be used as as `igraph`-object,
 #' with a plot method with settings
 #' suitable for plotting a network
@@ -69,22 +119,26 @@
 #'
 #' library(lavaan)
 #'
-#' dat <- dat_path_model
-#'
 #' mod <-
 #' "
-#' x3 ~ a*x1 + b*x2
-#' x4 ~ a*x1
-#' ab := a*b
+#' m1 ~ x
+#' m2 ~ m1
+#' y ~ m2
 #' "
 #'
-#' fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+#' fit <- sem(mod, dat_serial_4_weak, fixed.x = TRUE)
 #'
 #' out <- model_set(fit)
 #' out
 #'
 #' g <- model_graph(out)
 #' plot(g)
+#'
+#' out2 <- model_set(fit, df_change_add = 2, df_change_drop = 2)
+#' out2
+#'
+#' g2 <- model_graph(out2)
+#' plot(g2)
 #'
 #' @export
 
@@ -98,7 +152,7 @@ model_graph <- function(object,
                         color_add = "burlywood1",
                         color_drop = "lightgreen",
                         color_label = "black",
-                        node_label_size = 2,
+                        node_label_size = 1,
                         ...) {
     net_out <- models_network(object)
     out <- igraph::graph_from_adjacency_matrix(net_out,
@@ -147,14 +201,19 @@ model_graph <- function(object,
 #' the output of
 #' [model_graph()].
 #'
+#' For nows, it simply passes the object
+#' to [plot.igraph()]. This function
+#' is created for possible customization
+#' of the plot in the future.
+#'
 #' @param x The output of
 #' [model_graph()]. (Named `x`
 #' because it is required in the naming
 #' of arguments of the `plot` generic
 #' function.)
 #'
-#' @param ... Additional arguments.
-#' Ignored.
+#' @param ... Additional arguments,
+#' passed to [plot.igraph()].
 #'
 #' @seealso [model_graph()]
 #'

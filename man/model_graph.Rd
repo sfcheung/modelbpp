@@ -15,7 +15,7 @@ model_graph(
   color_add = "burlywood1",
   color_drop = "lightgreen",
   color_label = "black",
-  node_label_size = 2,
+  node_label_size = 1,
   ...
 )
 }
@@ -76,7 +76,7 @@ the labels of the nodes. Default is
 used for now.}
 }
 \value{
-A \code{model_graph}-class object that is
+A \code{model_graph}-class object that
 can be used as as \code{igraph}-object,
 with a plot method with settings
 suitable for plotting a network
@@ -86,25 +86,78 @@ of models with BIC posterior probability
 Generate an 'igraph' object from a
 'model_set' object.
 }
+\details{
+It extract the model list stored
+in \code{object}, create an adjacency
+matrix, and the create an \code{igraph}
+object customized for visualizing
+model relations.
+\subsection{Details of the Graph}{
+\itemize{
+\item Each model is connected by an
+arrow, pointing from one model to
+a model that is formed by
+
+a. adding one free parameter, or
+
+b, releasing one equality constraint
+between two parameters.
+\item By default, the size of the node
+for each model is scaled by its
+BIC posterior probability, if
+available. See \emph{The Size of a Node}
+below.
+\item The original model, the models with
+more degrees of freedom,
+and the models with fewer degrees
+of freedom are colored differently.
+\item The default layout is the tree
+layout, with simpler models (models
+with fewer degrees of freedom) on
+the top. The lower a model is in
+the network, the more the degrees
+of freedom it has.
+}
+
+The output is an \code{igraph} object.
+Users can customize it in anyway
+they want using functions from
+the \code{igraph} package.
+}
+
+\subsection{The Size of a Node}{
+
+When a model is scaled by \code{x},
+which usually is the BIC posterior
+probability, its size is determined
+by:
+
+\code{max_size * (x - min(x))/(max(x) - min(x)) + min_size}
+}
+}
 \examples{
 
 library(lavaan)
 
-dat <- dat_path_model
-
 mod <-
 "
-x3 ~ a*x1 + b*x2
-x4 ~ a*x1
-ab := a*b
+m1 ~ x
+m2 ~ m1
+y ~ m2
 "
 
-fit <- sem(mod, dat_path_model, fixed.x = TRUE)
+fit <- sem(mod, dat_serial_4_weak, fixed.x = TRUE)
 
 out <- model_set(fit)
 out
 
 g <- model_graph(out)
 plot(g)
+
+out2 <- model_set(fit, df_change_add = 2, df_change_drop = 2)
+out2
+
+g2 <- model_graph(out2)
+plot(g2)
 
 }

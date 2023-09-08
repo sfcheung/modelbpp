@@ -13,8 +13,8 @@ because it is required in the naming
 of arguments of the \code{plot} generic
 function.)}
 
-\item{...}{Additional arguments.
-Ignored.}
+\item{...}{Additional arguments,
+passed to \code{\link[=plot.igraph]{plot.igraph()}}.}
 }
 \value{
 \code{NULL}. Called for its
@@ -29,6 +29,11 @@ This function is the plot
 method of \code{model_graph} objects,
 the output of
 \code{\link[=model_graph]{model_graph()}}.
+
+For nows, it simply passes the object
+to \code{\link[=plot.igraph]{plot.igraph()}}. This function
+is created for possible customization
+of the plot in the future.
 }
 \examples{
 
