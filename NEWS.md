@@ -1,4 +1,4 @@
-# modelbpp 0.0.0.9008
+# modelbpp 0.0.0.9009
 
 - Migrating. (0.0.0.9001)
 - Initial setup. (0.0.0.9001)
@@ -27,3 +27,7 @@
   the minimum prior required to achieve
   the desired minimum BIC posterior
   probability. (0.0.0.9008)
+- Added `model_graph()` for plotting
+  models as a network, with sizes affected
+  by BIC posterior probabilities.
+  (0.0.0.9009)
