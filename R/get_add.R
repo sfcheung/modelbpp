@@ -58,6 +58,10 @@
 #' or equal to this number will be
 #' included. Default is 1.
 #'
+#' @param remove_duplicated If `TRUE`,
+#' the default, duplicated models are
+#' removed.
+#'
 #' @param model_id The identification
 #' number of the starting model.
 #' Default is `NA`, no identification
@@ -101,7 +105,8 @@ get_add <- function(sem_out,
                      exclude_error_cov = TRUE,
                      df_change = 1,
                      model_id = NA,
-                     keep_correct_df_change = TRUE
+                     keep_correct_df_change = TRUE,
+                     remove_duplicated = TRUE
                     ) {
     if (missing(sem_out)) stop("sem_out is not supplied.")
     if (!inherits(sem_out, "lavaan")) {
@@ -175,14 +180,17 @@ get_add <- function(sem_out,
       }
 
     out_names <- sapply(out, function(x) {
-        out <- paste0(c(attr(x, "parameters_added"),
-              attr(x, "constraints_released")), collapse = ";")
+        out <- paste0(c(attr(x, "parameters_added_str"),
+              attr(x, "constraints_released_str")), collapse = ";")
         paste("add:", out)
       })
     names(out) <- out_names
     attr(out, "call") <- match.call()
     attr(out, "sem_out") <- sem_out
     class(out) <- c("partables", class(out))
+    if (remove_duplicated) {
+        out <- unique_models(out)
+      }
     out
   }
 
@@ -218,6 +226,7 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
     # Add free parameters
     if (length(x_free) > 0) {
         x_free_str <- par_names(pars_list = x_free)
+        p_to_add <- sapply(x_free, paste0, collapse = "")
         sem_out_update <- lavaan::update(sem_out,
                                          pt,
                                          add = x_free_str,
@@ -229,6 +238,7 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
                                                    fit.measures = "df"))
       } else {
         x_free_str <- NULL
+        p_to_add <- NULL
         sem_out_update <- lavaan::update(sem_out,
                                          pt,
                                          do.fit = TRUE,
@@ -238,10 +248,12 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
         pt_update_df <- unname(lavaan::fitMeasures(sem_out_update,
                                                    fit.measures = "df"))
       }
-    attr(pt_update, "parameters_added") <- x_free_str
+    attr(pt_update, "parameters_added") <- p_to_add
+    attr(pt_update, "parameters_added_str") <- x_free_str
     attr(pt_update, "parameters_added_list") <- x_free
     attr(pt_update, "constraints_released_labels") <- x_constr_labels
-    attr(pt_update, "constraints_released") <- x_constr_str
+    attr(pt_update, "constraints_released_str") <- x_constr_str
+    attr(pt_update, "constraints_released") <- x_constr_pars
     attr(pt_update, "constraints_released_list") <- x_constr_out
     attr(pt_update, "from") <- from
     attr(pt_update, "df_expected") <- unname(lavaan::fitMeasures(sem_out, "df")) -

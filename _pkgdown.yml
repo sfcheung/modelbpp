@@ -32,15 +32,18 @@ reference:
 - contents:
   - model_set
   - fit_many
+  - model_graph
 - title: Helpers
 - contents:
   - get_add
   - get_drop
+  - min_prior
 - title: Methods
 - contents:
   - print.partables
   - print.sem_outs
   - print.model_set
+  - plot.model_graph
 - title: Datasets
   desc: Datasets used in examples.
 - contents:
