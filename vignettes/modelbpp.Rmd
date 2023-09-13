@@ -10,166 +10,247 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width  =  6,
+  fig.height =  6,
+  fig.align = "center"
 )
-options(width = 132)
-options(scipen = 5)
-```
-
-```{r setup}
-library(modelbpp)
-library(lavaan)
 ```
 
 # Introduction
 
-This package is used to implement the
-method presented in Wu, Cheung, and
-Leung (2020) to compute the BIC
-posterior
-probabilities for a set of models in
-structural equation modelling (SEM).
+This article illustrates how to
+use `model_set()` and other functions
+from the package `modelbpp` to:
+
+- Fit a set of neighboring models,
+  each has one more or one less degree
+  of freedom than a target model.
+
+- Compute the BIC posterior probability
+  BPP, for each model (Hu, Cheung,
+  and Leung, 2020).
+
+- Use BPP to assess to what extent
+  the target model is supported by the
+  data, compared to the neighboring
+  models.
 
 # Workflow
 
-1. The user fits an SEM model, the
+1. Fit an SEM model, the
     target model, as usual in `lavaan`.
 
-2. Use `model_set()` to enumerate the
-    neighboring models of the target
-    model fitted in Step 1. A
-    neighboring model is a model that
-    can be formed by adding one or more
-    free parameters to the target model,
-    or by fixing one or more free
-    parameters to zero in the target
-    model. The user can specify the
-    maximum difference in degrees of
-    freedom in the search.
+2. Call `model_set()` on the output from
+  Step 1. It will automatically do these:
 
-3. The function `model_set)` will return
-    the list of the neighboring models
-    and the target model. The following
-    results will also be returned:
+    - Enumerate the neighboring models
+      of the target model.
 
-  * The `lavaan` results of fitting each
-    of the model.
+    - Fit all the models and compute their
+      BIC posterior probabilities.
 
-  * The BIC of each model.
-
-  * The BIC posterior probability
-    of each
-    model, being normalized over the
-    list of models being compared and
-    assuming unbiased priors.
+3. Examine the results by printing
+  the output of `model_set()` or
+  generating a graph using `model_graph()`.
 
 # Examples
 
 ## A path model
 
-This is a sample dataset with four
-variables:
+This is a sample dataset,
+`dat_serial_4_weak`,
+with four variables:
 
 ```{r}
-head(dat_path_model)
+library(modelbpp)
+head(dat_serial_4_weak)
 ```
+
+### Step 1: Fit the Target Model
 
 We fit this target model, a serial
-mediation model:
+mediation model, with one direct path,
+from `x` to `y`:
 
 ```{r}
-mod <-
+library(lavaan)
+mod1 <-
 "
-x2 ~ x1
-x3 ~ x2
-x4 ~ x3
+m1 ~ x
+m2 ~ m1
+y ~ m2 + x
 "
-fit <- sem(mod, dat_path_model)
+fit1 <- sem(mod1, dat_serial_4_weak)
 ```
 
-We then find the neighboring models with
-at most one degree of freedom away from
-the target model.
+This the summary:
 
 ```{r}
-out <- model_set(sem_out = fit)
+summary(fit1,
+        fit.measures = TRUE)
 ```
+
+```{r echo = FALSE}
+tmp <- fitMeasures(fit1)
+fit1_cfi <- unname(tmp["cfi"])
+fit1_rmsea <- unname(tmp["rmsea"])
+```
+
+The fit is acceptable, though the RMSEA
+is marginal (
+CFI = `r formatC(fit1_cfi, 3, format = "f")`,
+RMSEA = `r formatC(fit1_rmsea, 3, format = "f")`).
+
+### Step 2: Call `model_set()`
+
+We find the neighboring models differ
+from the target model by one on model
+degrees of freedom, fit them, and compute
+the BPPs using `model_set()`:
+
+```{r}
+out1 <- model_set(fit1)
+```
+
+### Step 3: Examine the Results
 
 The output is a `model_set`-class
 object with a print method.
 
 ```{r}
-out
+out1
 ```
+
+```{r echo = FALSE}
+out1_bpp <- out1$bpp
+out1_bpp_2 <- sort(out1_bpp, decreasing = TRUE)[2]
+```
+
+The total number of models examined,
+including the target model, is 9.
 
 The BIC posterior probabilities
 (BPP) suggest that
-the original model is not the most
-probable model among the list. Instead,
-five other models, each with one
-parameters added or removed, have higher
-BIC posterior probabilities. The
-model with the direct path `x3~x1` added
-has substantially large BIC posterior
-probability then other models examined.
+the original model is indeed the most
+probable model based on BPP. However,
+the model with the direct dropped only
+have slightly lower BPP
+(`r formatC(out1_bpp_2, 3, format = "f")`)
 
-## A serial mediation model
+This suggests that, with equal prior
+probabilities (Hu et al., 2020), the
+support for the model with the direct
+and without the direct path have similar
+support from the data based on BPP.
 
-This is a sample dataset with four
-variables:
+Alternatively, we can use `model_graph()`
+to visualize the BPPs and model relations
+graphically:
 
-```{r}
-head(dat_serial_4)
+```{r fig.height = 8, fig.width = 8}
+graph1 <- model_graph(out1)
+plot(graph1)
 ```
 
-We fit this target model, a partial
-serial mediation model:
+Each node (circle) represent one model.
+The larger the BPP, the large the node.
+
+The arrow points from a simpler
+model (a model with larger model *df*)
+to a more complicated model (a model
+with smaller model *df*). If two models
+are connected by an arrow, then
+one model can be formed from another model
+by adding or removing one free parameter
+(e.g., adding or removing one path).
+
+### Repeat Step 2 with User-Prior
+
+In real studies, not all models are
+equally probable before having data
+(i.e., not all models have equal
+prior probabilities). A researcher
+fits a target model because
+
+  a. the
+    prior` probability is higher than other
+    models, at least other neighboring
+    model`s, but
+
+  b. the prior probability
+    is not high enough to eliminate the need
+    for collecting data to see how much it is
+    supported by data.
+
+Suppose we decide that the prior probability
+of the target model is .50: probable, but
+still need data to decide whether it is
+very probable.
+
+This can be done by setting `prior_sem_out`
+to the desired prior when calling
+`model_set()`:
 
 ```{r}
-mod <-
-"
-m1 ~ x
-m2 ~ m1
-y  ~ m2 + x
-"
-fit <- sem(mod, dat_serial_4)
+out1_prior <- model_set(fit1,
+                        prior_sem_out = .50)
 ```
 
-This is the summary of goodness of fit
-of this model:
+The prior probabilities of all other
+models are equal. Therefore, with
+nine models and the prior of the target
+model being .50, the prior probability
+of the other eight model is $(1 - .50) / 8$
+or .0625.
+
+This is the printout:
 
 ```{r}
-fitMeasures(fit, output = "text")
+out1_prior
 ```
 
-This model fits satisfactorily. However,
-if we examine the parameter estimates,
-two of the paths, from `x` to `m2` and
-from `x` to `y`, are not significant:
+If the prior of the target is set to .50,
+then, taking into account both the prior
+probabilities and the data, the target
+model is strongly supported by the data.
+
+This is the output of `model_graph()`:
+
+```{r fig.height = 8, fig.width = 8}
+graph1_prior <- model_graph(out1_prior)
+plot(graph1_prior)
+```
+
+# Other Options
+
+## More Neighboring Models
+
+If desired, we can enumerate models
+"farther away" from the target model.
+For example, we can set the difference
+in model *df* to 2:
 
 ```{r}
-parameterEstimates(fit)
+out1_df2 <- model_set(fit1,
+                      df_change_add = 2,
+                      df_change_drop = 2)
 ```
 
-We find the neighboring models with at
-most one degrees of freedom away from the
-target model.
+This is the printout. By default, when there
+are more than 10 models, only the top 10
+models base on BPP will be printed:
 
 ```{r}
-out <- model_set(sem_out = fit)
+out1_df2
 ```
 
-We then examine the BIC posterior
-probabilities:
+This is the output of `model_graph()`:
 
-```{r}
-out
+```{r fig.height = 8, fig.width = 8}
+graph1_df2 <- model_graph(out1_df2)
+plot(graph1_df2)
 ```
-
-The results suggest that, in this set
-of models, the model with one path
-dropped (`y~x`) is more probable than
-the fitted model.
 
 # References
 

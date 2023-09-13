@@ -1,4 +1,4 @@
-# modelbpp 0.0.0.9010
+# modelbpp 0.0.0.9016
 
 - Migrating. (0.0.0.9001)
 - Initial setup. (0.0.0.9001)
@@ -46,6 +46,7 @@
   `model_set()` depends on the input.
   If models have been fitted, they will
   not be refitted by default. (0.0.0.9014)
-- Add `check_sem_out()` to check whether
+- Added `check_sem_out()` to check whether
   the `sem_out`` argument is of a
   supported type. (0.0.0.9015)
+- Updated the vignette. (0.0.0.9016)
