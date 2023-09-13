@@ -34,3 +34,6 @@
 - Added the argument `compute_bpp` to
   `model_set()`. BPPs will be computed
   only if is it `TRUE`. (0.0.0.9010)
+- Add `gen_models()`, a wrapper of
+  `model_set()` for generating
+  a list of models. (0.0.0.9011)

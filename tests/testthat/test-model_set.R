@@ -168,3 +168,20 @@ test_that("BPP update", {
                  out3$postprob)
   })
 
+# Gen models
+
+out <- model_set(fit)
+out2 <- gen_models(fit)
+out3 <- model_set(model_set_out = out2)
+out4 <- gen_models(fit, output = "partables")
+out5 <- model_set(sem_out = fit,
+                  partables = out4)
+
+test_that("Test generated models", {
+    expect_identical(out$models,
+                     out2$models)
+    expect_identical(out$postprob,
+                     out3$postprob)
+    expect_identical(out$postprob,
+                     out5$postprob)
+  })
