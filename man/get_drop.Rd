@@ -10,7 +10,8 @@ get_drop(
   must_not_drop = NULL,
   df_change = 1,
   model_id = NA,
-  keep_correct_df_change = TRUE
+  keep_correct_df_change = TRUE,
+  remove_duplicated = TRUE
 )
 }
 \arguments{
@@ -47,6 +48,10 @@ number.}
 \item{keep_correct_df_change}{Keep
 only tables with actual \emph{df} change
 equal to expected \emph{df} change.}
+
+\item{remove_duplicated}{If \code{TRUE},
+the default, duplicated models are
+removed.}
 }
 \value{
 An object of the class
