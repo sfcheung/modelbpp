@@ -160,7 +160,7 @@ model_graph <- function(object,
     if (node_size_by_x) {
         if (is.null(x)) {
             if (inherits(object, "model_set")) {
-                x <- object$postprob
+                x <- object$bpp
               } else {
                 stop("node_size_by_prob set to TRUE but",
                      "x cannot be extracted or not supplied.")

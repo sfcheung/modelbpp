@@ -15,7 +15,7 @@ out <- model_set(fit)
 
 test_that("Posterior probability as expected", {
     expect_equal(
-        out$postprob,
+        out$bpp,
         c(9.999998e-01, 2.382290e-08, 8.302384e-13, 1.289951e-09, 1.712318e-07),
         tolerance = 1e-5,
         ignore_attr = TRUE
@@ -35,7 +35,7 @@ out <- model_set(fit, df_change_add = 2, df_change_drop = 2)
 
 test_that("Posterior probability as expected", {
     expect_equal(
-        out$postprob,
+        out$bpp,
         c(8.567850e-01, 2.041111e-08, 1.432148e-01, 7.113360e-13, 1.105211e-09,
           2.891960e-21, 1.467088e-07),
         tolerance = 1e-5,
@@ -80,7 +80,7 @@ chk_bpp <- d / sum(d)
 
 test_that("Posterior probability as expected: User prior", {
     expect_equal(
-        out$postprob,
+        out$bpp,
         chk_bpp,
         ignore_attr = TRUE
       )
@@ -106,7 +106,7 @@ out <- model_set(fit,
 test_that("Target BPP", {
     expect_equal(p1_out,
                  unname(p1))
-    expect_equal(unname(out$postprob["original"]),
+    expect_equal(unname(out$bpp["original"]),
                  postprob0)
   })
 
@@ -120,8 +120,8 @@ out2 <- model_set(fit,
                   prior_sem_out = .50)
 
 test_that("User supplied model_set", {
-    expect_identical(out1$postprob,
-                     out2$postprob)
+    expect_identical(out1$bpp,
+                     out2$bpp)
   })
 
 # Test user partables
@@ -135,8 +135,8 @@ out1 <- model_set(fit,
 test_that("User supplied model_set", {
     expect_identical(out0$bic,
                      out1$bic)
-    expect_identical(out0$postprob,
-                     out1$postprob)
+    expect_identical(out0$bpp,
+                     out1$bpp)
   })
 
 # Test no fit
@@ -164,8 +164,8 @@ out3 <- model_set(model_set_out = out,
                   prior_sem_out = .40)
 
 test_that("BPP update", {
-    expect_equal(out2$postprob,
-                 out3$postprob)
+    expect_equal(out2$bpp,
+                 out3$bpp)
   })
 
 # Gen models
@@ -180,8 +180,8 @@ out5 <- model_set(sem_out = fit,
 test_that("Test generated models", {
     expect_identical(out$models,
                      out2$models)
-    expect_identical(out$postprob,
-                     out3$postprob)
-    expect_identical(out$postprob,
-                     out5$postprob)
+    expect_identical(out$bpp,
+                     out3$bpp)
+    expect_identical(out$bpp,
+                     out5$bpp)
   })

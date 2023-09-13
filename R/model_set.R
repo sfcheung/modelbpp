@@ -356,11 +356,11 @@ model_set <- function(sem_out,
           # Assume unbiased priors for all models
           out$prior <- rep(1 / length(out$bic), length(out$bic))
         }
-      out$postprob <- bpp(bic = out$bic,
+      out$bpp <- bpp(bic = out$bic,
                           prior = out$prior)
     } else {
       out$bic <- NULL
-      out$postprob <- NULL
+      out$bpp <- NULL
     }
   out$model_set_call <- match.call()
   out$sem_out <- sem_out

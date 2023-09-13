@@ -37,3 +37,5 @@
 - Add `gen_models()`, a wrapper of
   `model_set()` for generating
   a list of models. (0.0.0.9011)
+- Rename `postprob` to `bpp`, for
+  consistency in naming. (0.0.0.9012)

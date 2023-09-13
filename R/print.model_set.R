@@ -95,7 +95,7 @@ print.model_set <- function(x,
       } else {
         change_tmp <- x$change
         bic_tmp <- x$bic
-        postprob_tmp <- x$postprob
+        postprob_tmp <- x$bpp
       }
     out_table <- data.frame(modification = fit_names,
                             df = change_tmp,
@@ -142,7 +142,7 @@ print.model_set <- function(x,
             tmp <- data.frame(x = c(
                       formatC(bpp_target, digits = bpp_digits, format = "f"),
                       formatC(bpp_min, digits = bpp_digits, format = "f"),
-                      formatC(x$postprob["original"], digits = bpp_digits, format = "f")))
+                      formatC(x$bpp["original"], digits = bpp_digits, format = "f")))
             colnames(tmp) <- "Target Model"
             rownames(tmp) <- c("Desired minimum BIC posterior probability:",
                                "Required minimum prior probability:",
@@ -155,7 +155,7 @@ print.model_set <- function(x,
             #     formatC(bpp_min, digits = bpp_digits, format = "f"),
             #     "\n", sep = "")
             # cat("Current BIC posterior probability of the target model: ",
-            #     formatC(x$postprob["original"], digits = bpp_digits, format = "f"),
+            #     formatC(x$bpp["original"], digits = bpp_digits, format = "f"),
             #     "\n", sep = "")
           }
       } else {
