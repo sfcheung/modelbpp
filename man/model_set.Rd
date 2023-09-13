@@ -26,7 +26,8 @@ model_set(
   ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
   make_cluster_args = list(),
   progress = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  skip_check_sem_out = FALSE
 )
 
 gen_models(
@@ -167,6 +168,16 @@ is \code{TRUE}.}
 messages will be displayed, such
 as the expected processing time.
 Default is \code{TRUE}.}
+
+\item{skip_check_sem_out}{If \code{TRUE}
+and \code{sem_out} is set, check
+whether \code{sem_out} is of a supported
+type (estimator is \code{"ML"} and
+the model has only one group). If
+not, an error will be raised.
+Can be set to \code{FALSE} for experimenting
+the functions on models not officially
+supported.}
 
 \item{output}{If \code{"model_est"},
 then the output is a \code{model_set}-class

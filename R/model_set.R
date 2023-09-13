@@ -164,6 +164,16 @@
 #' is a `partables`-class object.
 #' Default is `partables`.
 #'
+#' @param skip_check_sem_out If `TRUE`
+#' and `sem_out` is set, check
+#' whether `sem_out` is of a supported
+#' type (estimator is `"ML"` and
+#' the model has only one group). If
+#' not, an error will be raised.
+#' Can be set to `FALSE` for experimenting
+#' the functions on models not officially
+#' supported.
+#'
 #' @return The function [model_set()]
 #' returns an object of the class
 #' `model_set`, a list with the following
@@ -273,11 +283,15 @@ model_set <- function(sem_out,
                       ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
                       make_cluster_args = list(),
                       progress = TRUE,
-                      verbose = TRUE) {
+                      verbose = TRUE,
+                      skip_check_sem_out = FALSE) {
   # if (missing(sem_out)) stop("sem_out is not supplied.")
   if (!missing(sem_out)) {
       if (!inherits(sem_out, "lavaan")) {
           stop("sem_out is not a lavaan-class object.")
+        }
+      if (!skip_check_sem_out) {
+          check_sem_out(sem_out)
         }
     }
   if (!is.null(model_set_out)) {
