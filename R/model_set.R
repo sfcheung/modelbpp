@@ -115,17 +115,20 @@
 #' number will be included. Default is
 #' 1.
 #'
+#' @param remove_duplicated If `TRUE`,
+#' the default, duplicated models are
+#' removed.
+#'
 #' @param fit_models If `TRUE`, the
 #' default, the
-#' models will be fitted to the data
-#' and BIC probabilities will be computed.
+#' models will be fitted to the data.
 #' If `FALSE`, the models will be returned
 #' as is, in the element `models`
 #' of the output.
 #'
-#' @param remove_duplicated If `TRUE`,
-#' the default, duplicated models are
-#' removed.
+#' @param compute_bpp If `TRUE`, then BIC
+#' posterior will be computed. Default
+#' is `TRUE`.
 #'
 #' @param parallel If `TRUE`, parallel
 #' processing will be used to fit the
@@ -241,8 +244,9 @@ model_set <- function(sem_out,
                       exclude_error_cov = TRUE,
                       df_change_add = 1,
                       df_change_drop = 1,
-                      fit_models = TRUE,
                       remove_duplicated = TRUE,
+                      fit_models = TRUE,
+                      compute_bpp = TRUE,
                       parallel = FALSE,
                       ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
                       make_cluster_args = list(),
@@ -296,17 +300,27 @@ model_set <- function(sem_out,
                       progress = progress,
                       verbose = verbose)
     } else {
-      # Create an object of the class "sem_outs"
-      # Not a good solution but do not have a better one for now
-      out <- list(fit = NULL,
-                  change = NULL,
-                  converged = NULL,
-                  post_check = NULL,
-                  call = NULL)
-      class(out) <- c("sem_outs", class(out))
+      if (!is.null(model_set_out)) {
+          out <- model_set_out
+          tmp1 <- class(out)
+          tmp2 <- which(class(out) == "model_set")
+          if (length(tmp2) == 1) {
+              tmp1 <- tmp1[-tmp2]
+            }
+          class(out) <- tmp1
+        } else {
+          # Create an object of the class "sem_outs"
+          # Not a good solution but do not have a better one for now
+          out <- list(fit = NULL,
+                      change = NULL,
+                      converged = NULL,
+                      post_check = NULL,
+                      call = NULL)
+          class(out) <- c("sem_outs", class(out))
+        }
     }
   out$models <- mod_to_fit
-  if (fit_models) {
+  if (compute_bpp && !is.null(out$fit)) {
       bic_list <- sapply(out$fit,
             function(x) as.numeric(lavaan::fitMeasures(x, "bic")))
       out$bic <- bic_list

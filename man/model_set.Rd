@@ -18,8 +18,9 @@ model_set(
   exclude_error_cov = TRUE,
   df_change_add = 1,
   df_change_drop = 1,
-  fit_models = TRUE,
   remove_duplicated = TRUE,
+  fit_models = TRUE,
+  compute_bpp = TRUE,
   parallel = FALSE,
   ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
   make_cluster_args = list(),
@@ -109,17 +110,20 @@ change less than or equal to this
 number will be included. Default is
 1.}
 
+\item{remove_duplicated}{If \code{TRUE},
+the default, duplicated models are
+removed.}
+
 \item{fit_models}{If \code{TRUE}, the
 default, the
-models will be fitted to the data
-and BIC probabilities will be computed.
+models will be fitted to the data.
 If \code{FALSE}, the models will be returned
 as is, in the element \code{models}
 of the output.}
 
-\item{remove_duplicated}{If \code{TRUE},
-the default, duplicated models are
-removed.}
+\item{compute_bpp}{If \code{TRUE}, then BIC
+posterior will be computed. Default
+is \code{TRUE}.}
 
 \item{parallel}{If \code{TRUE}, parallel
 processing will be used to fit the

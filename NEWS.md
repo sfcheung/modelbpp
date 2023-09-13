@@ -1,4 +1,4 @@
-# modelbpp 0.0.0.9009
+# modelbpp 0.0.0.9010
 
 - Migrating. (0.0.0.9001)
 - Initial setup. (0.0.0.9001)
@@ -31,3 +31,6 @@
   models as a network, with sizes affected
   by BIC posterior probabilities.
   (0.0.0.9009)
+- Added the argument `compute_bpp` to
+  `model_set()`. BPPs will be computed
+  only if is it `TRUE`. (0.0.0.9010)
