@@ -151,3 +151,37 @@ x1 ~ x3
 fit <- sem(mod, dat_path_model, fixed.x = TRUE)
 out <- model_set(fit, fit_models = FALSE)
 out
+
+# Update bpp
+
+out <- model_set(fit)
+
+out2 <- model_set(fit,
+                  prior_sem_out = .40)
+
+out3 <- model_set(model_set_out = out,
+                  fit_models = FALSE,
+                  prior_sem_out = .40)
+
+test_that("BPP update", {
+    expect_equal(out2$postprob,
+                 out3$postprob)
+  })
+
+# Gen models
+
+out <- model_set(fit)
+out2 <- gen_models(fit)
+out3 <- model_set(model_set_out = out2)
+out4 <- gen_models(fit, output = "partables")
+out5 <- model_set(sem_out = fit,
+                  partables = out4)
+
+test_that("Test generated models", {
+    expect_identical(out$models,
+                     out2$models)
+    expect_identical(out$postprob,
+                     out3$postprob)
+    expect_identical(out$postprob,
+                     out5$postprob)
+  })

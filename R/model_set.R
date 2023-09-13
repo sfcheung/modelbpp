@@ -115,17 +115,20 @@
 #' number will be included. Default is
 #' 1.
 #'
+#' @param remove_duplicated If `TRUE`,
+#' the default, duplicated models are
+#' removed.
+#'
 #' @param fit_models If `TRUE`, the
 #' default, the
-#' models will be fitted to the data
-#' and BIC probabilities will be computed.
+#' models will be fitted to the data.
 #' If `FALSE`, the models will be returned
 #' as is, in the element `models`
 #' of the output.
 #'
-#' @param remove_duplicated If `TRUE`,
-#' the default, duplicated models are
-#' removed.
+#' @param compute_bpp If `TRUE`, then BIC
+#' posterior will be computed. Default
+#' is `TRUE`.
 #'
 #' @param parallel If `TRUE`, parallel
 #' processing will be used to fit the
@@ -152,7 +155,13 @@
 #' as the expected processing time.
 #' Default is `TRUE`.
 #'
-#' @return An object of the class
+#' @param output If `"model_est"`,
+#' then the output is a `model_set`-class
+#' object. If `"partables"`, the output
+#' is a `partables`-class object.
+#'
+#' @return The function [model_set()]
+#' returns an object of the class
 #' `model_set`, a list with the following
 #' elements:
 #'
@@ -195,6 +204,11 @@
 #'    or not. Checked by
 #'    [lavaan::lavInspect()].
 #'
+#' The object returned by [gen_models()]
+#' depends on the argument `output`.
+#' See the argument `output` for the
+#' details
+#'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
 #' @references
@@ -227,6 +241,11 @@
 #' out <- model_set(fit)
 #' out
 #'
+#' @describeIn model_set Compute the BPPs of a list of models.
+#'  Can generate the models and/or fit the models. Can also
+#'  accept pregenerated models, or just update BPPs.
+#' @order 1
+#'
 #' @export
 
 model_set <- function(sem_out,
@@ -241,8 +260,9 @@ model_set <- function(sem_out,
                       exclude_error_cov = TRUE,
                       df_change_add = 1,
                       df_change_drop = 1,
-                      fit_models = TRUE,
                       remove_duplicated = TRUE,
+                      fit_models = TRUE,
+                      compute_bpp = TRUE,
                       parallel = FALSE,
                       ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
                       make_cluster_args = list(),
@@ -287,6 +307,12 @@ model_set <- function(sem_out,
       pt0 <- lavaan::parameterTable(sem_out)
       mod_to_fit <- c(mod_all, list(`original` = pt0))
     }
+  if (remove_duplicated) {
+      mod_to_fit <- unique_models(mod_to_fit)
+    }
+  if (!inherits(mod_to_fit, "partables")) {
+      class(mod_to_fit) <- c("partables", class(mod_to_fit))
+    }
   if (fit_models) {
       out <- fit_many(model_list = mod_to_fit,
                       sem_out = sem_out,
@@ -296,17 +322,27 @@ model_set <- function(sem_out,
                       progress = progress,
                       verbose = verbose)
     } else {
-      # Create an object of the class "sem_outs"
-      # Not a good solution but do not have a better one for now
-      out <- list(fit = NULL,
-                  change = NULL,
-                  converged = NULL,
-                  post_check = NULL,
-                  call = NULL)
-      class(out) <- c("sem_outs", class(out))
+      if (!is.null(model_set_out)) {
+          out <- model_set_out
+          tmp1 <- class(out)
+          tmp2 <- which(class(out) == "model_set")
+          if (length(tmp2) == 1) {
+              tmp1 <- tmp1[-tmp2]
+            }
+          class(out) <- tmp1
+        } else {
+          # Create an object of the class "sem_outs"
+          # Not a good solution but do not have a better one for now
+          out <- list(fit = NULL,
+                      change = NULL,
+                      converged = NULL,
+                      post_check = NULL,
+                      call = NULL)
+          class(out) <- c("sem_outs", class(out))
+        }
     }
   out$models <- mod_to_fit
-  if (fit_models) {
+  if (compute_bpp && !is.null(out$fit)) {
       bic_list <- sapply(out$fit,
             function(x) as.numeric(lavaan::fitMeasures(x, "bic")))
       out$bic <- bic_list
@@ -331,6 +367,40 @@ model_set <- function(sem_out,
   class(out) <- c("model_set", class(out))
   out
 }
+
+#' @describeIn model_set Generate a list of models (parameter tables).
+#' @order 2
+#' @export
+
+gen_models <- function(sem_out,
+                       must_add = NULL,
+                       must_not_add = NULL,
+                       must_drop = NULL,
+                       must_not_drop = NULL,
+                       remove_constraints = TRUE,
+                       exclude_error_cov = TRUE,
+                       df_change_add = 1,
+                       df_change_drop = 1,
+                       remove_duplicated = TRUE,
+                       output = c("model_set", "partables")) {
+    output <- match.arg(output)
+    out <- model_set(sem_out = sem_out,
+                     must_add = must_add,
+                     must_not_add = must_not_add,
+                     must_drop = must_drop,
+                     must_not_drop = must_not_drop,
+                     remove_constraints = remove_duplicated,
+                     exclude_error_cov = exclude_error_cov,
+                     df_change_add = df_change_add,
+                     df_change_drop = df_change_drop,
+                     remove_duplicated = remove_duplicated,
+                     fit_models = FALSE,
+                     compute_bpp = FALSE)
+    out2 <- switch(output,
+                   model_set = out,
+                   partables = out$models)
+    out2
+  }
 
 #' @title BIC Posterior Probabilities
 #' @noRd

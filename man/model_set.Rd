@@ -2,6 +2,7 @@
 % Please edit documentation in R/model_set.R
 \name{model_set}
 \alias{model_set}
+\alias{gen_models}
 \title{BIC Posterior Probabilities
 of Neighboring Models}
 \usage{
@@ -18,13 +19,28 @@ model_set(
   exclude_error_cov = TRUE,
   df_change_add = 1,
   df_change_drop = 1,
-  fit_models = TRUE,
   remove_duplicated = TRUE,
+  fit_models = TRUE,
+  compute_bpp = TRUE,
   parallel = FALSE,
   ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
   make_cluster_args = list(),
   progress = TRUE,
   verbose = TRUE
+)
+
+gen_models(
+  sem_out,
+  must_add = NULL,
+  must_not_add = NULL,
+  must_drop = NULL,
+  must_not_drop = NULL,
+  remove_constraints = TRUE,
+  exclude_error_cov = TRUE,
+  df_change_add = 1,
+  df_change_drop = 1,
+  remove_duplicated = TRUE,
+  output = c("model_set", "partables")
 )
 }
 \arguments{
@@ -109,17 +125,20 @@ change less than or equal to this
 number will be included. Default is
 1.}
 
+\item{remove_duplicated}{If \code{TRUE},
+the default, duplicated models are
+removed.}
+
 \item{fit_models}{If \code{TRUE}, the
 default, the
-models will be fitted to the data
-and BIC probabilities will be computed.
+models will be fitted to the data.
 If \code{FALSE}, the models will be returned
 as is, in the element \code{models}
 of the output.}
 
-\item{remove_duplicated}{If \code{TRUE},
-the default, duplicated models are
-removed.}
+\item{compute_bpp}{If \code{TRUE}, then BIC
+posterior will be computed. Default
+is \code{TRUE}.}
 
 \item{parallel}{If \code{TRUE}, parallel
 processing will be used to fit the
@@ -145,9 +164,15 @@ is \code{TRUE}.}
 messages will be displayed, such
 as the expected processing time.
 Default is \code{TRUE}.}
+
+\item{output}{If \code{"model_est"},
+then the output is a \code{model_set}-class
+object. If \code{"partables"}, the output
+is a \code{partables}-class object.}
 }
 \value{
-An object of the class
+The function \code{\link[=model_set]{model_set()}}
+returns an object of the class
 \code{model_set}, a list with the following
 elements:
 \itemize{
@@ -184,6 +209,11 @@ solution of each fit is admissible
 or not. Checked by
 \code{\link[lavaan:lavInspect]{lavaan::lavInspect()}}.
 }
+
+The object returned by \code{\link[=gen_models]{gen_models()}}
+depends on the argument \code{output}.
+See the argument \code{output} for the
+details
 }
 \description{
 Identify neighboring
@@ -220,6 +250,15 @@ with the models sorted by descending
 order of BIC posterior
 probabilities.
 }
+\section{Functions}{
+\itemize{
+\item \code{model_set()}: Compute the BPPs of a list of models.
+Can generate the models and/or fit the models. Can also
+accept pregenerated models, or just update BPPs.
+
+\item \code{gen_models()}: Generate a list of models (parameter tables).
+
+}}
 \examples{
 
 library(lavaan)
