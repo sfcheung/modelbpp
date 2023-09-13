@@ -3,7 +3,7 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   modelbpp: modelbpp.html
-last_built: 2023-09-07T00:22Z
+last_built: 2023-09-13T16:03Z
 urls:
   reference: https://sfcheung.github.io/modelbpp/reference
   article: https://sfcheung.github.io/modelbpp/articles

@@ -37,6 +37,9 @@
     <loc>https://sfcheung.github.io/modelbpp/reference/dat_serial_4.html</loc>
   </url>
   <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/dat_serial_4_weak.html</loc>
+  </url>
+  <url>
     <loc>https://sfcheung.github.io/modelbpp/reference/fit_many.html</loc>
   </url>
   <url>
@@ -49,10 +52,19 @@
     <loc>https://sfcheung.github.io/modelbpp/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/min_prior.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/model_graph.html</loc>
+  </url>
+  <url>
     <loc>https://sfcheung.github.io/modelbpp/reference/model_set.html</loc>
   </url>
   <url>
     <loc>https://sfcheung.github.io/modelbpp/reference/modelbpp-package.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/modelbpp/reference/plot.model_graph.html</loc>
   </url>
   <url>
     <loc>https://sfcheung.github.io/modelbpp/reference/print.model_set.html</loc>
