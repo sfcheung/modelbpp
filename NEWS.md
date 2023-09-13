@@ -37,5 +37,8 @@
 - Add `gen_models()`, a wrapper of
   `model_set()` for generating
   a list of models. (0.0.0.9011)
-- Rename `postprob` to `bpp`, for
+- Renamed `postprob` to `bpp`, for
   consistency in naming. (0.0.0.9012)
+- Changed the default of `output`
+  of `gen_models()` to `"partables"`.
+  (0.0.0.9013)

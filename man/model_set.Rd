@@ -40,7 +40,7 @@ gen_models(
   df_change_add = 1,
   df_change_drop = 1,
   remove_duplicated = TRUE,
-  output = c("model_set", "partables")
+  output = c("partables", "model_set")
 )
 }
 \arguments{
@@ -168,7 +168,8 @@ Default is \code{TRUE}.}
 \item{output}{If \code{"model_est"},
 then the output is a \code{model_set}-class
 object. If \code{"partables"}, the output
-is a \code{partables}-class object.}
+is a \code{partables}-class object.
+Default is \code{partables}.}
 }
 \value{
 The function \code{\link[=model_set]{model_set()}}

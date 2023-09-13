@@ -171,9 +171,9 @@ test_that("BPP update", {
 # Gen models
 
 out <- model_set(fit)
-out2 <- gen_models(fit)
+out2 <- gen_models(fit, output = "model_set")
 out3 <- model_set(model_set_out = out2)
-out4 <- gen_models(fit, output = "partables")
+out4 <- gen_models(fit)
 out5 <- model_set(sem_out = fit,
                   partables = out4)
 

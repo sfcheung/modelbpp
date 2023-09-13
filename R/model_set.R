@@ -159,6 +159,7 @@
 #' then the output is a `model_set`-class
 #' object. If `"partables"`, the output
 #' is a `partables`-class object.
+#' Default is `partables`.
 #'
 #' @return The function [model_set()]
 #' returns an object of the class
@@ -382,7 +383,7 @@ gen_models <- function(sem_out,
                        df_change_add = 1,
                        df_change_drop = 1,
                        remove_duplicated = TRUE,
-                       output = c("model_set", "partables")) {
+                       output = c("partables", "model_set")) {
     output <- match.arg(output)
     out <- model_set(sem_out = sem_out,
                      must_add = must_add,
