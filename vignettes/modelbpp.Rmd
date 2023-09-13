@@ -174,7 +174,7 @@ prior probabilities). A researcher
 fits a target model because
 
   a. the
-    prior` probability is higher than other
+    prior probability is higher than other
     models, at least other neighboring
     model`s, but
 
