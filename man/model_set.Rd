@@ -20,7 +20,7 @@ model_set(
   df_change_add = 1,
   df_change_drop = 1,
   remove_duplicated = TRUE,
-  fit_models = TRUE,
+  fit_models = ifelse(!is.null(model_set_out$fit), FALSE, TRUE),
   compute_bpp = TRUE,
   parallel = FALSE,
   ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
@@ -129,12 +129,15 @@ number will be included. Default is
 the default, duplicated models are
 removed.}
 
-\item{fit_models}{If \code{TRUE}, the
-default, the
+\item{fit_models}{If \code{TRUE},
+the
 models will be fitted to the data.
 If \code{FALSE}, the models will be returned
 as is, in the element \code{models}
-of the output.}
+of the output. If \code{model_set_out}
+is set and models have been fitted,
+then default is \code{FALSE}. Otherwise,
+default is \code{TRUE}.}
 
 \item{compute_bpp}{If \code{TRUE}, then BIC
 posterior will be computed. Default

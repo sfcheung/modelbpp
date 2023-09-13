@@ -119,12 +119,15 @@
 #' the default, duplicated models are
 #' removed.
 #'
-#' @param fit_models If `TRUE`, the
-#' default, the
+#' @param fit_models If `TRUE`,
+#' the
 #' models will be fitted to the data.
 #' If `FALSE`, the models will be returned
 #' as is, in the element `models`
-#' of the output.
+#' of the output. If `model_set_out`
+#' is set and models have been fitted,
+#' then default is `FALSE`. Otherwise,
+#' default is `TRUE`.
 #'
 #' @param compute_bpp If `TRUE`, then BIC
 #' posterior will be computed. Default
@@ -262,7 +265,9 @@ model_set <- function(sem_out,
                       df_change_add = 1,
                       df_change_drop = 1,
                       remove_duplicated = TRUE,
-                      fit_models = TRUE,
+                      fit_models = ifelse(!is.null(model_set_out$fit),
+                                          FALSE,
+                                          TRUE),
                       compute_bpp = TRUE,
                       parallel = FALSE,
                       ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),

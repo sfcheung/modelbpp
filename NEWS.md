@@ -42,3 +42,7 @@
 - Changed the default of `output`
   of `gen_models()` to `"partables"`.
   (0.0.0.9013)
+- The default of `fit_models` of
+  `model_set()` depends on the input.
+  If models have been fitted, they will
+  not be refitted by default. (0.0.0.9014)
