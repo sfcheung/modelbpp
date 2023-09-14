@@ -1,6 +1,10 @@
 ---
 title: "Get Started"
-output: rmarkdown::html_vignette
+author: "Shu Fai Cheung"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    number_sections: true
 vignette: >
   %\VignetteIndexEntry{Get Started}
   %\VignetteEngine{knitr::rmarkdown}
@@ -21,42 +25,48 @@ knitr::opts_chunk$set(
 
 This article illustrates how to
 use `model_set()` and other functions
-from the package `modelbpp` to:
+from the package
+[`modelbpp`](https://sfcheung.github.io/modelbpp/)
+to:
 
 - Fit a set of neighboring models,
   each has one more or one less degree
-  of freedom than a target model.
+  of freedom than the original fitted
+  model.
 
 - Compute the BIC posterior probability
-  BPP, for each model (Hu, Cheung,
+  (BPP), for each model (Hu, Cheung,
   and Leung, 2020).
 
 - Use BPP to assess to what extent
-  the target model is supported by the
-  data, compared to the neighboring
-  models.
+  each model is supported by the
+  data, compared to all other models
+  under consideration.
 
 # Workflow
 
 1. Fit an SEM model, the
-    target model, as usual in `lavaan`.
+    original model, as usual in `lavaan`.
 
 2. Call `model_set()` on the output from
-  Step 1. It will automatically do these:
+  Step 1. It will automatically do the
+  following:
 
     - Enumerate the neighboring models
-      of the target model.
+      of the original model.
 
     - Fit all the models and compute their
-      BIC posterior probabilities.
+      BIC posterior probabilities (BPPs).
 
-3. Examine the results by printing
-  the output of `model_set()` or
-  generating a graph using `model_graph()`.
+3. Examine the results by:
+
+    - printing the output of `model_set()`, or
+
+    - generating a graph using `model_graph()`.
 
 # Examples
 
-## A path model
+## A Serial Mediation Model
 
 This is a sample dataset,
 `dat_serial_4_weak`,
@@ -67,9 +77,9 @@ library(modelbpp)
 head(dat_serial_4_weak)
 ```
 
-### Step 1: Fit the Target Model
+### Step 1: Fit the Original Model
 
-We fit this target model, a serial
+Fit this original model, a serial
 mediation model, with one direct path,
 from `x` to `y`:
 
@@ -98,16 +108,16 @@ fit1_rmsea <- unname(tmp["rmsea"])
 ```
 
 The fit is acceptable, though the RMSEA
-is marginal (
-CFI = `r formatC(fit1_cfi, 3, format = "f")`,
+is marginal (CFI = `r formatC(fit1_cfi, 3, format = "f")`,
 RMSEA = `r formatC(fit1_rmsea, 3, format = "f")`).
 
 ### Step 2: Call `model_set()`
 
-We find the neighboring models differ
+Use `model_set()` to find the
+neighboring models differ
 from the target model by one on model
 degrees of freedom, fit them, and compute
-the BPPs using `model_set()`:
+the BPPs:
 
 ```{r}
 out1 <- model_set(fit1)
@@ -115,8 +125,8 @@ out1 <- model_set(fit1)
 
 ### Step 3: Examine the Results
 
-The output is a `model_set`-class
-object with a print method.
+To examine the results, just print
+the output:
 
 ```{r}
 out1
@@ -128,14 +138,15 @@ out1_bpp_2 <- sort(out1_bpp, decreasing = TRUE)[2]
 ```
 
 The total number of models examined,
-including the target model, is 9.
+including the original model, is 9.
 
 The BIC posterior probabilities
-(BPP) suggest that
+(BPPs) suggest that
 the original model is indeed the most
 probable model based on BPP. However,
-the model with the direct dropped only
-have slightly lower BPP
+the model with the direct path
+dropped, `drop: y~x`, only
+has slightly lower BPP
 (`r formatC(out1_bpp_2, 3, format = "f")`)
 
 This suggests that, with equal prior
@@ -153,8 +164,8 @@ graph1 <- model_graph(out1)
 plot(graph1)
 ```
 
-Each node (circle) represent one model.
-The larger the BPP, the large the node.
+Each node (circle) represents one model.
+The larger the BPP, the larger the node.
 
 The arrow points from a simpler
 model (a model with larger model *df*)
@@ -165,31 +176,33 @@ one model can be formed from another model
 by adding or removing one free parameter
 (e.g., adding or removing one path).
 
-### Repeat Step 2 with User-Prior
+### Repeat Step 2 with User Prior
 
 In real studies, not all models are
 equally probable before having data
 (i.e., not all models have equal
 prior probabilities). A researcher
-fits a target model because
+fits the original model because
 
-  a. the
+  - its
     prior probability is higher than other
     models, at least other neighboring
-    model`s, but
+    models (otherwise, it is not worthy
+    of collecting data assess thi original
+    model), but
 
-  b. the prior probability
-    is not high enough to eliminate the need
+  - the prior probability
+    is not so high to eliminate the need
     for collecting data to see how much it is
     supported by data.
 
 Suppose we decide that the prior probability
-of the target model is .50: probable, but
-still need data to decide whether it is
-very probable.
+of the original model is .50: probable, but
+still needs data to decide whether it is
+empirically supported
 
 This can be done by setting `prior_sem_out`
-to the desired prior when calling
+to the desired prior probability when calling
 `model_set()`:
 
 ```{r}
@@ -201,7 +214,7 @@ The prior probabilities of all other
 models are equal. Therefore, with
 nine models and the prior of the target
 model being .50, the prior probability
-of the other eight model is $(1 - .50) / 8$
+of the other eight model is (1 - .50) / 8
 or .0625.
 
 This is the printout:
@@ -222,7 +235,7 @@ graph1_prior <- model_graph(out1_prior)
 plot(graph1_prior)
 ```
 
-# Other Options
+# Advanced Options
 
 ## More Neighboring Models
 
@@ -239,18 +252,108 @@ out1_df2 <- model_set(fit1,
 
 This is the printout. By default, when there
 are more than 10 models, only the top 10
-models base on BPP will be printed:
+models on BPP will be printed:
 
 ```{r}
 out1_df2
 ```
 
+The number of models examined, including
+the original model, is 18.
+
 This is the output of `model_graph()`:
 
 ```{r fig.height = 8, fig.width = 8}
 graph1_df2 <- model_graph(out1_df2)
-plot(graph1_df2)
+plot(graph1_df2,
+     node_label_size = .75)
 ```
+
+Note: Due to the number of nodes,
+`node_label_size` is used to reduce
+the size of the labels.
+
+## Excluding Some Parameters From the Search
+
+When calling `model_set()`, users can
+specify parameters that must be excluded
+in the list to be added (`must_not_add`),
+or must not be dropped (`must_not_drop`).
+
+For example, it may not make sense To
+add the error covariance between `m1`
+and `y` (`m1~~y`). We can exclude it
+when calling `model_set()`
+
+```{r}
+out1_no_cov <- model_set(fit1,
+                         must_not_add = "m1~~y")
+```
+
+This is the output:
+
+```{r}
+out1_no_cov
+```
+
+The number of models reduced to 8.
+
+This is the plot:
+
+```{r}
+graph1_no_cov <- model_graph(out1_no_cov)
+plot(graph1_no_cov)
+```
+
+## Models With Constraints
+
+If the original model has equality
+constraints, they will be included in
+the search for neighboring models,
+by default. That is, removing one
+equality constraint between two models
+is considered as a model with an
+increase of 1 *df*.
+
+## Recompute BPPs Without Refitting the Models
+
+Users can examine the impact of the prior
+probability of the original model without
+refitting the models, by using
+the output of `model_set()` as the
+input, using the `model_set_out` argument:
+
+```{r}
+out1_new_prior <- model_set(model_set_out = out1,
+                            prior_sem_out = .50)
+```
+
+The results are identical to calling
+`model_set()` with the original `lavaan`
+output as the input:
+
+```{r}
+out1_new_prior
+```
+
+## Many Neighboring Models
+
+When a model has a lot of free parameters,
+the number of neighboring models can be
+large and it will take a long time to
+fit all of them. Users can enable
+parallel processing by setting `parallel`
+to `TRUE` when calling `model_set()`.
+
+## More Options
+
+Please refer to the help page of
+`model_set()` for options available.
+
+# Further Information
+
+For further information on the functions,
+please refer to their help pages.
 
 # References
 

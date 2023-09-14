@@ -14,8 +14,7 @@
 
 This package is for assessing model uncertainty in structural
 equation modeling (SEM) by using BIC posterior
-probabilities, AIC weight (to be added), and similar measures and
-fitting neighboring models. The package name, `modelbpp`,
+probabilities and fitting neighboring models. The package name, `modelbpp`,
 stands for `model` `b`ayesian `p`osterior `p`ability.
 
 Pease visit its GitHub page for further information
@@ -38,3 +37,10 @@ remotes::install_github("sfcheung/modelbpp")
 
 This package is still under development. Please report any
 bugs and issues. Comments and suggestions are also welcomed.
+
+# Issues
+
+If you have any suggestions or found any bugs, please feel
+feel to open a GitHub issue. Thanks.
+
+https://github.com/sfcheung/modelbpp/issues
