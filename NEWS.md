@@ -1,4 +1,4 @@
-# modelbpp 0.0.0.9017
+# modelbpp 0.0.0.9018
 
 - Migrating. (0.0.0.9001)
 - Initial setup. (0.0.0.9001)
@@ -50,5 +50,5 @@
   the `sem_out`` argument is of a
   supported type. (0.0.0.9015)
 - Updated the vignette. (0.0.0.9016, 0.0.0.9017)
-- Updated the `pkgdown` site (0.0.0.9017)
+- Updated the `pkgdown` site (0.0.0.9017, 0.0.0.9018)
 - Updated the `DESCRIPTION`. (0.0.0.9017)

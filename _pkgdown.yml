@@ -11,6 +11,7 @@ template:
     bg: "#EFEFEF"
     fg: "#000000"
     primary: "#907E4F"
+    link-color: "#000000"
     base_font: {google: "Heebo"}
     heading_font: {google: "Heebo"}
     code_font: {google: "Red Hat Mono"}
