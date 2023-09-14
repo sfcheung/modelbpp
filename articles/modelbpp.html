@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9016</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9017</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,14 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
 </form>
 
-      <ul class="navbar-nav"></ul>
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/sfcheung/modelbpp/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 
     
@@ -71,9 +78,12 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Get Started</h1>
+                        <h4 data-toc-skip class="author">Shu Fai
+Cheung</h4>
             
+            <h4 data-toc-skip class="date">2023-09-14</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/sfcheung/modelbpp/blob/HEAD/vignettes/modelbpp.Rmd" class="external-link"><code>vignettes/modelbpp.Rmd</code></a></small>
       <div class="d-none name"><code>modelbpp.Rmd</code></div>
     </div>
 
@@ -83,41 +93,46 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This article illustrates how to use <code><a href="../reference/model_set.html">model_set()</a></code> and
-other functions from the package <code>modelbpp</code> to:</p>
+other functions from the package <a href="https://sfcheung.github.io/modelbpp/"><code>modelbpp</code></a>
+to:</p>
 <ul>
 <li><p>Fit a set of neighboring models, each has one more or one less
-degree of freedom than a target model.</p></li>
-<li><p>Compute the BIC posterior probability BPP, for each model (Hu,
+degree of freedom than the original fitted model.</p></li>
+<li><p>Compute the BIC posterior probability (BPP), for each model (Hu,
 Cheung, and Leung, 2020).</p></li>
-<li><p>Use BPP to assess to what extent the target model is supported by
-the data, compared to the neighboring models.</p></li>
+<li><p>Use BPP to assess to what extent each model is supported by the
+data, compared to all other models under consideration.</p></li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="workflow">Workflow<a class="anchor" aria-label="anchor" href="#workflow"></a>
 </h2>
 <ol style="list-style-type: decimal">
-<li><p>Fit an SEM model, the target model, as usual in
+<li><p>Fit an SEM model, the original model, as usual in
 <code>lavaan</code>.</p></li>
 <li>
 <p>Call <code><a href="../reference/model_set.html">model_set()</a></code> on the output from Step 1. It will
-automatically do these:</p>
+automatically do the following:</p>
 <ul>
-<li><p>Enumerate the neighboring models of the target model.</p></li>
-<li><p>Fit all the models and compute their BIC posterior
-probabilities.</p></li>
+<li><p>Enumerate the neighboring models of the original model.</p></li>
+<li><p>Fit all the models and compute their BIC posterior probabilities
+(BPPs).</p></li>
 </ul>
 </li>
-<li><p>Examine the results by printing the output of
-<code><a href="../reference/model_set.html">model_set()</a></code> or generating a graph using
-<code><a href="../reference/model_graph.html">model_graph()</a></code>.</p></li>
+<li>
+<p>Examine the results by:</p>
+<ul>
+<li><p>printing the output of <code><a href="../reference/model_set.html">model_set()</a></code>, or</p></li>
+<li><p>generating a graph using <code><a href="../reference/model_graph.html">model_graph()</a></code>.</p></li>
+</ul>
+</li>
 </ol>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
 <div class="section level3">
-<h3 id="a-path-model">A path model<a class="anchor" aria-label="anchor" href="#a-path-model"></a>
+<h3 id="a-serial-mediation-model">A Serial Mediation Model<a class="anchor" aria-label="anchor" href="#a-serial-mediation-model"></a>
 </h3>
 <p>This is a sample dataset, <code>dat_serial_4_weak</code>, with four
 variables:</p>
@@ -132,9 +147,9 @@ variables:</p>
 <span><span class="co">#&gt; 5 -0.15321350  0.1509888  1.1251386  0.6892537</span></span>
 <span><span class="co">#&gt; 6 -2.00640303 -0.1595208 -0.1553136 -0.2364792</span></span></code></pre></div>
 <div class="section level4">
-<h4 id="step-1-fit-the-target-model">Step 1: Fit the Target Model<a class="anchor" aria-label="anchor" href="#step-1-fit-the-target-model"></a>
+<h4 id="step-1-fit-the-original-model">Step 1: Fit the Original Model<a class="anchor" aria-label="anchor" href="#step-1-fit-the-original-model"></a>
 </h4>
-<p>We fit this target model, a serial mediation model, with one direct
+<p>Fit this original model, a serial mediation model, with one direct
 path, from <code>x</code> to <code>y</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span></span>
@@ -151,7 +166,7 @@ path, from <code>x</code> to <code>y</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit1</span>,</span>
 <span>        fit.measures <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; lavaan 0.6.16 ended normally after 2 iterations</span></span>
+<span><span class="co">#&gt; lavaan 0.6.16 ended normally after 1 iteration</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Estimator                                         ML</span></span>
 <span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
@@ -218,23 +233,22 @@ path, from <code>x</code> to <code>y</code>:</p>
 <span><span class="co">#&gt;    .m1                0.278    0.039    7.071    0.000</span></span>
 <span><span class="co">#&gt;    .m2                0.254    0.036    7.071    0.000</span></span>
 <span><span class="co">#&gt;    .y                 0.213    0.030    7.071    0.000</span></span></code></pre></div>
-<p>The fit is acceptable, though the RMSEA is marginal ( CFI = 0.958,
+<p>The fit is acceptable, though the RMSEA is marginal (CFI = 0.958,
 RMSEA = 0.083).</p>
 </div>
 <div class="section level4">
 <h4 id="step-2-call-model_set">Step 2: Call <code>model_set()</code><a class="anchor" aria-label="anchor" href="#step-2-call-model_set"></a>
 </h4>
-<p>We find the neighboring models differ from the target model by one on
-model degrees of freedom, fit them, and compute the BPPs using
-<code><a href="../reference/model_set.html">model_set()</a></code>:</p>
+<p>Use <code><a href="../reference/model_set.html">model_set()</a></code> to find the neighboring models differ
+from the target model by one on model degrees of freedom, fit them, and
+compute the BPPs:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_set.html">model_set</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="step-3-examine-the-results">Step 3: Examine the Results<a class="anchor" aria-label="anchor" href="#step-3-examine-the-results"></a>
 </h4>
-<p>The output is a <code>model_set</code>-class object with a print
-method.</p>
+<p>To examine the results, just print the output:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out1</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -261,11 +275,12 @@ method.</p>
 <span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
 <span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
 <span><span class="co">#&gt; - BPP Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
-<p>The total number of models examined, including the target model, is
+<p>The total number of models examined, including the original model, is
 9.</p>
-<p>The BIC posterior probabilities (BPP) suggest that the original model
-is indeed the most probable model based on BPP. However, the model with
-the direct dropped only have slightly lower BPP (0.251)</p>
+<p>The BIC posterior probabilities (BPPs) suggest that the original
+model is indeed the most probable model based on BPP. However, the model
+with the direct path dropped, <code>drop: y~x</code>, only has slightly
+lower BPP (0.251)</p>
 <p>This suggests that, with equal prior probabilities (Hu et al., 2020),
 the support for the model with the direct and without the direct path
 have similar support from the data based on BPP.</p>
@@ -275,8 +290,8 @@ BPPs and model relations graphically:</p>
 <code class="sourceCode R"><span><span class="va">graph1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_graph.html">model_graph</a></span><span class="op">(</span><span class="va">out1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">graph1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="modelbpp_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;"></p>
-<p>Each node (circle) represent one model. The larger the BPP, the large
-the node.</p>
+<p>Each node (circle) represents one model. The larger the BPP, the
+larger the node.</p>
 <p>The arrow points from a simpler model (a model with larger model
 <em>df</em>) to a more complicated model (a model with smaller model
 <em>df</em>). If two models are connected by an arrow, then one model
@@ -284,29 +299,29 @@ can be formed from another model by adding or removing one free
 parameter (e.g., adding or removing one path).</p>
 </div>
 <div class="section level4">
-<h4 id="repeat-step-2-with-user-prior">Repeat Step 2 with User-Prior<a class="anchor" aria-label="anchor" href="#repeat-step-2-with-user-prior"></a>
+<h4 id="repeat-step-2-with-user-prior">Repeat Step 2 with User Prior<a class="anchor" aria-label="anchor" href="#repeat-step-2-with-user-prior"></a>
 </h4>
 <p>In real studies, not all models are equally probable before having
 data (i.e., not all models have equal prior probabilities). A researcher
-fits a target model because</p>
-<ol style="list-style-type: lower-alpha">
-<li><p>the prior probability is higher than other models, at least other
-neighboring model`s, but</p></li>
-<li><p>the prior probability is not high enough to eliminate the need
-for collecting data to see how much it is supported by data.</p></li>
-</ol>
-<p>Suppose we decide that the prior probability of the target model is
-.50: probable, but still need data to decide whether it is very
-probable.</p>
+fits the original model because</p>
+<ul>
+<li><p>its prior probability is higher than other models, at least other
+neighboring models (otherwise, it is not worthy of collecting data
+assess thi original model), but</p></li>
+<li><p>the prior probability is not so high to eliminate the need for
+collecting data to see how much it is supported by data.</p></li>
+</ul>
+<p>Suppose we decide that the prior probability of the original model is
+.50: probable, but still needs data to decide whether it is empirically
+supported</p>
 <p>This can be done by setting <code>prior_sem_out</code> to the desired
-prior when calling <code><a href="../reference/model_set.html">model_set()</a></code>:</p>
+prior probability when calling <code><a href="../reference/model_set.html">model_set()</a></code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out1_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_set.html">model_set</a></span><span class="op">(</span><span class="va">fit1</span>,</span>
 <span>                        prior_sem_out <span class="op">=</span> <span class="fl">.50</span><span class="op">)</span></span></code></pre></div>
 <p>The prior probabilities of all other models are equal. Therefore,
 with nine models and the prior of the target model being .50, the prior
-probability of the other eight model is <span class="math inline">\((1 -
-.50) / 8\)</span> or .0625.</p>
+probability of the other eight model is (1 - .50) / 8 or .0625.</p>
 <p>This is the printout:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out1_prior</span></span>
@@ -346,7 +361,7 @@ supported by the data.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="other-options">Other Options<a class="anchor" aria-label="anchor" href="#other-options"></a>
+<h2 id="advanced-options">Advanced Options<a class="anchor" aria-label="anchor" href="#advanced-options"></a>
 </h2>
 <div class="section level3">
 <h3 id="more-neighboring-models">More Neighboring Models<a class="anchor" aria-label="anchor" href="#more-neighboring-models"></a>
@@ -359,7 +374,7 @@ model. For example, we can set the difference in model <em>df</em> to
 <span>                      df_change_add <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>                      df_change_drop <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>This is the printout. By default, when there are more than 10 models,
-only the top 10 models base on BPP will be printed:</p>
+only the top 10 models on BPP will be printed:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out1_df2</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -387,12 +402,130 @@ only the top 10 models base on BPP will be printed:</p>
 <span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
 <span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
 <span><span class="co">#&gt; - BPP Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
+<p>The number of models examined, including the original model, is
+18.</p>
 <p>This is the output of <code><a href="../reference/model_graph.html">model_graph()</a></code>:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">graph1_df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_graph.html">model_graph</a></span><span class="op">(</span><span class="va">out1_df2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">graph1_df2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">graph1_df2</span>,</span>
+<span>     node_label_size <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span></span></code></pre></div>
 <p><img src="modelbpp_files/figure-html/unnamed-chunk-15-1.png" width="768" style="display: block; margin: auto;"></p>
+<p>Note: Due to the number of nodes, <code>node_label_size</code> is
+used to reduce the size of the labels.</p>
 </div>
+<div class="section level3">
+<h3 id="excluding-some-parameters-from-the-search">Excluding Some Parameters From the Search<a class="anchor" aria-label="anchor" href="#excluding-some-parameters-from-the-search"></a>
+</h3>
+<p>When calling <code><a href="../reference/model_set.html">model_set()</a></code>, users can specify parameters
+that must be excluded in the list to be added
+(<code>must_not_add</code>), or must not be dropped
+(<code>must_not_drop</code>).</p>
+<p>For example, it may not make sense To add the error covariance
+between <code>m1</code> and <code>y</code> (<code>m1~~y</code>). We can
+exclude it when calling <code><a href="../reference/model_set.html">model_set()</a></code></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out1_no_cov</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_set.html">model_set</a></span><span class="op">(</span><span class="va">fit1</span>,</span>
+<span>                         must_not_add <span class="op">=</span> <span class="st">"m1~~y"</span><span class="op">)</span></span></code></pre></div>
+<p>This is the output:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out1_no_cov</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; model_set(sem_out = fit1, must_not_add = "m1~~y")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Number of model(s) fitted: 8</span></span>
+<span><span class="co">#&gt; Number of model(s) converged: 8</span></span>
+<span><span class="co">#&gt; Number of model(s) passed post.check: 8</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The models (sorted by BPP):</span></span>
+<span><span class="co">#&gt;             df     BIC   BPP BPP Cumulative</span></span>
+<span><span class="co">#&gt; original     0 464.320 0.286          0.286</span></span>
+<span><span class="co">#&gt; drop: y~x   -1 464.340 0.283          0.569</span></span>
+<span><span class="co">#&gt; add: y~m1    1 465.900 0.130          0.699</span></span>
+<span><span class="co">#&gt; drop: m2~m1 -1 465.953 0.126          0.825</span></span>
+<span><span class="co">#&gt; add: m1~y    1 466.142 0.115          0.940</span></span>
+<span><span class="co">#&gt; add: m2~x    1 468.575 0.034          0.974</span></span>
+<span><span class="co">#&gt; drop: m1~x  -1 469.403 0.023          0.997</span></span>
+<span><span class="co">#&gt; drop: y~m2  -1 473.291 0.003          1.000</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
+<span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
+<span><span class="co">#&gt; - BPP Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
+<p>The number of models reduced to 8.</p>
+<p>This is the plot:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">graph1_no_cov</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_graph.html">model_graph</a></span><span class="op">(</span><span class="va">out1_no_cov</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">graph1_no_cov</span><span class="op">)</span></span></code></pre></div>
+<p><img src="modelbpp_files/figure-html/unnamed-chunk-18-1.png" width="576" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level3">
+<h3 id="models-with-constraints">Models With Constraints<a class="anchor" aria-label="anchor" href="#models-with-constraints"></a>
+</h3>
+<p>If the original model has equality constraints, they will be included
+in the search for neighboring models, by default. That is, removing one
+equality constraint between two models is considered as a model with an
+increase of 1 <em>df</em>.</p>
+</div>
+<div class="section level3">
+<h3 id="recompute-bpps-without-refitting-the-models">Recompute BPPs Without Refitting the Models<a class="anchor" aria-label="anchor" href="#recompute-bpps-without-refitting-the-models"></a>
+</h3>
+<p>Users can examine the impact of the prior probability of the original
+model without refitting the models, by using the output of
+<code><a href="../reference/model_set.html">model_set()</a></code> as the input, using the
+<code>model_set_out</code> argument:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out1_new_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_set.html">model_set</a></span><span class="op">(</span>model_set_out <span class="op">=</span> <span class="va">out1</span>,</span>
+<span>                            prior_sem_out <span class="op">=</span> <span class="fl">.50</span><span class="op">)</span></span></code></pre></div>
+<p>The results are identical to calling <code><a href="../reference/model_set.html">model_set()</a></code> with
+the original <code>lavaan</code> output as the input:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out1_new_prior</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; model_set(model_set_out = out1, prior_sem_out = 0.5)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Number of model(s) fitted: 9</span></span>
+<span><span class="co">#&gt; Number of model(s) converged: 9</span></span>
+<span><span class="co">#&gt; Number of model(s) passed post.check: 9</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The models (sorted by BPP):</span></span>
+<span><span class="co">#&gt;             df     BIC   BPP BPP Cumulative</span></span>
+<span><span class="co">#&gt; original     0 464.320 0.730          0.730</span></span>
+<span><span class="co">#&gt; drop: y~x   -1 464.340 0.090          0.821</span></span>
+<span><span class="co">#&gt; add: m1~~y   1 465.900 0.041          0.862</span></span>
+<span><span class="co">#&gt; add: y~m1    1 465.900 0.041          0.904</span></span>
+<span><span class="co">#&gt; drop: m2~m1 -1 465.953 0.040          0.944</span></span>
+<span><span class="co">#&gt; add: m1~y    1 466.142 0.037          0.981</span></span>
+<span><span class="co">#&gt; add: m2~x    1 468.575 0.011          0.992</span></span>
+<span><span class="co">#&gt; drop: m1~x  -1 469.403 0.007          0.999</span></span>
+<span><span class="co">#&gt; drop: y~m2  -1 473.291 0.001          1.000</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
+<span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
+<span><span class="co">#&gt; - BPP Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="many-neighboring-models">Many Neighboring Models<a class="anchor" aria-label="anchor" href="#many-neighboring-models"></a>
+</h3>
+<p>When a model has a lot of free parameters, the number of neighboring
+models can be large and it will take a long time to fit all of them.
+Users can enable parallel processing by setting <code>parallel</code> to
+<code>TRUE</code> when calling <code><a href="../reference/model_set.html">model_set()</a></code>.</p>
+</div>
+<div class="section level3">
+<h3 id="more-options">More Options<a class="anchor" aria-label="anchor" href="#more-options"></a>
+</h3>
+<p>Please refer to the help page of <code><a href="../reference/model_set.html">model_set()</a></code> for options
+available.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="further-information">Further Information<a class="anchor" aria-label="anchor" href="#further-information"></a>
+</h2>
+<p>For further information on the functions, please refer to their help
+pages.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
