@@ -8,7 +8,7 @@
 
 *UNDER DEVELOPMENT NOT YET READY PLEASE DO NOT INSTALL*
 
-(Version 0.0.0.9016, updated on 2023-09-14, [release history](https://sfcheung.github.io/modelbpp/news/index.html))2
+(Version 0.0.0.9016, updated on 2023-09-14, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
 
 # modelbpp: Model BIC posterior probability and related measures
 
