@@ -12,6 +12,7 @@ Fits the neighboring models of a fitted structural equation model and assesses t
 Useful links:
 \itemize{
   \item \url{https://sfcheung.github.io/modelbpp/}
+  \item Report bugs at \url{https://github.com/sfcheung/modelbpp/issues}
 }
 
 }

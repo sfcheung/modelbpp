@@ -1,6 +1,6 @@
 Package: modelbpp
 Title: Model BIC Posterior Probability and Related Measures
-Version: 0.0.0.9016
+Version: 0.0.0.9017
 Authors@R:
     person(given = "Shu Fai",
            family = "Cheung",
@@ -32,4 +32,5 @@ Config/testthat/edition: 3
 VignetteBuilder: knitr
 Config/testthat/parallel: true
 URL: https://sfcheung.github.io/modelbpp/
+BugReports: https://github.com/sfcheung/modelbpp/issues
 LazyData: true
