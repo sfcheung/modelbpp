@@ -4,14 +4,14 @@
 \alias{print.sem_outs}
 \title{Print an \code{sem_outs}-Class Object}
 \usage{
-\method{print}{sem_outs}(x, max_models = 10, ...)
+\method{print}{sem_outs}(x, max_models = 20, ...)
 }
 \arguments{
 \item{x}{An \code{sem_outs}-class object.}
 
 \item{max_models}{The maximum number
 of models to be printed. Default
-is 10.}
+is 20.}
 
 \item{...}{Optional arguments.
 Ignored.}
@@ -22,7 +22,7 @@ Called for its side effect.
 }
 \description{
 Print the content of
-an \code{sem_outs}-class object
+an \code{sem_outs}-class object.
 }
 \details{
 The print method for the output

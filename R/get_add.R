@@ -4,15 +4,16 @@
 #' models with one or more fixed
 #' parameter freed.
 #'
-#' @details Generate a list of models
+#' @details It generates a list of models
 #' with one or more fixed parameter
 #' freed (and the degrees of freedom, *df*,
 #' increases by one or more). If a
 #' model has equality constraints, models
 #' with one or more of the constraints
+#' between two free parameters
 #' released will also be included.
 #'
-#' Conceptually, paths or covariances
+#' Graphically, paths or covariances
 #' are "added" to form the list of models.
 #'
 #' The models to be included are
@@ -20,23 +21,26 @@
 #' [lavaan::modificationIndices()].
 #'
 #' The models will be checked by `lavaan`
-#' to make sure that the increase in
+#' to make sure that the decrease in
 #' model degrees of freedom is of the
 #' expected value.
 #'
-#' @param sem_out The output from an
+#' This function is called by
+#' [model_set()] and usually users do
+#' not need to call it. It is exported
+#' for advanced users.
+#'
+#' @param sem_out The original model,
+#' which is the output from an
 #' structural equation modeling
 #' function. Currently support
-#' [lavaan::lavaan-class] only. Usually
-#' the one used in [get_add()] or
-#' [get_drop()] to generate the list of
-#' models.
+#' [lavaan::lavaan-class] objects only.
 #'
 #' @param must_add A character vector
 #' of parameters, named in
 #' [lavaan::lavaan()] style (e.g.,
 #' `"y ~ x"`), that must be added.
-#' Default is `NULL``.
+#' Default is `NULL`.
 #'
 #' @param must_not_add A character
 #' vector of parameters, named in
@@ -46,7 +50,7 @@
 #'
 #' @param remove_constraints Whether
 #' equality constraints will be
-#' removed. Default is ``TRUE`.
+#' removed. Default is `TRUE`.
 #'
 #' @param exclude_error_cov Exclude
 #' error covariances of indicators.
@@ -56,7 +60,9 @@
 #' of freedom (*df*) away in the list.
 #' All models with *df* change less than
 #' or equal to this number will be
-#' included. Default is 1.
+#' included, taking into account
+#' requirements set by other arguments.
+#' Default is 1.
 #'
 #' @param remove_duplicated If `TRUE`,
 #' the default, duplicated models are
@@ -68,7 +74,7 @@
 #' number.
 #'
 #' @param keep_correct_df_change Keep
-#' only tables with actual *df* change
+#' only models with actual *df* change
 #' equal to expected *df* change.
 #'
 #' @return An object of the class

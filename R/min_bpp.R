@@ -7,8 +7,14 @@
 #'
 #' @details
 #' It assumes that all models other than
-#' the target model have the same prior
+#' the original model have the same prior
 #' probabilities.
+#'
+#' This function is called by
+#' [model_set()] or [print.model_set()]
+#' and usually users do
+#' not need to call it. It is exported
+#' for advanced users.
 #'
 #' @param bic A named vector of BIC values
 #' for a set of models.
@@ -18,7 +24,7 @@
 #' probability.
 #'
 #' @param target_name The name of the
-#' target model, as appeared in the
+#' original model, as appeared in the
 #' names of `bic`.
 #'
 #' @return A scalar. The required prior
@@ -36,7 +42,8 @@
 #' *55*(1), 1--16.
 #' \doi{10.1080/00273171.2019.1574546}
 #'
-#' @seealso [model_set()]
+#' @seealso [model_set()] and
+#'  [print.model_set()]
 #'
 #' @examples
 #'

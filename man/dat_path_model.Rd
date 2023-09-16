@@ -3,7 +3,8 @@
 \docType{data}
 \name{dat_path_model}
 \alias{dat_path_model}
-\title{A sample dataset based on a path model (for testing)}
+\title{A Sample Dataset Based on a
+Path Model (For Testing)}
 \format{
 A data frame with four variables:
 \describe{
@@ -17,10 +18,12 @@ A data frame with four variables:
 dat_path_model
 }
 \description{
-Generated from the following path model, n = 100
+Generated from the
+a path model (n = 100).
 }
 \details{
-The model used to generate this dataset:
+The model used to generate
+this dataset:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{x1 ~~ x2
 x3 ~ x1 + x2

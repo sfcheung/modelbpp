@@ -1,7 +1,7 @@
 #' @title Print an `sem_outs`-Class Object
 #'
 #' @description Print the content of
-#' an `sem_outs`-class object
+#' an `sem_outs`-class object.
 #'
 #' @details
 #' The print method for the output
@@ -15,7 +15,7 @@
 #'
 #' @param max_models The maximum number
 #' of models to be printed. Default
-#' is 10.
+#' is 20.
 #'
 #' @param ...  Optional arguments.
 #' Ignored.
@@ -44,7 +44,7 @@
 #' @export
 
 print.sem_outs <- function(x,
-                           max_models = 10,
+                           max_models = 20,
                            ...) {
     fit_n <- length(x$fit)
     fit_names <- names(x$fit)

@@ -3,7 +3,8 @@
 \docType{data}
 \name{dat_path_model_p06}
 \alias{dat_path_model_p06}
-\title{A sample dataset based on a complex path model (for testing)}
+\title{A Sample Dataset Based On a
+Complex Path Model (For Testing)}
 \format{
 A data frame with six variables:
 \describe{
@@ -19,10 +20,12 @@ A data frame with six variables:
 dat_path_model_p06
 }
 \description{
-Generated from the following path model, n = 200
+Generated from
+a complex path model (n = 200).
 }
 \details{
-The model used to generate this dataset:
+The model used to generate
+this dataset:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{y4 ~  x1 + x2 + x3
 y5 ~  y4 + x1 + x2

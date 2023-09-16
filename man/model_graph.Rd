@@ -20,8 +20,8 @@ model_graph(
 )
 }
 \arguments{
-\item{object}{Support only a
-\code{model_set} object for now.}
+\item{object}{Must be a
+\code{model_set}-class object for now.}
 
 \item{node_size_by_x}{Logical. Whether
 node (vertex) sizes are determined
@@ -61,7 +61,7 @@ Default is \code{"burlywood1"}.}
 \item{color_drop}{The color of
 the nodes of models formed by
 dropping one or more free parameters
-to the original model.
+from the original model.
 Default is \code{"lightgreen"}.}
 
 \item{color_label}{The color of the
@@ -70,38 +70,45 @@ is \code{"black"}.}
 
 \item{node_label_size}{The size of
 the labels of the nodes. Default is
-2.}
+1.}
 
 \item{...}{Optional arguments. Not
 used for now.}
 }
 \value{
 A \code{model_graph}-class object that
-can be used as as \code{igraph}-object,
-with a plot method with settings
+can be used as as an \code{igraph}-object,
+with a plot method (\code{\link[=plot.model_graph]{plot.model_graph()}})
+with settings
 suitable for plotting a network
-of models with BIC posterior probability
+of models with BIC posterior probabilities
+computed.
 }
 \description{
 Generate an 'igraph' object from a
 'model_set' object.
 }
 \details{
-It extract the model list stored
-in \code{object}, create an adjacency
-matrix, and the create an \code{igraph}
+It extracts the model list stored
+in \code{object}, creates an adjacency
+matrix, and then creates an \code{igraph}
 object customized for visualizing
 model relations.
-\subsection{Details of the Graph}{
+\subsection{Construction of the Graph}{
 \itemize{
 \item Each model is connected by an
 arrow, pointing from one model to
-a model that is formed by
+another model that is formed by
 
 a. adding one free parameter, or
 
 b, releasing one equality constraint
 between two parameters.
+}
+
+That is, it points to a model with
+one \emph{less} degree of freedom.
+\itemize{
 \item By default, the size of the node
 for each model is scaled by its
 BIC posterior probability, if
@@ -111,16 +118,18 @@ below.
 more degrees of freedom,
 and the models with fewer degrees
 of freedom are colored differently.
-\item The default layout is the tree
+\item The default layout is the Sugiyama
 layout, with simpler models (models
 with fewer degrees of freedom) on
 the top. The lower a model is in
 the network, the more the degrees
-of freedom it has.
+of freedom it has. This layout is
+suitable for showing the nested
+relations of the models.
 }
 
 The output is an \code{igraph} object.
-Users can customize it in anyway
+Users can customize it in any way
 they want using functions from
 the \code{igraph} package.
 }

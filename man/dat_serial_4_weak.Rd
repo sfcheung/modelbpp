@@ -3,9 +3,9 @@
 \docType{data}
 \name{dat_serial_4_weak}
 \alias{dat_serial_4_weak}
-\title{A sample dataset based on a serial mediation path model
-with weak paths (for
-testing)}
+\title{A Sample Dataset Based On a
+Serial Mediation Model
+With Weak Paths (For Testing)}
 \format{
 A data frame with four variables:
 \describe{
@@ -19,10 +19,11 @@ A data frame with four variables:
 dat_serial_4_weak
 }
 \description{
-Generated from the following path model, n = 100
+Generated from
+a serial mediation model (n = 100).
 }
 \details{
-The model used to generate this dataset:
+The model to be fitted:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{m1 ~ x
 m2 ~ m1 + x

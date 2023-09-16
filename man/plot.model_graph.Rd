@@ -30,7 +30,7 @@ method of \code{model_graph} objects,
 the output of
 \code{\link[=model_graph]{model_graph()}}.
 
-For nows, it simply passes the object
+For now, it simply passes the object
 to \code{\link[=plot.igraph]{plot.igraph()}}. This function
 is created for possible customization
 of the plot in the future.
