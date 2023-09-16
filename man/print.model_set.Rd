@@ -9,7 +9,7 @@
   bic_digits = 3,
   bpp_digits = 3,
   sort_models = TRUE,
-  max_models = 10,
+  max_models = 20,
   bpp_target = NULL,
   ...
 )
@@ -34,7 +34,7 @@ Default is \code{TRUE}.}
 
 \item{max_models}{The maximum number
 of models to be printed. Default is
-10.}
+20.}
 
 \item{bpp_target}{The desired
 BIC probability. Used to compute
