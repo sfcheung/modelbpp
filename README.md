@@ -1,42 +1,41 @@
 <!-- badges: start -->
-[![Lifecycle: Experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![Project Status: WIP - Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Code size](https://img.shields.io/github/languages/code-size/sfcheung/modelbpp.svg)](https://github.com/sfcheung/modelbpp)
 [![Last Commit at Main](https://img.shields.io/github/last-commit/sfcheung/modelbpp.svg)](https://github.com/sfcheung/modelbpp/commits/main)
 [![R-CMD-check](https://github.com/sfcheung/modelbpp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/modelbpp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-*UNDER DEVELOPMENT NOT YET READY PLEASE DO NOT INSTALL*
-
-(Version 0.0.0.9021, updated on 2023-09-16, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
+(Version 0.1.0, updated on 2023-09-16, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
 
 # modelbpp: Model BIC posterior probability and related measures
 
 This package is for assessing model uncertainty in structural
-equation modeling (SEM) by using BIC posterior
-probabilities and fitting neighboring models. The package name, `modelbpp`,
+equation modeling (SEM) by the BIC posterior
+probabilities of the fitted model and its neighboring models,
+based on the method presented in Wu, Cheung, and Leung (2020).
+The package name, `modelbpp`,
 stands for `model` `b`ayesian `p`osterior `p`ability.
 
-Pease visit its GitHub page for further information
+- Wu, H., Cheung, S. F., & Leung, S. O. (2020).
+  Simple use of BIC to assess model selection uncertainty:
+  An illustration using mediation and moderation models.
+  *Multivariate Behavioral Research*, *55*(1), 1--16.
+  https://doi.org/10.1080/00273171.2019.1574546
+
+# Homepage
+
+For more information on this package, please visit its GitHub page:
 
 [https://sfcheung.github.io/modelbpp/](https://sfcheung.github.io/modelbpp/)
 
 # Installation
-
-Stable release versions of this package can be downloaded below:
-
-[https://github.com/sfcheung/modelbpp/releases](https://github.com/sfcheung/modelbpp/releases)
 
 The latest developmental-but-stable version of this package can be installed by `remotes::install_github`:
 
 ```r
 remotes::install_github("sfcheung/modelbpp")
 ```
-
-# Status
-
-This package is still under development. Please report any
-bugs and issues. Comments and suggestions are also welcomed.
 
 # Issues
 

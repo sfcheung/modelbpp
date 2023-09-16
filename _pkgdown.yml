@@ -15,6 +15,8 @@ template:
     base_font: {google: "Heebo"}
     heading_font: {google: "Heebo"}
     code_font: {google: "Red Hat Mono"}
+  includes:
+    in_header: <meta name="google-site-verification" content="0VLBmFnW_UJFI-7gXnORPBsWxqZwmzuGpK-TeVRLBjQ" />
 
 navbar:
   bg: primary
@@ -32,10 +34,10 @@ reference:
 - title: Main Functions
 - contents:
   - model_set
-  - fit_many
   - model_graph
 - title: Helpers
 - contents:
+  - fit_many
   - get_add
   - get_drop
   - min_prior

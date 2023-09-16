@@ -1,6 +1,6 @@
 Package: modelbpp
-Title: Model BIC Posterior Probability and Related Measures
-Version: 0.0.0.9021
+Title: Model BIC Posterior Probability
+Version: 0.1.0
 Authors@R:
     person(given = "Shu Fai",
            family = "Cheung",
@@ -8,11 +8,11 @@ Authors@R:
            email = "shufai.cheung@gmail.com",
            comment = c(ORCID = "0000-0002-9871-9448"))
 Description: Fits the neighboring models of a fitted
-    structural equation model and assesses the model
-    uncertainty of the fitted model. Currently supports
-    BIC posterior probabilities (Wu, Cheung, and Leung,
-    2020, <doi:10.1080/00273171.2019.1574546>) but may
-    support other measures in the future.
+  structural equation model and assesses the model
+  uncertainty of the fitted model based on BIC posterior
+  probabilities, using the method presented in
+  Wu, Cheung, and Leung (2020)
+  <doi:10.1080/00273171.2019.1574546>.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
