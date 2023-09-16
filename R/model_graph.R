@@ -183,10 +183,13 @@ model_graph <- function(object,
     color_tmp[i_add] <- color_add
     color_tmp[i_drop] <- color_drop
     igraph::V(out)$color <- color_tmp
+    igraph::V(out)$frame.color <- "grey75"
     igraph::V(out)$label <- v_labels(m_names)
     igraph::V(out)$label.color <- color_label
     igraph::V(out)$label.cex <- node_label_size
-    out <- igraph::add_layout_(out, igraph::as_tree())
+    igraph::V(out)$label.family <- "sans"
+    igraph::E(out)$arrow.size <- .75
+    out <- igraph::add_layout_(out, igraph::with_sugiyama())
     class(out) <- c("model_graph", class(out))
     out
   }
