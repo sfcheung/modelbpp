@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9018</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9020</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@
                         <h4 data-toc-skip class="author">Shu Fai
 Cheung</h4>
             
-            <h4 data-toc-skip class="date">2023-09-14</h4>
+            <h4 data-toc-skip class="date">2023-09-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/modelbpp/blob/HEAD/vignettes/modelbpp.Rmd" class="external-link"><code>vignettes/modelbpp.Rmd</code></a></small>
       <div class="d-none name"><code>modelbpp.Rmd</code></div>
@@ -255,26 +255,26 @@ compute the BPPs:</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; model_set(sem_out = fit1)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of model(s) fitted: 9</span></span>
-<span><span class="co">#&gt; Number of model(s) converged: 9</span></span>
+<span><span class="co">#&gt; Number of model(s) fitted           : 9</span></span>
+<span><span class="co">#&gt; Number of model(s) converged        : 9</span></span>
 <span><span class="co">#&gt; Number of model(s) passed post.check: 9</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; The models (sorted by BPP):</span></span>
-<span><span class="co">#&gt;             df     BIC   BPP BPP Cumulative</span></span>
-<span><span class="co">#&gt; original     0 464.320 0.253          0.253</span></span>
-<span><span class="co">#&gt; drop: y~x   -1 464.340 0.251          0.504</span></span>
-<span><span class="co">#&gt; add: m1~~y   1 465.900 0.115          0.619</span></span>
-<span><span class="co">#&gt; add: y~m1    1 465.900 0.115          0.733</span></span>
-<span><span class="co">#&gt; drop: m2~m1 -1 465.953 0.112          0.845</span></span>
-<span><span class="co">#&gt; add: m1~y    1 466.142 0.102          0.947</span></span>
-<span><span class="co">#&gt; add: m2~x    1 468.575 0.030          0.977</span></span>
-<span><span class="co">#&gt; drop: m1~x  -1 469.403 0.020          0.997</span></span>
-<span><span class="co">#&gt; drop: y~m2  -1 473.291 0.003          1.000</span></span>
+<span><span class="co">#&gt;             df Prior     BIC   BPP Cumulative</span></span>
+<span><span class="co">#&gt; original     0 0.111 464.320 0.253      0.253</span></span>
+<span><span class="co">#&gt; drop: y~x   -1 0.111 464.340 0.251      0.504</span></span>
+<span><span class="co">#&gt; add: m1~~y   1 0.111 465.900 0.115      0.619</span></span>
+<span><span class="co">#&gt; add: y~m1    1 0.111 465.900 0.115      0.733</span></span>
+<span><span class="co">#&gt; drop: m2~m1 -1 0.111 465.953 0.112      0.845</span></span>
+<span><span class="co">#&gt; add: m1~y    1 0.111 466.142 0.102      0.947</span></span>
+<span><span class="co">#&gt; add: m2~x    1 0.111 468.575 0.030      0.977</span></span>
+<span><span class="co">#&gt; drop: m1~x  -1 0.111 469.403 0.020      0.997</span></span>
+<span><span class="co">#&gt; drop: y~m2  -1 0.111 473.291 0.003      1.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
 <span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
-<span><span class="co">#&gt; - BPP Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
+<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
 <p>The total number of models examined, including the original model, is
 9.</p>
 <p>The BIC posterior probabilities (BPPs) suggest that the original
@@ -329,26 +329,26 @@ probability of the other eight model is (1 - .50) / 8 or .0625.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; model_set(sem_out = fit1, prior_sem_out = 0.5)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of model(s) fitted: 9</span></span>
-<span><span class="co">#&gt; Number of model(s) converged: 9</span></span>
+<span><span class="co">#&gt; Number of model(s) fitted           : 9</span></span>
+<span><span class="co">#&gt; Number of model(s) converged        : 9</span></span>
 <span><span class="co">#&gt; Number of model(s) passed post.check: 9</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; The models (sorted by BPP):</span></span>
-<span><span class="co">#&gt;             df     BIC   BPP BPP Cumulative</span></span>
-<span><span class="co">#&gt; original     0 464.320 0.730          0.730</span></span>
-<span><span class="co">#&gt; drop: y~x   -1 464.340 0.090          0.821</span></span>
-<span><span class="co">#&gt; add: m1~~y   1 465.900 0.041          0.862</span></span>
-<span><span class="co">#&gt; add: y~m1    1 465.900 0.041          0.904</span></span>
-<span><span class="co">#&gt; drop: m2~m1 -1 465.953 0.040          0.944</span></span>
-<span><span class="co">#&gt; add: m1~y    1 466.142 0.037          0.981</span></span>
-<span><span class="co">#&gt; add: m2~x    1 468.575 0.011          0.992</span></span>
-<span><span class="co">#&gt; drop: m1~x  -1 469.403 0.007          0.999</span></span>
-<span><span class="co">#&gt; drop: y~m2  -1 473.291 0.001          1.000</span></span>
+<span><span class="co">#&gt;             df Prior     BIC   BPP Cumulative</span></span>
+<span><span class="co">#&gt; original     0 0.500 464.320 0.730      0.730</span></span>
+<span><span class="co">#&gt; drop: y~x   -1 0.062 464.340 0.090      0.821</span></span>
+<span><span class="co">#&gt; add: m1~~y   1 0.062 465.900 0.041      0.862</span></span>
+<span><span class="co">#&gt; add: y~m1    1 0.062 465.900 0.041      0.904</span></span>
+<span><span class="co">#&gt; drop: m2~m1 -1 0.062 465.953 0.040      0.944</span></span>
+<span><span class="co">#&gt; add: m1~y    1 0.062 466.142 0.037      0.981</span></span>
+<span><span class="co">#&gt; add: m2~x    1 0.062 468.575 0.011      0.992</span></span>
+<span><span class="co">#&gt; drop: m1~x  -1 0.062 469.403 0.007      0.999</span></span>
+<span><span class="co">#&gt; drop: y~m2  -1 0.062 473.291 0.001      1.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
 <span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
-<span><span class="co">#&gt; - BPP Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
+<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
 <p>If the prior of the target is set to .50, then, taking into account
 both the prior probabilities and the data, the target model is strongly
 supported by the data.</p>
@@ -381,27 +381,35 @@ only the top 10 models on BPP will be printed:</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; model_set(sem_out = fit1, df_change_add = 2, df_change_drop = 2)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of model(s) fitted: 18</span></span>
-<span><span class="co">#&gt; Number of model(s) converged: 18</span></span>
+<span><span class="co">#&gt; Number of model(s) fitted           : 18</span></span>
+<span><span class="co">#&gt; Number of model(s) converged        : 18</span></span>
 <span><span class="co">#&gt; Number of model(s) passed post.check: 18</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The first 10 model(s) (sorted by BPP):</span></span>
-<span><span class="co">#&gt;                 df     BIC   BPP BPP Cumulative</span></span>
-<span><span class="co">#&gt; original         0 464.320 0.214          0.214</span></span>
-<span><span class="co">#&gt; drop: y~x       -1 464.340 0.212          0.426</span></span>
-<span><span class="co">#&gt; add: m1~~y       1 465.900 0.097          0.523</span></span>
-<span><span class="co">#&gt; add: y~m1        1 465.900 0.097          0.620</span></span>
-<span><span class="co">#&gt; drop: m2~m1     -1 465.953 0.095          0.714</span></span>
-<span><span class="co">#&gt; drop: m2~m1;y~x -2 465.973 0.094          0.808</span></span>
-<span><span class="co">#&gt; add: m1~y        1 466.142 0.086          0.894</span></span>
-<span><span class="co">#&gt; add: m2~x        1 468.575 0.025          0.920</span></span>
-<span><span class="co">#&gt; drop: m1~x      -1 469.403 0.017          0.936</span></span>
-<span><span class="co">#&gt; drop: m1~x;y~x  -2 469.423 0.017          0.953</span></span>
+<span><span class="co">#&gt; The models (sorted by BPP):</span></span>
+<span><span class="co">#&gt;                  df Prior     BIC   BPP Cumulative</span></span>
+<span><span class="co">#&gt; original          0 0.056 464.320 0.214      0.214</span></span>
+<span><span class="co">#&gt; drop: y~x        -1 0.056 464.340 0.212      0.426</span></span>
+<span><span class="co">#&gt; add: m1~~y        1 0.056 465.900 0.097      0.523</span></span>
+<span><span class="co">#&gt; add: y~m1         1 0.056 465.900 0.097      0.620</span></span>
+<span><span class="co">#&gt; drop: m2~m1      -1 0.056 465.953 0.095      0.714</span></span>
+<span><span class="co">#&gt; drop: m2~m1;y~x  -2 0.056 465.973 0.094      0.808</span></span>
+<span><span class="co">#&gt; add: m1~y         1 0.056 466.142 0.086      0.894</span></span>
+<span><span class="co">#&gt; add: m2~x         1 0.056 468.575 0.025      0.920</span></span>
+<span><span class="co">#&gt; drop: m1~x       -1 0.056 469.403 0.017      0.936</span></span>
+<span><span class="co">#&gt; drop: m1~x;y~x   -2 0.056 469.423 0.017      0.953</span></span>
+<span><span class="co">#&gt; add: m1~y;m2~x    2 0.056 470.154 0.012      0.965</span></span>
+<span><span class="co">#&gt; add: m1~~y;m2~x   2 0.056 470.154 0.012      0.976</span></span>
+<span><span class="co">#&gt; add: m2~x;y~m1    2 0.056 470.154 0.012      0.988</span></span>
+<span><span class="co">#&gt; drop: m1~x;m2~m1 -2 0.056 471.036 0.007      0.995</span></span>
+<span><span class="co">#&gt; drop: y~m2       -1 0.056 473.291 0.002      0.998</span></span>
+<span><span class="co">#&gt; drop: y~m2;y~x   -2 0.056 474.819 0.001      0.999</span></span>
+<span><span class="co">#&gt; drop: m2~m1;y~m2 -2 0.056 474.924 0.001      1.000</span></span>
+<span><span class="co">#&gt; drop: m1~x;y~m2  -2 0.056 478.374 0.000      1.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
 <span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
-<span><span class="co">#&gt; - BPP Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
+<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
 <p>The number of models examined, including the original model, is
 18.</p>
 <p>This is the output of <code><a href="../reference/model_graph.html">model_graph()</a></code>:</p>
@@ -433,25 +441,25 @@ exclude it when calling <code><a href="../reference/model_set.html">model_set()<
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; model_set(sem_out = fit1, must_not_add = "m1~~y")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of model(s) fitted: 8</span></span>
-<span><span class="co">#&gt; Number of model(s) converged: 8</span></span>
+<span><span class="co">#&gt; Number of model(s) fitted           : 8</span></span>
+<span><span class="co">#&gt; Number of model(s) converged        : 8</span></span>
 <span><span class="co">#&gt; Number of model(s) passed post.check: 8</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; The models (sorted by BPP):</span></span>
-<span><span class="co">#&gt;             df     BIC   BPP BPP Cumulative</span></span>
-<span><span class="co">#&gt; original     0 464.320 0.286          0.286</span></span>
-<span><span class="co">#&gt; drop: y~x   -1 464.340 0.283          0.569</span></span>
-<span><span class="co">#&gt; add: y~m1    1 465.900 0.130          0.699</span></span>
-<span><span class="co">#&gt; drop: m2~m1 -1 465.953 0.126          0.825</span></span>
-<span><span class="co">#&gt; add: m1~y    1 466.142 0.115          0.940</span></span>
-<span><span class="co">#&gt; add: m2~x    1 468.575 0.034          0.974</span></span>
-<span><span class="co">#&gt; drop: m1~x  -1 469.403 0.023          0.997</span></span>
-<span><span class="co">#&gt; drop: y~m2  -1 473.291 0.003          1.000</span></span>
+<span><span class="co">#&gt;             df Prior     BIC   BPP Cumulative</span></span>
+<span><span class="co">#&gt; original     0 0.125 464.320 0.286      0.286</span></span>
+<span><span class="co">#&gt; drop: y~x   -1 0.125 464.340 0.283      0.569</span></span>
+<span><span class="co">#&gt; add: y~m1    1 0.125 465.900 0.130      0.699</span></span>
+<span><span class="co">#&gt; drop: m2~m1 -1 0.125 465.953 0.126      0.825</span></span>
+<span><span class="co">#&gt; add: m1~y    1 0.125 466.142 0.115      0.940</span></span>
+<span><span class="co">#&gt; add: m2~x    1 0.125 468.575 0.034      0.974</span></span>
+<span><span class="co">#&gt; drop: m1~x  -1 0.125 469.403 0.023      0.997</span></span>
+<span><span class="co">#&gt; drop: y~m2  -1 0.125 473.291 0.003      1.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
 <span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
-<span><span class="co">#&gt; - BPP Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
+<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
 <p>The number of models reduced to 8.</p>
 <p>This is the plot:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -485,26 +493,26 @@ the original <code>lavaan</code> output as the input:</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; model_set(model_set_out = out1, prior_sem_out = 0.5)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of model(s) fitted: 9</span></span>
-<span><span class="co">#&gt; Number of model(s) converged: 9</span></span>
+<span><span class="co">#&gt; Number of model(s) fitted           : 9</span></span>
+<span><span class="co">#&gt; Number of model(s) converged        : 9</span></span>
 <span><span class="co">#&gt; Number of model(s) passed post.check: 9</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; The models (sorted by BPP):</span></span>
-<span><span class="co">#&gt;             df     BIC   BPP BPP Cumulative</span></span>
-<span><span class="co">#&gt; original     0 464.320 0.730          0.730</span></span>
-<span><span class="co">#&gt; drop: y~x   -1 464.340 0.090          0.821</span></span>
-<span><span class="co">#&gt; add: m1~~y   1 465.900 0.041          0.862</span></span>
-<span><span class="co">#&gt; add: y~m1    1 465.900 0.041          0.904</span></span>
-<span><span class="co">#&gt; drop: m2~m1 -1 465.953 0.040          0.944</span></span>
-<span><span class="co">#&gt; add: m1~y    1 466.142 0.037          0.981</span></span>
-<span><span class="co">#&gt; add: m2~x    1 468.575 0.011          0.992</span></span>
-<span><span class="co">#&gt; drop: m1~x  -1 469.403 0.007          0.999</span></span>
-<span><span class="co">#&gt; drop: y~m2  -1 473.291 0.001          1.000</span></span>
+<span><span class="co">#&gt;             df Prior     BIC   BPP Cumulative</span></span>
+<span><span class="co">#&gt; original     0 0.500 464.320 0.730      0.730</span></span>
+<span><span class="co">#&gt; drop: y~x   -1 0.062 464.340 0.090      0.821</span></span>
+<span><span class="co">#&gt; add: m1~~y   1 0.062 465.900 0.041      0.862</span></span>
+<span><span class="co">#&gt; add: y~m1    1 0.062 465.900 0.041      0.904</span></span>
+<span><span class="co">#&gt; drop: m2~m1 -1 0.062 465.953 0.040      0.944</span></span>
+<span><span class="co">#&gt; add: m1~y    1 0.062 466.142 0.037      0.981</span></span>
+<span><span class="co">#&gt; add: m2~x    1 0.062 468.575 0.011      0.992</span></span>
+<span><span class="co">#&gt; drop: m1~x  -1 0.062 469.403 0.007      0.999</span></span>
+<span><span class="co">#&gt; drop: y~m2  -1 0.062 473.291 0.001      1.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
 <span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
-<span><span class="co">#&gt; - BPP Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
+<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="many-neighboring-models">Many Neighboring Models<a class="anchor" aria-label="anchor" href="#many-neighboring-models"></a>

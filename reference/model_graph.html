@@ -12,7 +12,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9018</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9020</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -240,26 +240,26 @@ by:</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> model_set(sem_out = fit)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of model(s) fitted: 9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of model(s) converged: 9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of model(s) fitted           : 9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of model(s) converged        : 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of model(s) passed post.check: 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The models (sorted by BPP):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             df     BIC   BPP BPP Cumulative</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: y~m1    1 463.892 0.267          0.267</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: y~x     1 464.320 0.216          0.483</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> original     0 464.340 0.213          0.696</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> drop: m2~m1 -1 465.973 0.094          0.790</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~~y   1 466.131 0.087          0.878</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~y    1 466.330 0.079          0.957</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: m2~x    1 468.595 0.025          0.982</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> drop: m1~x  -1 469.423 0.017          0.999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> drop: y~m2  -1 474.819 0.001          1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             df Prior     BIC   BPP Cumulative</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: y~m1    1 0.111 463.892 0.267      0.267</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: y~x     1 0.111 464.320 0.216      0.483</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> original     0 0.111 464.340 0.213      0.696</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> drop: m2~m1 -1 0.111 465.973 0.094      0.790</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~~y   1 0.111 466.131 0.087      0.878</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~y    1 0.111 466.330 0.079      0.957</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: m2~x    1 0.111 468.595 0.025      0.982</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> drop: m1~x  -1 0.111 469.423 0.017      0.999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> drop: y~m2  -1 0.111 474.819 0.001      1.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - BIC: Bayesian Information Criterion.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - BPP: BIC posterior probability.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - BPP Cumulative: Cumulative BIC posterior probability.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Cumulative: Cumulative BIC posterior probability.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">model_graph</span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span></span>
@@ -271,27 +271,36 @@ by:</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> model_set(sem_out = fit, df_change_add = 2, df_change_drop = 2)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of model(s) fitted: 19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of model(s) converged: 19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of model(s) fitted           : 19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of model(s) converged        : 19</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of model(s) passed post.check: 19</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The first 10 model(s) (sorted by BPP):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                df     BIC   BPP BPP Cumulative</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: y~m1       1 463.892 0.195          0.195</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: y~x        1 464.320 0.157          0.353</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> original        0 464.340 0.156          0.508</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~~y;y~x  2 465.900 0.071          0.580</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: y~m1;y~x   2 465.900 0.071          0.651</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> drop: m2~m1    -1 465.973 0.069          0.720</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~~y      1 466.131 0.064          0.784</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~y;y~x   2 466.142 0.063          0.847</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~y       1 466.330 0.058          0.905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> add: m2~x;y~m1  2 468.147 0.023          0.928</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The models (sorted by BPP):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  df Prior     BIC   BPP Cumulative</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: y~m1         1 0.053 463.892 0.195      0.195</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: y~x          1 0.053 464.320 0.157      0.353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> original          0 0.053 464.340 0.156      0.508</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~~y;y~x    2 0.053 465.900 0.071      0.580</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: y~m1;y~x     2 0.053 465.900 0.071      0.651</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> drop: m2~m1      -1 0.053 465.973 0.069      0.720</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~~y        1 0.053 466.131 0.064      0.784</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~y;y~x     2 0.053 466.142 0.063      0.847</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~y         1 0.053 466.330 0.058      0.905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: m2~x;y~m1    2 0.053 468.147 0.023      0.928</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: m2~x;y~x     2 0.053 468.575 0.019      0.947</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: m2~x         1 0.053 468.595 0.019      0.966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> drop: m1~x       -1 0.053 469.423 0.012      0.978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~y;m2~x    2 0.053 470.325 0.008      0.986</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> add: m1~~y;m2~x   2 0.053 470.386 0.008      0.993</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> drop: m1~x;m2~m1 -2 0.053 471.056 0.005      0.999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> drop: y~m2       -1 0.053 474.819 0.001      1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> drop: m2~m1;y~m2 -2 0.053 476.451 0.000      1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> drop: m1~x;y~m2  -2 0.053 479.902 0.000      1.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - BIC: Bayesian Information Criterion.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - BPP: BIC posterior probability.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - BPP Cumulative: Cumulative BIC posterior probability.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Cumulative: Cumulative BIC posterior probability.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu">model_graph</span><span class="op">(</span><span class="va">out2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">g2</span><span class="op">)</span></span></span>
