@@ -30,7 +30,7 @@
 #'
 #' @param max_models The maximum number
 #' of models to be printed. Default is
-#' 10.
+#' 20.
 #'
 #' @param bpp_target The desired
 #' BIC probability. Used to compute
@@ -72,7 +72,7 @@ print.model_set <- function(x,
                             bic_digits = 3,
                             bpp_digits = 3,
                             sort_models = TRUE,
-                            max_models = 10,
+                            max_models = 20,
                             bpp_target = NULL,
                             ...) {
     fit_n <- length(x$models)
@@ -90,15 +90,18 @@ print.model_set <- function(x,
       }
     if (!models_fitted) {
         change_tmp <- rep(NA, fit_n)
+        prior_tmp <- rep(NA, fit_n)
         bic_tmp <- rep(NA, fit_n)
         postprob_tmp <- rep(NA, fit_n)
       } else {
         change_tmp <- x$change
+        prior_tmp <- x$prior
         bic_tmp <- x$bic
         postprob_tmp <- x$bpp
       }
     out_table <- data.frame(modification = fit_names,
                             df = change_tmp,
+                            Prior = prior_tmp,
                             BIC = bic_tmp,
                             BPP = postprob_tmp)
     if (sort_models && models_fitted) {
@@ -109,9 +112,14 @@ print.model_set <- function(x,
         tmp <- formatC(tmp,
                        digits = bpp_digits,
                        format = "f")
-        out_table["BPP Cumulative"] <- tmp
+        out_table["Cumulative"] <- tmp
       }
     out_table_print <- out_table
+    out_table_print$Prior <- round(out_table_print$Prior,
+                                 digits = bpp_digits)
+    out_table_print$Prior <- formatC(out_table_print$Prior,
+                                   digits = bpp_digits,
+                                   format = "f")
     out_table_print$BIC <- round(out_table_print$BIC,
                                  digits = bic_digits)
     out_table_print$BIC <- formatC(out_table_print$BIC,
@@ -122,9 +130,11 @@ print.model_set <- function(x,
     out_table_print$BPP <- formatC(out_table_print$BPP,
                                    digits = bpp_digits,
                                    format = "f")
-    if (fit_n > max_models) {
+    if (isTRUE(fit_n > max_models)) {
+        gt_max_models <- TRUE
         x_tmp <- out_table_print[seq_len(max_models), ]
       } else {
+        gt_max_models <- FALSE
         x_tmp <- out_table_print
       }
     cat("\n")
@@ -132,9 +142,16 @@ print.model_set <- function(x,
     print(model_set_call)
     cat("\n")
     if (models_fitted) {
-        cat("Number of model(s) fitted: ", fit_n, "\n", sep = "")
-        cat("Number of model(s) converged: ", k_converged, "\n", sep = "")
-        cat("Number of model(s) passed post.check: ", k_post_check, "\n", sep = "")
+        tmp1 <- c("Number of model(s) fitted",
+                  "Number of model(s) converged",
+                  "Number of model(s) passed post.check")
+        tmp2 <- c(fit_n,
+                  k_converged,
+                  k_post_check)
+        tmp3 <- auto_tab(tmp1,
+                         tmp2,
+                         between = ": ")
+        cat(tmp3, sep = "\n")
         if (!is.null(bpp_target)) {
             bpp_min <- min_prior(x$bic,
                                  bpp_target = bpp_target,
@@ -148,15 +165,6 @@ print.model_set <- function(x,
                                "Required minimum prior probability:",
                                "Current BIC posterior probability:")
             print(tmp)
-            # cat("Desired minimum BIC posterior probability of the target model: ",
-            #     formatC(bpp_target, digits = bpp_digits, format = "f"),
-            #     "\n", sep = "")
-            # cat("Required minimum prior probability of the target model: ",
-            #     formatC(bpp_min, digits = bpp_digits, format = "f"),
-            #     "\n", sep = "")
-            # cat("Current BIC posterior probability of the target model: ",
-            #     formatC(x$bpp["original"], digits = bpp_digits, format = "f"),
-            #     "\n", sep = "")
           }
       } else {
         cat("Models are not fitted.")
@@ -167,7 +175,7 @@ print.model_set <- function(x,
                    " (sorted by BPP)",
                    "")
     if (!models_fitted) tmp1 <- ""
-    if (fit_n > max_models) {
+    if (gt_max_models) {
         cat("The first ",
             max_models,
             " model(s)",
@@ -185,7 +193,17 @@ print.model_set <- function(x,
     cat("- BIC: Bayesian Information Criterion.\n")
     cat("- BPP: BIC posterior probability.\n")
     if (sort_models) {
-        cat("- BPP Cumulative: Cumulative BIC posterior probability.\n")
+        cat("- Cumulative: Cumulative BIC posterior probability.\n")
+      }
+    if (gt_max_models) {
+        x <- paste(fit_n,
+                   "models were fitted but",
+                   max_models,
+                   "were printed. Call print() and",
+                   "set 'max_models' to a larger number",
+                   "to print more models, or set it to",
+                   "NA to print all models.")
+        catwrap(x, initial = "- ", exdent = 2)
       }
     invisible(x)
   }

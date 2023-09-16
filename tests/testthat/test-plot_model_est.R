@@ -71,3 +71,6 @@ out3
 g3 <- model_graph(out3)
 plot(g3)
 
+# Test print
+
+out2
