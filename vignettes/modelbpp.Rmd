@@ -35,7 +35,7 @@ to:
   model.
 
 - Compute the BIC posterior probability
-  (BPP), for each model (Hu, Cheung,
+  (BPP), for each model (Wu, Cheung,
   and Leung, 2020).
 
 - Use BPP to assess to what extent
@@ -148,7 +148,7 @@ has slightly lower BPP
 (`r formatC(out1_bpp_2, 3, format = "f")`)
 
 This suggests that, with equal prior
-probabilities (Hu et al., 2020), the
+probabilities (Wu et al., 2020), the
 support for the model with the direct
 and without the direct path have similar
 support from the data based on BPP.
