@@ -6,7 +6,7 @@ models with one or more free parameter
 dropped (fixed to zero)."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--></head><body>
+<![endif]--><meta name="google-site-verification" content="0VLBmFnW_UJFI-7gXnORPBsWxqZwmzuGpK-TeVRLBjQ"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
@@ -14,7 +14,7 @@ dropped (fixed to zero)."><!-- mathjax --><script src="https://cdnjs.cloudflare.
     
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9020</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,12 +81,11 @@ dropped (fixed to zero).</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>sem_out</dt>
-<dd><p>The output from an
-SEM function. Currently support
-<a href="https://rdrr.io/pkg/lavaan/man/lavaan-class.html" class="external-link">lavaan::lavaan</a> only.
-Usually the one used <code><a href="get_add.html">get_add()</a></code> or
-<code>get_drop()</code> to generate the
-list of models.</p></dd>
+<dd><p>The original model,
+which is the output from an
+structural equation modeling
+function. Currently support
+<a href="https://rdrr.io/pkg/lavaan/man/lavaan-class.html" class="external-link">lavaan::lavaan</a> objects only.</p></dd>
 
 
 <dt>must_drop</dt>
@@ -110,7 +109,9 @@ included. Default is <code>NULL</code>.</p></dd>
 of freedom away in the list. All
 models with <em>df</em> change less than
 or equal to this number will be
-included. Default is 1.</p></dd>
+included, taking into account
+requirements set by other arguments.
+Default is 1.</p></dd>
 
 
 <dt>model_id</dt>
@@ -122,7 +123,7 @@ number.</p></dd>
 
 <dt>keep_correct_df_change</dt>
 <dd><p>Keep
-only tables with actual <em>df</em> change
+only models with actual <em>df</em> change
 equal to expected <em>df</em> change.</p></dd>
 
 
@@ -147,7 +148,7 @@ parameters.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Generate a list of models
+    <p>It generates a list of models
 with one or more free parameters
 dropped, that is, fixed to zero
 (with degrees of freedom,
@@ -160,6 +161,10 @@ kept.</p>
 to make sure that the increase in
 model degrees of freedom is of the
 expected value.</p>
+<p>This function is called by
+<code><a href="model_set.html">model_set()</a></code> and usually users do
+not need to call it. It is exported
+for advanced users.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

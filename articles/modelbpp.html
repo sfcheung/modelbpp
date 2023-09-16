@@ -18,7 +18,7 @@
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<![endif]--><meta name="google-site-verification" content="0VLBmFnW_UJFI-7gXnORPBsWxqZwmzuGpK-TeVRLBjQ">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9020</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,11 +129,8 @@ automatically do the following:</p>
 </ol>
 </div>
 <div class="section level2">
-<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<div class="section level3">
-<h3 id="a-serial-mediation-model">A Serial Mediation Model<a class="anchor" aria-label="anchor" href="#a-serial-mediation-model"></a>
-</h3>
 <p>This is a sample dataset, <code>dat_serial_4_weak</code>, with four
 variables:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -146,9 +143,9 @@ variables:</p>
 <span><span class="co">#&gt; 4 -2.25521708  0.1185732 -0.1727878  0.9320889</span></span>
 <span><span class="co">#&gt; 5 -0.15321350  0.1509888  1.1251386  0.6892537</span></span>
 <span><span class="co">#&gt; 6 -2.00640303 -0.1595208 -0.1553136 -0.2364792</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="step-1-fit-the-original-model">Step 1: Fit the Original Model<a class="anchor" aria-label="anchor" href="#step-1-fit-the-original-model"></a>
-</h4>
+<div class="section level3">
+<h3 id="step-1-fit-the-original-model">Step 1: Fit the Original Model<a class="anchor" aria-label="anchor" href="#step-1-fit-the-original-model"></a>
+</h3>
 <p>Fit this original model, a serial mediation model, with one direct
 path, from <code>x</code> to <code>y</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -236,18 +233,18 @@ path, from <code>x</code> to <code>y</code>:</p>
 <p>The fit is acceptable, though the RMSEA is marginal (CFI = 0.958,
 RMSEA = 0.083).</p>
 </div>
-<div class="section level4">
-<h4 id="step-2-call-model_set">Step 2: Call <code>model_set()</code><a class="anchor" aria-label="anchor" href="#step-2-call-model_set"></a>
-</h4>
+<div class="section level3">
+<h3 id="step-2-call-model_set">Step 2: Call <code>model_set()</code><a class="anchor" aria-label="anchor" href="#step-2-call-model_set"></a>
+</h3>
 <p>Use <code><a href="../reference/model_set.html">model_set()</a></code> to find the neighboring models differ
 from the target model by one on model degrees of freedom, fit them, and
 compute the BPPs:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_set.html">model_set</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="step-3-examine-the-results">Step 3: Examine the Results<a class="anchor" aria-label="anchor" href="#step-3-examine-the-results"></a>
-</h4>
+<div class="section level3">
+<h3 id="step-3-examine-the-results">Step 3: Examine the Results<a class="anchor" aria-label="anchor" href="#step-3-examine-the-results"></a>
+</h3>
 <p>To examine the results, just print the output:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out1</span></span>
@@ -298,9 +295,9 @@ larger the node.</p>
 can be formed from another model by adding or removing one free
 parameter (e.g., adding or removing one path).</p>
 </div>
-<div class="section level4">
-<h4 id="repeat-step-2-with-user-prior">Repeat Step 2 with User Prior<a class="anchor" aria-label="anchor" href="#repeat-step-2-with-user-prior"></a>
-</h4>
+<div class="section level3">
+<h3 id="repeat-step-2-with-user-prior">Repeat Step 2 with User Prior<a class="anchor" aria-label="anchor" href="#repeat-step-2-with-user-prior"></a>
+</h3>
 <p>In real studies, not all models are equally probable before having
 data (i.e., not all models have equal prior probabilities). A researcher
 fits the original model because</p>
@@ -359,7 +356,6 @@ supported by the data.</p>
 <p><img src="modelbpp_files/figure-html/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 </div>
-</div>
 <div class="section level2">
 <h2 id="advanced-options">Advanced Options<a class="anchor" aria-label="anchor" href="#advanced-options"></a>
 </h2>
@@ -367,8 +363,9 @@ supported by the data.</p>
 <h3 id="more-neighboring-models">More Neighboring Models<a class="anchor" aria-label="anchor" href="#more-neighboring-models"></a>
 </h3>
 <p>If desired, we can enumerate models “farther away” from the target
-model. For example, we can set the difference in model <em>df</em> to
-2:</p>
+model. For example, we can set the maximum difference in model
+<em>df</em> to 2, to include models having two more or two less
+<em>df</em> than the original model:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out1_df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_set.html">model_set</a></span><span class="op">(</span><span class="va">fit1</span>,</span>
 <span>                      df_change_add <span class="op">=</span> <span class="fl">2</span>,</span>
@@ -425,7 +422,7 @@ used to reduce the size of the labels.</p>
 <h3 id="excluding-some-parameters-from-the-search">Excluding Some Parameters From the Search<a class="anchor" aria-label="anchor" href="#excluding-some-parameters-from-the-search"></a>
 </h3>
 <p>When calling <code><a href="../reference/model_set.html">model_set()</a></code>, users can specify parameters
-that must be excluded in the list to be added
+that must be excluded from the list to be added
 (<code>must_not_add</code>), or must not be dropped
 (<code>must_not_drop</code>).</p>
 <p>For example, it may not make sense To add the error covariance
@@ -532,8 +529,8 @@ available.</p>
 <div class="section level2">
 <h2 id="further-information">Further Information<a class="anchor" aria-label="anchor" href="#further-information"></a>
 </h2>
-<p>For further information on the functions, please refer to their help
-pages.</p>
+<p>For further information on other functions, please refer to their
+help pages.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
