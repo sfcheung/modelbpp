@@ -1,6 +1,6 @@
 Package: modelbpp
 Title: Model BIC Posterior Probability
-Version: 0.1.0
+Version: 0.1.0.9001
 Authors@R:
     person(given = "Shu Fai",
            family = "Cheung",
