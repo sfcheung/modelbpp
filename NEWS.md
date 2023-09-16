@@ -1,4 +1,4 @@
-# modelbpp 0.0.0.9019
+# modelbpp 0.0.0.9020
 
 - Migrating. (0.0.0.9001)
 - Initial setup. (0.0.0.9001)
@@ -54,3 +54,5 @@
 - Updated the `DESCRIPTION`. (0.0.0.9017)
 - Improved the printout of `print.model_set()`.
   (0.0.0.9019)
+- Improved the default look of
+  `model_graph()`. (0.0.0.9020)
