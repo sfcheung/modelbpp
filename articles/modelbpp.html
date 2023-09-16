@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,7 +98,7 @@ to:</p>
 <ul>
 <li><p>Fit a set of neighboring models, each has one more or one less
 degree of freedom than the original fitted model.</p></li>
-<li><p>Compute the BIC posterior probability (BPP), for each model (Hu,
+<li><p>Compute the BIC posterior probability (BPP), for each model (Wu,
 Cheung, and Leung, 2020).</p></li>
 <li><p>Use BPP to assess to what extent each model is supported by the
 data, compared to all other models under consideration.</p></li>
@@ -278,7 +278,7 @@ compute the BPPs:</p>
 model is indeed the most probable model based on BPP. However, the model
 with the direct path dropped, <code>drop: y~x</code>, only has slightly
 lower BPP (0.251)</p>
-<p>This suggests that, with equal prior probabilities (Hu et al., 2020),
+<p>This suggests that, with equal prior probabilities (Wu et al., 2020),
 the support for the model with the direct and without the direct path
 have similar support from the data based on BPP.</p>
 <p>Alternatively, we can use <code><a href="../reference/model_graph.html">model_graph()</a></code> to visualize the
