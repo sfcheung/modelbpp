@@ -15,7 +15,7 @@ to 1. The desired BIC posterior
 probability.}
 
 \item{target_name}{The name of the
-target model, as appeared in the
+original model, as appeared in the
 names of \code{bic}.}
 }
 \value{
@@ -30,8 +30,14 @@ probability.
 }
 \details{
 It assumes that all models other than
-the target model have the same prior
+the original model have the same prior
 probabilities.
+
+This function is called by
+\code{\link[=model_set]{model_set()}} or \code{\link[=print.model_set]{print.model_set()}}
+and usually users do
+not need to call it. It is exported
+for advanced users.
 }
 \examples{
 
@@ -63,7 +69,8 @@ moderation models.
 \doi{10.1080/00273171.2019.1574546}
 }
 \seealso{
-\code{\link[=model_set]{model_set()}}
+\code{\link[=model_set]{model_set()}} and
+\code{\link[=print.model_set]{print.model_set()}}
 }
 \author{
 Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}

@@ -3,7 +3,9 @@
 \docType{data}
 \name{dat_cfa}
 \alias{dat_cfa}
-\title{A sample dataset based on a CFA (for testing)}
+\title{A Sample Dataset Based On a
+Confirmatory Factor Analysis Model
+(For Testing)}
 \format{
 A data frame with six variables:
 \describe{
@@ -19,10 +21,13 @@ A data frame with six variables:
 dat_cfa
 }
 \description{
-Generated from the following path model, n = 200
+Generated from
+a confirmatory factor analysis
+model (n = 200).
 }
 \details{
-The model used to generate this dataset:
+The model used to generate
+this dataset:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{f1 =~ x1 + x2 + x3 + x5
 f2 =~ x3 + x4 + x5 + x6

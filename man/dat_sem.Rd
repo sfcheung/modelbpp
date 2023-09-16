@@ -3,7 +3,8 @@
 \docType{data}
 \name{dat_sem}
 \alias{dat_sem}
-\title{A sample dataset based on an SEM model (for testing)}
+\title{A Sample Dataset Based On a
+Structural Model (For Testing)}
 \format{
 An object of class \code{data.frame} with 250 rows and 16 columns.
 }
@@ -11,7 +12,9 @@ An object of class \code{data.frame} with 250 rows and 16 columns.
 dat_sem
 }
 \description{
-Generated from an SEM model, n = 250
+Generated from
+a structural model with
+latent variables (n = 250).
 }
 \details{
 The model to be fitted:

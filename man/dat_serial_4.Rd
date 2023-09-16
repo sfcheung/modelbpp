@@ -3,8 +3,8 @@
 \docType{data}
 \name{dat_serial_4}
 \alias{dat_serial_4}
-\title{A sample dataset based on a serial mediation path model (for
-testing)}
+\title{A Sample Dataset Based On a
+Serial Mediation Model (For Testing)}
 \format{
 A data frame with four variables:
 \describe{
@@ -18,10 +18,12 @@ A data frame with four variables:
 dat_serial_4
 }
 \description{
-Generated from the following path model, n = 100
+Generated from
+a serial mediation model (n = 100).
 }
 \details{
-The model used to generate this dataset:
+The model used to generate
+this dataset:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{m1 ~ x
 m2 ~ m1

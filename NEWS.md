@@ -1,4 +1,4 @@
-# modelbpp 0.0.0.9020
+# modelbpp 0.0.0.9021
 
 - Migrating. (0.0.0.9001)
 - Initial setup. (0.0.0.9001)
@@ -56,3 +56,4 @@
   (0.0.0.9019)
 - Improved the default look of
   `model_graph()`. (0.0.0.9020)
+- Fixed the help pages. (0.0.0.9021)

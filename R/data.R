@@ -1,8 +1,11 @@
-#' A sample dataset based on a path model (for testing)
+#' @title A Sample Dataset Based on a
+#'  Path Model (For Testing)
 #'
-#' Generated from the following path model, n = 100
+#' @description Generated from the
+#'  a path model (n = 100).
 #'
-#' The model used to generate this dataset:
+#' @details  The model used to generate
+#' this dataset:
 #'
 #' ```
 #' x1 ~~ x2
@@ -20,11 +23,16 @@
 "dat_path_model"
 
 
-#' A sample dataset based on a CFA (for testing)
+#' @title A Sample Dataset Based On a
+#' Confirmatory Factor Analysis Model
+#' (For Testing)
 #'
-#' Generated from the following path model, n = 200
+#' @description Generated from
+#' a confirmatory factor analysis
+#' model (n = 200).
 #'
-#' The model used to generate this dataset:
+#' @details The model used to generate
+#' this dataset:
 #'
 #' ```
 #' f1 =~ x1 + x2 + x3 + x5
@@ -43,11 +51,14 @@
 #' }
 "dat_cfa"
 
-#' A sample dataset based on a complex path model (for testing)
+#' @title A Sample Dataset Based On a
+#' Complex Path Model (For Testing)
 #'
-#' Generated from the following path model, n = 200
+#' @description Generated from
+#' a complex path model (n = 200).
 #'
-#' The model used to generate this dataset:
+#' @details The model used to generate
+#' this dataset:
 #'
 #' ```
 #' y4 ~  x1 + x2 + x3
@@ -68,13 +79,14 @@
 #' }
 "dat_path_model_p06"
 
-
-#' A sample dataset based on a serial mediation path model (for
-#' testing)
+#' @title A Sample Dataset Based On a
+#' Serial Mediation Model (For Testing)
 #'
-#' Generated from the following path model, n = 100
+#' @description Generated from
+#' a serial mediation model (n = 100).
 #'
-#' The model used to generate this dataset:
+#' @details The model used to generate
+#' this dataset:
 #'
 #' ```
 #' m1 ~ x
@@ -91,11 +103,14 @@
 #' }
 "dat_serial_4"
 
-#' A sample dataset based on an SEM model (for testing)
+#' @title A Sample Dataset Based On a
+#' Structural Model (For Testing)
 #'
-#' Generated from an SEM model, n = 250
+#' @description Generated from
+#' a structural model with
+#' latent variables (n = 250).
 #'
-#' The model to be fitted:
+#' @details The model to be fitted:
 #'
 #' ```
 #' f1 =~ x1 + x2 + x3 + x4
@@ -108,14 +123,14 @@
 #'
 "dat_sem"
 
-
-#' A sample dataset based on a serial mediation path model
-#' with weak paths (for
-#' testing)
+#' @title A Sample Dataset Based On a
+#' Serial Mediation Model
+#' With Weak Paths (For Testing)
 #'
-#' Generated from the following path model, n = 100
+#' @description Generated from
+#' a serial mediation model (n = 100).
 #'
-#' The model used to generate this dataset:
+#' @details The model to be fitted:
 #'
 #' ```
 #' m1 ~ x

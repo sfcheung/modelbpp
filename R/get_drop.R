@@ -4,7 +4,7 @@
 #' models with one or more free parameter
 #' dropped (fixed to zero).
 #'
-#' @details Generate a list of models
+#' @details It generates a list of models
 #' with one or more free parameters
 #' dropped, that is, fixed to zero
 #' (with degrees of freedom,
@@ -20,12 +20,16 @@
 #' model degrees of freedom is of the
 #' expected value.
 #'
-#' @param sem_out The output from an
-#' SEM function. Currently support
-#' [lavaan::lavaan-class] only.
-#' Usually the one used [get_add()] or
-#' [get_drop()] to generate the
-#' list of models.
+#' This function is called by
+#' [model_set()] and usually users do
+#' not need to call it. It is exported
+#' for advanced users.
+#'
+#' @param sem_out The original model,
+#' which is the output from an
+#' structural equation modeling
+#' function. Currently support
+#' [lavaan::lavaan-class] objects only.
 #'
 #' @param must_drop A character vector
 #' of parameters, named in
@@ -43,7 +47,9 @@
 #' of freedom away in the list. All
 #' models with *df* change less than
 #' or equal to this number will be
-#' included. Default is 1.
+#' included, taking into account
+#' requirements set by other arguments.
+#' Default is 1.
 #'
 #' @param model_id The identification
 #' number of the starting model.
@@ -51,7 +57,7 @@
 #' number.
 #'
 #' @param keep_correct_df_change Keep
-#' only tables with actual *df* change
+#' only models with actual *df* change
 #' equal to expected *df* change.
 #'
 #' @param remove_duplicated If `TRUE`,

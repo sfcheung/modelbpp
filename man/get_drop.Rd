@@ -15,12 +15,11 @@ get_drop(
 )
 }
 \arguments{
-\item{sem_out}{The output from an
-SEM function. Currently support
-\link[lavaan:lavaan-class]{lavaan::lavaan} only.
-Usually the one used \code{\link[=get_add]{get_add()}} or
-\code{\link[=get_drop]{get_drop()}} to generate the
-list of models.}
+\item{sem_out}{The original model,
+which is the output from an
+structural equation modeling
+function. Currently support
+\link[lavaan:lavaan-class]{lavaan::lavaan} objects only.}
 
 \item{must_drop}{A character vector
 of parameters, named in
@@ -38,7 +37,9 @@ included. Default is \code{NULL}.}
 of freedom away in the list. All
 models with \emph{df} change less than
 or equal to this number will be
-included. Default is 1.}
+included, taking into account
+requirements set by other arguments.
+Default is 1.}
 
 \item{model_id}{The identification
 number of the starting model.
@@ -46,7 +47,7 @@ Default is \code{NA}, no identification
 number.}
 
 \item{keep_correct_df_change}{Keep
-only tables with actual \emph{df} change
+only models with actual \emph{df} change
 equal to expected \emph{df} change.}
 
 \item{remove_duplicated}{If \code{TRUE},
@@ -67,7 +68,7 @@ models with one or more free parameter
 dropped (fixed to zero).
 }
 \details{
-Generate a list of models
+It generates a list of models
 with one or more free parameters
 dropped, that is, fixed to zero
 (with degrees of freedom,
@@ -82,6 +83,11 @@ The models will be checked by \code{lavaan}
 to make sure that the increase in
 model degrees of freedom is of the
 expected value.
+
+This function is called by
+\code{\link[=model_set]{model_set()}} and usually users do
+not need to call it. It is exported
+for advanced users.
 }
 \examples{
 
