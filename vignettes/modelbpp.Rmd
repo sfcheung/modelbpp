@@ -64,9 +64,7 @@ to:
 
     - generating a graph using `model_graph()`.
 
-# Examples
-
-## A Serial Mediation Model
+# Example
 
 This is a sample dataset,
 `dat_serial_4_weak`,
@@ -77,7 +75,7 @@ library(modelbpp)
 head(dat_serial_4_weak)
 ```
 
-### Step 1: Fit the Original Model
+## Step 1: Fit the Original Model
 
 Fit this original model, a serial
 mediation model, with one direct path,
@@ -111,7 +109,7 @@ The fit is acceptable, though the RMSEA
 is marginal (CFI = `r formatC(fit1_cfi, 3, format = "f")`,
 RMSEA = `r formatC(fit1_rmsea, 3, format = "f")`).
 
-### Step 2: Call `model_set()`
+## Step 2: Call `model_set()`
 
 Use `model_set()` to find the
 neighboring models differ
@@ -123,7 +121,7 @@ the BPPs:
 out1 <- model_set(fit1)
 ```
 
-### Step 3: Examine the Results
+## Step 3: Examine the Results
 
 To examine the results, just print
 the output:
@@ -176,7 +174,7 @@ one model can be formed from another model
 by adding or removing one free parameter
 (e.g., adding or removing one path).
 
-### Repeat Step 2 with User Prior
+## Repeat Step 2 with User Prior
 
 In real studies, not all models are
 equally probable before having data
@@ -241,8 +239,11 @@ plot(graph1_prior)
 
 If desired, we can enumerate models
 "farther away" from the target model.
-For example, we can set the difference
-in model *df* to 2:
+For example, we can set the
+maximum difference
+in model *df* to 2, to include models
+having two more or two less *df* than
+the original model:
 
 ```{r}
 out1_df2 <- model_set(fit1,
@@ -277,7 +278,7 @@ the size of the labels.
 
 When calling `model_set()`, users can
 specify parameters that must be excluded
-in the list to be added (`must_not_add`),
+from the list to be added (`must_not_add`),
 or must not be dropped (`must_not_drop`).
 
 For example, it may not make sense To
@@ -352,7 +353,8 @@ Please refer to the help page of
 
 # Further Information
 
-For further information on the functions,
+For further information on other
+functions,
 please refer to their help pages.
 
 # References
