@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9003</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@
                         <h4 data-toc-skip class="author">Shu Fai
 Cheung</h4>
             
-            <h4 data-toc-skip class="date">2023-09-16</h4>
+            <h4 data-toc-skip class="date">2023-09-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/modelbpp/blob/HEAD/vignettes/modelbpp.Rmd" class="external-link"><code>vignettes/modelbpp.Rmd</code></a></small>
       <div class="d-none name"><code>modelbpp.Rmd</code></div>
@@ -98,8 +98,7 @@ to:</p>
 <ul>
 <li><p>Fit a set of neighboring models, each has one more or one less
 degree of freedom than the original fitted model.</p></li>
-<li><p>Compute the BIC posterior probability (BPP), for each model (Wu,
-Cheung, and Leung, 2020).</p></li>
+<li><p>Compute the BIC posterior probability (BPP), for each model <span class="citation">(Wu et al., 2020)</span>.</p></li>
 <li><p>Use BPP to assess to what extent each model is supported by the
 data, compared to all other models under consideration.</p></li>
 </ul>
@@ -278,9 +277,9 @@ compute the BPPs:</p>
 model is indeed the most probable model based on BPP. However, the model
 with the direct path dropped, <code>drop: y~x</code>, only has slightly
 lower BPP (0.251)</p>
-<p>This suggests that, with equal prior probabilities (Wu et al., 2020),
-the support for the model with the direct and without the direct path
-have similar support from the data based on BPP.</p>
+<p>This suggests that, with equal prior probabilities <span class="citation">(Wu et al., 2020)</span>, the support for the model
+with the direct and without the direct path have similar support from
+the data based on BPP.</p>
 <p>Alternatively, we can use <code><a href="../reference/model_graph.html">model_graph()</a></code> to visualize the
 BPPs and model relations graphically:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -411,9 +410,9 @@ only the top 10 models on BPP will be printed:</p>
 18.</p>
 <p>This is the output of <code><a href="../reference/model_graph.html">model_graph()</a></code>:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">graph1_df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_graph.html">model_graph</a></span><span class="op">(</span><span class="va">out1_df2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">graph1_df2</span>,</span>
-<span>     node_label_size <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">graph1_df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_graph.html">model_graph</a></span><span class="op">(</span><span class="va">out1_df2</span>,</span>
+<span>                          node_label_size <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">graph1_df2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="modelbpp_files/figure-html/unnamed-chunk-15-1.png" width="768" style="display: block; margin: auto;"></p>
 <p>Note: Due to the number of nodes, <code>node_label_size</code> is
 used to reduce the size of the labels.</p>
@@ -533,12 +532,16 @@ available.</p>
 help pages.</p>
 </div>
 <div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>Wu, H., Cheung, S. F., &amp; Leung, S. O. (2020). Simple use of BIC
-to assess model selection uncertainty: An illustration using mediation
-and moderation models. <em>Multivariate Behavioral Research</em>,
-<em>55</em>(1), 1–16. <a href="https://doi.org/10.1080/00273171.2019.1574546" class="external-link uri">https://doi.org/10.1080/00273171.2019.1574546</a></p>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-wu_simple_2020" class="csl-entry">
+Wu, H., Cheung, S. F., &amp; Leung, S. O. (2020). Simple use of
+<span>BIC</span> to assess model selection uncertainty: <span>An</span>
+illustration using mediation and moderation models. <em>Multivariate
+Behavioral Research</em>, <em>55</em>(1), 1–16. <a href="https://doi.org/10.1080/00273171.2019.1574546" class="external-link">https://doi.org/10.1080/00273171.2019.1574546</a>
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -548,7 +551,7 @@ and moderation models. <em>Multivariate Behavioral Research</em>,
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Shu Fai Cheung.</p>
+<p>Developed by Shu Fai Cheung, Huiping Wu, Shing On Leung.</p>
 </div>
 
 <div class="pkgdown-footer-right">
