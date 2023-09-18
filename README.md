@@ -6,16 +6,16 @@
 [![R-CMD-check](https://github.com/sfcheung/modelbpp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/modelbpp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.1.0.9002, updated on 2023-09-18, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
+(Version 0.1.0.9003, updated on 2023-09-19, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
 
-# modelbpp: Model BIC posterior probability and related measures
+# modelbpp: Model BIC Posterior Probability
 
 This package is for assessing model uncertainty in structural
 equation modeling (SEM) by the BIC posterior
 probabilities of the fitted model and its neighboring models,
 based on the method presented in Wu, Cheung, and Leung (2020).
 The package name, `modelbpp`,
-stands for `model` `b`ayesian `p`osterior `p`ability.
+stands for `model` `b`ayesian `p`osterior `p`robability.
 
 - Wu, H., Cheung, S. F., & Leung, S. O. (2020).
   Simple use of BIC to assess model selection uncertainty:
