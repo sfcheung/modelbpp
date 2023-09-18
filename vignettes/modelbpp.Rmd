@@ -265,9 +265,9 @@ the original model, is 18.
 This is the output of `model_graph()`:
 
 ```{r fig.height = 8, fig.width = 8}
-graph1_df2 <- model_graph(out1_df2)
-plot(graph1_df2,
-     node_label_size = .75)
+graph1_df2 <- model_graph(out1_df2,
+                          node_label_size = .75)
+plot(graph1_df2)
 ```
 
 Note: Due to the number of nodes,
