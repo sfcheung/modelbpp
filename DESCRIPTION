@@ -1,12 +1,19 @@
 Package: modelbpp
 Title: Model BIC Posterior Probability
-Version: 0.1.0.9001
+Version: 0.1.0.9003
 Authors@R:
-    person(given = "Shu Fai",
-           family = "Cheung",
-           role = c("aut", "cre"),
-           email = "shufai.cheung@gmail.com",
-           comment = c(ORCID = "0000-0002-9871-9448"))
+    c(person(given = "Shu Fai",
+             family = "Cheung",
+             role = c("aut", "cre"),
+             email = "shufai.cheung@gmail.com",
+             comment = c(ORCID = "0000-0002-9871-9448")),
+      person(given = "Huiping",
+             family = "Wu",
+             role = c("aut")),
+      person(given = "Shing On",
+             family = "Leung",
+             role = c("aut"),
+             comment = c(ORCID = "0000-0002-0962-339X")))
 Description: Fits the neighboring models of a fitted
   structural equation model and assesses the model
   uncertainty of the fitted model based on BIC posterior
