@@ -19,11 +19,11 @@ fit2 <- sem(mod, dat_path_model, group = "group")
 fit3 <- sem(mod, dat_path_model, estimator = "GLS")
 fit4 <- sem(mod, dat_path_model, missing = "fiml")
 
-expect_true(check_sem_out(fit1))
-expect_error(check_sem_out(fit2), "groups")
-expect_error(check_sem_out(fit3), "estimator")
+expect_true(modelbpp:::check_sem_out(fit1))
+expect_error(modelbpp:::check_sem_out(fit2), "groups")
+expect_error(modelbpp:::check_sem_out(fit3), "estimator")
 expect_error(model_set(fit2), "groups")
 expect_error(model_set(fit3), "estimator")
-expect_true(check_sem_out(fit4))
+expect_true(modelbpp:::check_sem_out(fit4))
 
 
