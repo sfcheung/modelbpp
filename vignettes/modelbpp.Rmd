@@ -19,7 +19,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.width  =  6,
   fig.height =  6,
-  fig.align = "center"
+  fig.align = "center",
+  fig.path = ""
 )
 ```
 
@@ -158,10 +159,12 @@ Alternatively, we can use `model_graph()`
 to visualize the BPPs and model relations
 graphically:
 
-```{r fig.height = 8, fig.width = 8}
+```{r graph1, fig.height = 8, fig.width = 8, eval = FALSE}
 graph1 <- model_graph(out1)
 plot(graph1)
 ```
+
+![](graph1-1.png)
 
 Each node (circle) represents one model.
 The larger the BPP, the larger the node.
@@ -229,10 +232,12 @@ model is strongly supported by the data.
 
 This is the output of `model_graph()`:
 
-```{r fig.height = 8, fig.width = 8}
+```{r out1_prior, fig.height = 8, fig.width = 8, eval = FALSE}
 graph1_prior <- model_graph(out1_prior)
 plot(graph1_prior)
 ```
+
+![](out1_prior-1.png)
 
 # Advanced Options
 
@@ -265,11 +270,13 @@ the original model, is 18.
 
 This is the output of `model_graph()`:
 
-```{r fig.height = 8, fig.width = 8}
+```{r graph1_df2, fig.height = 8, fig.width = 8, eval = FALSE}
 graph1_df2 <- model_graph(out1_df2,
                           node_label_size = .75)
 plot(graph1_df2)
 ```
+
+![](graph1_df2-1.png)
 
 Note: Due to the number of nodes,
 `node_label_size` is used to reduce
@@ -302,10 +309,12 @@ The number of models reduced to 8.
 
 This is the plot:
 
-```{r}
+```{r graph1_no_cov, ig.height = 8, fig.width = 8, eval = FALSE}
 graph1_no_cov <- model_graph(out1_no_cov)
 plot(graph1_no_cov)
 ```
+
+![](graph1_no_cov-1.png)
 
 ## Models With Constraints
 

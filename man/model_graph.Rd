@@ -151,22 +151,15 @@ library(lavaan)
 mod <-
 "
 m1 ~ x
-m2 ~ m1
-y ~ m2
+y ~ m1
 "
 
-fit <- sem(mod, dat_serial_4_weak, fixed.x = TRUE)
+fit <- sem(mod, dat_serial_4, fixed.x = TRUE)
 
 out <- model_set(fit)
 out
 
 g <- model_graph(out)
 plot(g)
-
-out2 <- model_set(fit, df_change_add = 2, df_change_drop = 2)
-out2
-
-g2 <- model_graph(out2)
-plot(g2)
 
 }
