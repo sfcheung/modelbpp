@@ -1,4 +1,4 @@
-# modelbpp 0.1.0.9006
+# modelbpp 0.1.1
 
 - First version submitted to CRAN.
 - Fixed a few typos in Get Started. (0.1.0.9001)
@@ -7,3 +7,4 @@
 - Fixed typos in README.md. (0.1.0.9003)
 - Used `tinytest` for tests. (0.1.0.9004 - 0.1.0.9006)
 - Simplified some examples. (0.1.0.9007)
+- Finalized to 0.1.1.
