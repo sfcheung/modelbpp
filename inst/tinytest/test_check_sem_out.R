@@ -1,4 +1,4 @@
-library(lavaan)
+suppressMessages(library(lavaan))
 
 data(dat_path_model)
 set.seed(8970431)

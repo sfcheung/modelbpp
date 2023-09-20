@@ -1,7 +1,8 @@
 # WIP
 
 if (FALSE) {
-    library(lavaan)
+
+    suppressMessages(library(lavaan))
 
     dat <- dat_sem
 

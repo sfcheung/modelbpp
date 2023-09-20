@@ -1,8 +1,8 @@
 if (interactive() &&
     length(unclass(packageVersion("modelbpp"))[[1]]) == 4) {
 
-    library(lavaan)
-    library(igraph)
+    suppressMessages(library(lavaan))
+    suppressMessages(library(igraph))
 
     mod <-
     "

@@ -1,7 +1,7 @@
 if (interactive() &&
     length(unclass(packageVersion("modelbpp"))[[1]]) == 4) {
 
-    library(lavaan)
+    suppressMessages(library(lavaan))
 
     dat <- dat_path_model_p06
 

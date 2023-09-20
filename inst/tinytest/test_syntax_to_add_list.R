@@ -1,4 +1,4 @@
-library(lavaan)
+suppressMessages(library(lavaan))
 
 out1 <- syntax_to_add_list(c("m3 ~ m4", "x4 ~ x3", "f0 =~ x1"))
 out2 <- syntax_to_add_list(list("m3 ~ m4", "x4 ~ x3", "f0 =~ x1"))

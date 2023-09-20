@@ -1,4 +1,4 @@
-library(lavaan)
+suppressMessages(library(lavaan))
 
 dat <- dat_path_model
 
