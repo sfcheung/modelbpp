@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@
                         <h4 data-toc-skip class="author">Shu Fai
 Cheung</h4>
             
-            <h4 data-toc-skip class="date">2023-09-18</h4>
+            <h4 data-toc-skip class="date">2023-09-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/modelbpp/blob/HEAD/vignettes/modelbpp.Rmd" class="external-link"><code>vignettes/modelbpp.Rmd</code></a></small>
       <div class="d-none name"><code>modelbpp.Rmd</code></div>
@@ -285,7 +285,7 @@ BPPs and model relations graphically:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">graph1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_graph.html">model_graph</a></span><span class="op">(</span><span class="va">out1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">graph1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelbpp_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="graph1-1.png"></p>
 <p>Each node (circle) represents one model. The larger the BPP, the
 larger the node.</p>
 <p>The arrow points from a simpler model (a model with larger model
@@ -352,7 +352,7 @@ supported by the data.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">graph1_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_graph.html">model_graph</a></span><span class="op">(</span><span class="va">out1_prior</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">graph1_prior</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelbpp_files/figure-html/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="out1_prior-1.png"></p>
 </div>
 </div>
 <div class="section level2">
@@ -413,7 +413,7 @@ only the top 10 models on BPP will be printed:</p>
 <code class="sourceCode R"><span><span class="va">graph1_df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_graph.html">model_graph</a></span><span class="op">(</span><span class="va">out1_df2</span>,</span>
 <span>                          node_label_size <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">graph1_df2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelbpp_files/figure-html/unnamed-chunk-15-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="graph1_df2-1.png"></p>
 <p>Note: Due to the number of nodes, <code>node_label_size</code> is
 used to reduce the size of the labels.</p>
 </div>
@@ -461,7 +461,7 @@ exclude it when calling <code><a href="../reference/model_set.html">model_set()<
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">graph1_no_cov</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_graph.html">model_graph</a></span><span class="op">(</span><span class="va">out1_no_cov</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">graph1_no_cov</span><span class="op">)</span></span></code></pre></div>
-<p><img src="modelbpp_files/figure-html/unnamed-chunk-18-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="graph1_no_cov-1.png"></p>
 </div>
 <div class="section level3">
 <h3 id="models-with-constraints">Models With Constraints<a class="anchor" aria-label="anchor" href="#models-with-constraints"></a>
