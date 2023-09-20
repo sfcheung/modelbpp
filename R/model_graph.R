@@ -141,12 +141,6 @@
 #' g <- model_graph(out)
 #' plot(g)
 #'
-#' out2 <- model_set(fit, df_change_add = 2, df_change_drop = 2)
-#' out2
-#'
-#' g2 <- model_graph(out2)
-#' plot(g2)
-#'
 #' @export
 
 model_graph <- function(object,
