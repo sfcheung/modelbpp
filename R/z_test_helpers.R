@@ -1,17 +1,4 @@
-library(lavaan)
-
-dat <- dat_path_model_p06
-
-mod <- attr(dat, "mod")
-
-fit <- sem(mod, dat_path_model_p06, fixed.x = TRUE)
-pt <- parameterTable(fit)
-pt_no_user <- pt[pt$op != ":=", ]
-pt0 <- parameterTable(fit)
-mod_to_add <- get_add(fit)
-fit_add <- lapply(mod_to_add, function(x) update(fit, x))
-anova_add <- lapply(fit_add, function(x) anova(x, fit))
-
+#' @noRd
 
 get_diff <- function(x, pt_no_user) {
   x_lor <- x[, c("lhs", "op", "rhs")]
@@ -50,24 +37,18 @@ get_diff <- function(x, pt_no_user) {
   out_ops
 }
 
+#' @noRd
 
-
-test_that("Parameters to drop as expected", {
-    expect_true(
-        all(names(mod_to_add) %in%
-          c("add: y4~~y6", "add: y4~y6", "add: y5~x2", "add: y6~y4", "add: y6~x1",
-            "add: y6~x2", "add: (y4~x1),(y4~x2)"))
-      )
-  })
-
-test_that("All df differences are one", {
-    expect_true(
-        all(sapply(anova_add, function(x) x[2, "Df diff"]) == 1)
-      )
-  })
-
-test_that("Generated difference matches the names", {
-    expect_true(
-        all(sapply(mod_to_add, get_diff, pt_no_user) == names(mod_to_add))
-      )
-  })
+get_diff_drop <- function(x, pt_no_user) {
+  tmp <- c("lhs", "op", "rhs", "block", "group", "label", "free")
+  x0 <- x[, tmp]
+  pt_no_user0 <- pt_no_user[, tmp]
+  x0$free <- x0$free > 0
+  pt_no_user0$free <- pt_no_user0$free > 0
+  out <- x0[which(apply(x0 != pt_no_user0, 1, any, na.rm = TRUE)), ]
+  out_ops <- sapply(seq_len(nrow(out)), function(x) {
+      paste0(out[x, "lhs"], out[x, "op"], out[x, "rhs"], collapse = "")
+    })
+  out_ops <- paste(out_ops, collapse = ";")
+  out_ops <- paste("drop:", out_ops)
+}
