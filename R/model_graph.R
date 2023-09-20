@@ -129,11 +129,10 @@
 #' mod <-
 #' "
 #' m1 ~ x
-#' m2 ~ m1
-#' y ~ m2
+#' y ~ m1
 #' "
 #'
-#' fit <- sem(mod, dat_serial_4_weak, fixed.x = TRUE)
+#' fit <- sem(mod, dat_serial_4, fixed.x = TRUE)
 #'
 #' out <- model_set(fit)
 #' out

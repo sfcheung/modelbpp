@@ -6,7 +6,7 @@
 [![R-CMD-check](https://github.com/sfcheung/modelbpp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/modelbpp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.1.0.9006, updated on 2023-09-20, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
+(Version 0.1.0.9007, updated on 2023-09-20, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
 
 # modelbpp: Model BIC Posterior Probability
 
