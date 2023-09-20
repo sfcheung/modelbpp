@@ -16,16 +16,16 @@ fit <- sem(mod,
 
 ptable <- parameterTable(fit)
 
-out1 <- syntax_to_id(list("x3 ~ x1", "x3 ~~ x4", "x3 ~1",
+out1 <- modelbpp:::syntax_to_id(list("x3 ~ x1", "x3 ~~ x4", "x3 ~1",
                           "m1 ~~ m2"),
                      ptable = ptable)
 
-out2 <- syntax_to_id(list("m3 ~ m71",
+out2 <- modelbpp:::syntax_to_id(list("m3 ~ m71",
                           "m1 ~~ m2"),
                      ptable = ptable)
 
 expect_equal(sort(out1),
               c(1, 6, 10),
-              info = "syntax_to_id")
+              info = "modelbpp:::syntax_to_id")
 expect_true(length(out2) == 0,
-            info = "syntax_to_id")
+            info = "modelbpp:::syntax_to_id")
