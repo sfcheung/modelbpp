@@ -14,8 +14,12 @@ out1_check <- lapply(out1_check,
                           x
                         })
 
-test_that("syntax_to_add_list", {
-    expect_equal(out1, out1_check)
-    expect_equal(out2, out1_check)
-    expect_equal(out3, out1_check)
-  })
+expect_equal(out1,
+              out1_check,
+              info = "syntax_to_add_list")
+expect_equal(out2,
+              out1_check,
+              info = "syntax_to_add_list")
+expect_equal(out3,
+              out1_check,
+              info = "syntax_to_add_list")

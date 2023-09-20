@@ -1,6 +1,6 @@
 Package: modelbpp
 Title: Model BIC Posterior Probability
-Version: 0.1.0.9003
+Version: 0.1.0.9004
 Authors@R:
     c(person(given = "Shu Fai",
              family = "Cheung",
@@ -27,7 +27,7 @@ RoxygenNote: 7.2.3
 Suggests:
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    tinytest
 Depends:
     R (>= 4.0.0)
 Imports:
@@ -35,9 +35,7 @@ Imports:
     parallel,
     pbapply,
     igraph
-Config/testthat/edition: 3
 VignetteBuilder: knitr
-Config/testthat/parallel: true
 URL: https://sfcheung.github.io/modelbpp/
 BugReports: https://github.com/sfcheung/modelbpp/issues
 LazyData: true

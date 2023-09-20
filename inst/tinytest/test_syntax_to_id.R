@@ -9,7 +9,10 @@ x4 ~ a*x1
 ab := a*b
 "
 
-fit <- sem(mod, dat_path_model, meanstructure = TRUE, fixed.x = TRUE)
+fit <- sem(mod,
+           dat_path_model,
+           meanstructure = TRUE,
+           fixed.x = TRUE)
 
 ptable <- parameterTable(fit)
 
@@ -21,7 +24,8 @@ out2 <- syntax_to_id(list("m3 ~ m71",
                           "m1 ~~ m2"),
                      ptable = ptable)
 
-test_that("syntax_to_id", {
-    expect_equal(sort(out1), c(1, 6, 10))
-    expect_true(length(out2) == 0)
-  })
+expect_equal(sort(out1),
+              c(1, 6, 10),
+              info = "syntax_to_id")
+expect_true(length(out2) == 0,
+            info = "syntax_to_id")
