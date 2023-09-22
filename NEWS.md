@@ -1,3 +1,9 @@
+# modelbpp 0.1.2.2
+
+- Updated info related to the first CRAN
+  release (0.1.2.1).
+- Added a logo.
+
 # modelbpp 0.1.2
 
 - First version submitted to CRAN.

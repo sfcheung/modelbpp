@@ -1,14 +1,16 @@
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![CRAN status](https://www.r-pkg.org/badges/version/modelbpp?color=blue)](https://CRAN.R-project.org/package=modelbpp)
+[![CRAN: Release Date](https://www.r-pkg.org/badges/last-release/modelbpp?color=blue)](https://cran.r-project.org/package=modelbpp)
 [![Code size](https://img.shields.io/github/languages/code-size/sfcheung/modelbpp.svg)](https://github.com/sfcheung/modelbpp)
 [![Last Commit at Main](https://img.shields.io/github/last-commit/sfcheung/modelbpp.svg)](https://github.com/sfcheung/modelbpp/commits/main)
 [![R-CMD-check](https://github.com/sfcheung/modelbpp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/modelbpp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.1.2, updated on 2023-09-20, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
+# modelbpp: Model BIC Posterior Probability <img src="man/figures/logo.png" align="right" />
 
-# modelbpp: Model BIC Posterior Probability
+(Version 0.1.2.2, updated on 2023-09-22, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
 
 This package is for assessing model uncertainty in structural
 equation modeling (SEM) by the BIC posterior
@@ -30,6 +32,12 @@ For more information on this package, please visit its GitHub page:
 [https://sfcheung.github.io/modelbpp/](https://sfcheung.github.io/modelbpp/)
 
 # Installation
+
+The stable CRAN version can be installed by `install.packages()`:
+
+```r
+install.packages("modelbpp")
+```
 
 The latest developmental-but-stable version of this package can be installed by `remotes::install_github`:
 
