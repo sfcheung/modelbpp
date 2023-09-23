@@ -31,6 +31,9 @@ syntax_to_add_list <- function(x) {
 #' @noRd
 
 add_list_duplicate_cov <- function(x) {
+    if (length(x) == 0) {
+        return(x)
+      }
     x0 <- lapply(x, function(y) {
                         if (y[2] == "~~") return(y[3:1])
                         NULL
@@ -43,6 +46,9 @@ add_list_duplicate_cov <- function(x) {
 #' @noRd
 
 add_list_clean_duplicated_cov <- function(x) {
+    if (length(x) == 0) {
+        return(x)
+      }
     x0 <- sapply(seq_len(length(x)),
                  function(y) {
                     y0 <- x[[y]]
@@ -119,6 +125,9 @@ release_constr <- function(constr, pt) {
 #' @noRd
 
 mt_exclude_existing_pars <- function(mt, pt) {
+    if (nrow(mt) == 0) {
+        return(mt)
+      }
     # Remove those already in the parameter tables
     mt_in_pt1 <- mapply(function(x, y) {
                             any((pt$lhs == x) & (pt$rhs == y))
@@ -140,6 +149,9 @@ mt_exclude_existing_pars <- function(mt, pt) {
 #' @noRd
 
 mt_exclude_reversed <- function(mt, pt) {
+    if (nrow(mt) == 0) {
+        return(mt)
+      }
     user_v <- unique(c(pt$lhs[pt$user %in% c(1, 0)],
                        pt$rhs[pt$user %in% c(1, 0)]))
     i_iv <- user_v[!user_v %in% pt$lhs[pt$op == "~"]]
@@ -151,6 +163,9 @@ mt_exclude_reversed <- function(mt, pt) {
 #' @noRd
 
 mt_remove_error_cov <- function(mt_list, sem_out) {
+    if (length(mt_list) == 0) {
+        return(mt_list)
+      }
     ind <- lavaan::lavNames(sem_out, "ov.ind")
     ind_cov <- sapply(mt_list, function(x, indnames) {
                         if ((x[1] %in% indnames) &&

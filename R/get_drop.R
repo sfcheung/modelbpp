@@ -128,16 +128,20 @@ get_drop <- function(sem_out,
         id_must_not_drop <- syntax_to_id(must_not_drop, ptable = pt)
         id_to_drop <- setdiff(id_to_drop, id_must_not_drop)
       }
-    # Determine the sets of changes
-    sets_to_gen <- lapply(seq_len(df_change),
-                function(x) {
-                          utils::combn(which(id_to_drop), x, simplify = FALSE)
-                        }
-              )
-    sets_to_gen <- unlist(sets_to_gen, recursive = FALSE)
-    df0 <- lavaan::fitMeasures(sem_out, "df")
-    out <- lapply(sets_to_gen, gen_pt_drop, pt = pt, to = model_id,
-                  source_df = df0, sem_out = sem_out)
+    if (any(id_to_drop)) {
+        # Determine the sets of changes
+        sets_to_gen <- lapply(seq_len(df_change),
+                    function(x) {
+                              utils::combn(which(id_to_drop), x, simplify = FALSE)
+                            }
+                  )
+        sets_to_gen <- unlist(sets_to_gen, recursive = FALSE)
+        df0 <- lavaan::fitMeasures(sem_out, "df")
+        out <- lapply(sets_to_gen, gen_pt_drop, pt = pt, to = model_id,
+                      source_df = df0, sem_out = sem_out)
+      } else {
+        out <- list()
+      }
 
     # Keep tables with expected df only?
     if (keep_correct_df_change) {
