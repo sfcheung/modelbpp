@@ -1,8 +1,16 @@
-# modelbpp 0.1.2.2
+# modelbpp 0.1.2.3
+
+## Miscellaneous
 
 - Updated info related to the first CRAN
   release (0.1.2.1).
 - Added a logo.
+
+## Bug Fixes
+
+- Fixed a bug in which error occurs in
+  `model_set()` if no paths are dropped
+  or no paths are added. (0.1.2.3)
 
 # modelbpp 0.1.2
 
