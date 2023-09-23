@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,7 @@
                         <h4 data-toc-skip class="author">Shu Fai
 Cheung</h4>
             
-            <h4 data-toc-skip class="date">2023-09-22</h4>
+            <h4 data-toc-skip class="date">2023-09-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/modelbpp/blob/HEAD/vignettes/modelbpp.Rmd" class="external-link"><code>vignettes/modelbpp.Rmd</code></a></small>
       <div class="d-none name"><code>modelbpp.Rmd</code></div>
@@ -169,7 +169,7 @@ path, from <code>x</code> to <code>y</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit1</span>,</span>
 <span>        fit.measures <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; lavaan 0.6.16 ended normally after 2 iterations</span></span>
+<span><span class="co">#&gt; lavaan 0.6.16 ended normally after 1 iteration</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Estimator                                         ML</span></span>
 <span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
@@ -400,8 +400,8 @@ only the top 10 models on BPP will be printed:</p>
 <span><span class="co">#&gt; add: m2~x         1 0.056 468.575 0.025      0.920</span></span>
 <span><span class="co">#&gt; drop: m1~x       -1 0.056 469.403 0.017      0.936</span></span>
 <span><span class="co">#&gt; drop: m1~x;y~x   -2 0.056 469.423 0.017      0.953</span></span>
-<span><span class="co">#&gt; add: m1~~y;m2~x   2 0.056 470.154 0.012      0.965</span></span>
-<span><span class="co">#&gt; add: m1~y;m2~x    2 0.056 470.154 0.012      0.976</span></span>
+<span><span class="co">#&gt; add: m1~y;m2~x    2 0.056 470.154 0.012      0.965</span></span>
+<span><span class="co">#&gt; add: m1~~y;m2~x   2 0.056 470.154 0.012      0.976</span></span>
 <span><span class="co">#&gt; add: m2~x;y~m1    2 0.056 470.154 0.012      0.988</span></span>
 <span><span class="co">#&gt; drop: m1~x;m2~m1 -2 0.056 471.036 0.007      0.995</span></span>
 <span><span class="co">#&gt; drop: y~m2       -1 0.056 473.291 0.002      0.998</span></span>
