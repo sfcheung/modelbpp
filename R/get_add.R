@@ -163,20 +163,24 @@ get_add <- function(sem_out,
     row_eq <- which(i_eq)
     row_eq_op2 <- lor_to_list(pt[row_eq, ])
 
-    # Determine the sets of changes
-    sets_to_gen2 <- lapply(seq_len(df_change),
-                function(x) {
-                    utils::combn(c(mt1_op2, row_eq_op2), x, simplify = FALSE)
-                  }
-              )
-    sets_to_gen2 <- unlist(sets_to_gen2, recursive = FALSE)
+    if (length(c(mt1_op2, row_eq_op2)) != 0) {
+        # Determine the sets of changes
+        sets_to_gen2 <- lapply(seq_len(df_change),
+                    function(x) {
+                        utils::combn(c(mt1_op2, row_eq_op2), x, simplify = FALSE)
+                      }
+                  )
+        sets_to_gen2 <- unlist(sets_to_gen2, recursive = FALSE)
 
-    # Clean up inadmissible modification
-    sets_to_gen2_ok <- sets_remove_inadmissible(sets_to_gen2)
+        # Clean up inadmissible modification
+        sets_to_gen2_ok <- sets_remove_inadmissible(sets_to_gen2)
 
-    # Generate parameter tables
-    out <- lapply(sets_to_gen2_ok, gen_pt_add, pt = pt, sem_out = sem_out,
-                  from = model_id)
+        # Generate parameter tables
+        out <- lapply(sets_to_gen2_ok, gen_pt_add, pt = pt, sem_out = sem_out,
+                      from = model_id)
+      } else {
+        out <- list()
+      }
 
     # Keep tables with expected df only?
     if (keep_correct_df_change) {
