@@ -9,8 +9,23 @@ unique_models <- function(partables) {
                      x = i_added,
                      y = i_dropped,
                      SIMPLIFY = FALSE)
+    i_null <- sapply(i_comb,
+                      function(x) {
+                          is.null(x[[1]]) && is.null(x[[2]])
+                        }
+                     )
+    if (any(i_null)) {
+        i_comb2 <- which(i_null)
+      } else {
+        i_comb2 <- NULL
+      }
     j <- !duplicated(i_comb)
-    out <- partables[j]
+    if (any(j)) {
+        j_comb2 <- which(j)
+      } else {
+        j_comb2 <- NULL
+      }
+    out <- partables[union(j_comb2, i_comb2)]
     out
   }
 
