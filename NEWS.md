@@ -1,10 +1,13 @@
-# modelbpp 0.1.2.4
+# modelbpp 0.1.2.5
 
 ## Miscellaneous
 
 - Updated info related to the first CRAN
   release (0.1.2.1).
 - Added a logo.
+- Suppress the warning from
+  `lavaan::modificationIndices()` about
+  equality constraints. (0.1.2.5)
 
 ## Bug Fixes
 

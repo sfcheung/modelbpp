@@ -124,9 +124,10 @@ get_add <- function(sem_out,
     pt <- pt[pt$op != ":=", ]
 
     # Get the MI table
-    mt <- lavaan::modificationIndices(sem_out,
+    # Suppress the warning about equality constraints.
+    mt <- suppressWarnings(lavaan::modificationIndices(sem_out,
                     standardized = FALSE,
-                    power = FALSE)
+                    power = FALSE))
 
     # Remove those already in the parameter tables
     mt1 <- mt_exclude_existing_pars(mt = mt, pt = pt)
