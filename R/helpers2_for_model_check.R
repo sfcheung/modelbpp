@@ -19,13 +19,16 @@ unique_models <- function(partables) {
       } else {
         i_comb2 <- NULL
       }
+    if (!is.null(i_comb2)) {
+        i_comb2 <- i_comb2[!duplicated(names(i_comb2))]
+      }
     j <- !duplicated(i_comb)
     if (any(j)) {
         j_comb2 <- which(j)
       } else {
         j_comb2 <- NULL
       }
-    out <- partables[union(j_comb2, i_comb2)]
+    out <- partables[unique(c(j_comb2, i_comb2))]
     out
   }
 
