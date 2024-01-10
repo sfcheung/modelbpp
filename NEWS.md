@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.3
+# modelbpp 0.1.2.4
 
 ## Miscellaneous
 
@@ -11,6 +11,8 @@
 - Fixed a bug in which error occurs in
   `model_set()` if no paths are dropped
   or no paths are added. (0.1.2.3)
+- Corrected a typo in the help page of
+  `gen_models()`'s argument, `output`.
 
 # modelbpp 0.1.2
 

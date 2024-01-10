@@ -163,7 +163,7 @@
 #' as the expected processing time.
 #' Default is `TRUE`.
 #'
-#' @param output If `"model_est"`,
+#' @param output If `"model_set"`,
 #' then the output is a `model_set`-class
 #' object. If `"partables"`, the output
 #' is a `partables`-class object.

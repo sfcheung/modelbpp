@@ -180,7 +180,7 @@ Can be set to \code{FALSE} for experimenting
 the functions on models not officially
 supported.}
 
-\item{output}{If \code{"model_est"},
+\item{output}{If \code{"model_set"},
 then the output is a \code{model_set}-class
 object. If \code{"partables"}, the output
 is a \code{partables}-class object.
