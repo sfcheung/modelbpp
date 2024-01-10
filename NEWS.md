@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.5
+# modelbpp 0.1.2.6
 
 ## Miscellaneous
 
@@ -8,6 +8,8 @@
 - Suppress the warning from
   `lavaan::modificationIndices()` about
   equality constraints. (0.1.2.5)
+- Updated `unique_models()` to handle
+  user-supplied models. (0.1.2.6)
 
 ## Bug Fixes
 
