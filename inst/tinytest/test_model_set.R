@@ -220,6 +220,9 @@ expect_identical(out$bpp,
 
 # Test user models
 
+if (interactive() &&
+    length(unclass(packageVersion("modelbpp"))[[1]]) == 4) {
+
 mod2 <-
 "
 x2 ~ x1
@@ -247,14 +250,15 @@ out_user <- model_set(sem_out = fit,
                       partables = pt_user,
                       progress = FALSE,
                       parallel = FALSE)
-out_user
+names(out_user$models)
 
 out_user_prior <- model_set(sem_out = fit,
                             partables = pt_user,
                             prior_sem_out = .50,
                             progress = FALSE,
                             parallel = FALSE)
-out_user_prior
+
+expect_true(all(c("user2", "user3") %in% names(out_user_prior$models)))
 
 out_user_prior2 <- model_set(sem_out = fit,
                              partables = pt_user,
@@ -263,7 +267,11 @@ out_user_prior2 <- model_set(sem_out = fit,
                                                user3 = .10),
                              progress = FALSE,
                              parallel = FALSE)
-out_user_prior2
+
+tmp <- out_user_prior2$prior
+names(tmp) <- names(out_user_prior2$models)
+expect_equal(unname(tmp[c("user2", "original", "user3")]),
+             c(.20, .30, .10))
 
 out_user_prior3 <- model_set(sem_out = fit,
                              partables = pt_user,
@@ -272,35 +280,46 @@ out_user_prior3 <- model_set(sem_out = fit,
                                                user1 = .10),
                              progress = FALSE,
                              parallel = FALSE)
-out_user_prior3
 
-min_prior(out_user_prior3$bic,
-          bpp_target = .95,
-          target_name = "original")
-min_prior(out_user_prior3$bic,
-          bpp_target = .25,
-          target_name = "user3")
-min_prior(out_user_prior3$bic,
-          bpp_target = .25,
-          target_name = "add: x1~x4")
+tmp <- out_user_prior3$prior
+names(tmp) <- names(out_user_prior3$models)
+expect_equal(unname(tmp[c("drop: x2~~x1", "original")]),
+             c(.21, .31))
 
-print(out_user_prior3,
-      bpp_target = .95,
-      target_name = "add: x1~x4")
-
-out_user_prior4 <- model_set(sem_out = fit,
-                             partables = pt_user,
-                             prior_sem_out = c(`add: x1~x4` = .87),
-                             progress = FALSE,
-                             parallel = FALSE)
-out_user_prior4
+expect_stdout(print(out_user_prior3,
+                    bpp_target = .95,
+                    target_name = "add: x1~x4"),
+              pattern = "Target Model: add: x1~x4")
+}
 
 if (interactive() &&
     length(unclass(packageVersion("modelbpp"))[[1]]) == 4) {
 
-    suppressMessages(library(igraph))
+suppressMessages(library(igraph))
 
-    g3 <- model_graph(out_user_prior3)
-    plot(g3)
+mod4 <-
+"
+x2 ~ 0*x3 + 0*x4
+x1 ~ 0*x3
+"
+fit4 <- sem(mod4, dat_path_model)
 
-  }
+pt_user <- out$models
+
+pt_user[["user2"]] <- parameterTable(fit2)
+pt_user[["user3"]] <- parameterTable(fit3)
+pt_user[["user4"]] <- parameterTable(fit3)
+
+out_user_prior5 <- model_set(sem_out = fit,
+                            partables = pt_user,
+                            prior_sem_out = c(original = .11,
+                                              user2 = .50),
+                            progress = FALSE,
+                            parallel = FALSE)
+expect_warning(g <- model_graph(out_user_prior5),
+               pattern = "One or more")
+expect_true(all(c("user2", "user4", "user3") %in%
+                names(V(g))))
+plot(g)
+
+}
