@@ -41,6 +41,10 @@
 #' achieve `bpp_target`. Default
 #' is `NULL`.
 #'
+#' @param target_name The name of the
+#' target model as appeared in the
+#' model list. Default is `"original"`.
+#'
 #' @param ...  Optional arguments.
 #' Ignored.
 #'
@@ -75,6 +79,7 @@ print.model_set <- function(x,
                             sort_models = TRUE,
                             max_models = 20,
                             bpp_target = NULL,
+                            target_name = "original",
                             ...) {
     fit_n <- length(x$models)
     fit_names <- names(x$models)
@@ -156,12 +161,13 @@ print.model_set <- function(x,
         if (!is.null(bpp_target)) {
             bpp_min <- min_prior(x$bic,
                                  bpp_target = bpp_target,
-                                 target_name = "original")
+                                 target_name = target_name)
             tmp <- data.frame(x = c(
                       formatC(bpp_target, digits = bpp_digits, format = "f"),
                       formatC(bpp_min, digits = bpp_digits, format = "f"),
-                      formatC(x$bpp["original"], digits = bpp_digits, format = "f")))
-            colnames(tmp) <- "Target Model"
+                      formatC(x$bpp[target_name], digits = bpp_digits, format = "f")))
+            colnames(tmp) <- paste0("Target Model: ",
+                                    target_name)
             rownames(tmp) <- c("Desired minimum BIC posterior probability:",
                                "Required minimum prior probability:",
                                "Current BIC posterior probability:")

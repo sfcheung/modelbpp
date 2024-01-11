@@ -287,3 +287,10 @@ min_prior(out_user_prior3$bic,
 print(out_user_prior3,
       bpp_target = .95,
       target_name = "add: x1~x4")
+
+out_user_prior4 <- model_set(sem_out = fit,
+                             partables = pt_user,
+                             prior_sem_out = c(`add: x1~x4` = .87),
+                             progress = FALSE,
+                             parallel = FALSE)
+out_user_prior4
