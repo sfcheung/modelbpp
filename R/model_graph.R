@@ -111,6 +111,10 @@
 #' from the original model.
 #' Default is `"lightgreen"`.
 #'
+#' @param color_others The color
+#' of other models not specified above.
+#' Default is `"grey50"`.
+#'
 #' @param color_label The color of the
 #' text labels of the nodes. Default
 #' is `"black"`.
@@ -151,6 +155,7 @@ model_graph <- function(object,
                         color_original = "lightblue",
                         color_add = "burlywood1",
                         color_drop = "lightgreen",
+                        color_others = "grey50",
                         color_label = "black",
                         node_label_size = 1,
                         ...) {
@@ -178,10 +183,11 @@ model_graph <- function(object,
     i_original <- which(m_names == "original")
     i_add <- grepl("^add: ", m_names)
     i_drop <- grepl("^drop: ", m_names)
-    color_tmp <- rep("", p)
+    color_tmp <- rep(color_others, p)
     color_tmp[i_original] <- color_original
     color_tmp[i_add] <- color_add
     color_tmp[i_drop] <- color_drop
+    browser()
     igraph::V(out)$color <- color_tmp
     igraph::V(out)$frame.color <- "grey75"
     igraph::V(out)$label <- v_labels(m_names)

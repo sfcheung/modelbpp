@@ -294,3 +294,13 @@ out_user_prior4 <- model_set(sem_out = fit,
                              progress = FALSE,
                              parallel = FALSE)
 out_user_prior4
+
+if (interactive() &&
+    length(unclass(packageVersion("modelbpp"))[[1]]) == 4) {
+
+    suppressMessages(library(igraph))
+
+    g3 <- model_graph(out_user_prior3)
+    plot(g3)
+
+  }
