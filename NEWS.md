@@ -1,4 +1,22 @@
-# modelbpp 0.1.2.6
+# modelbpp 0.1.2.7
+
+## New Features
+
+- Updated `model_set()` to work with
+  user-supplied models. These models
+  are supplied as parameter tables
+  through the argument `partables`.
+  (0.1.2.7)
+- Updated the `print`-method of
+  `model_set`-class objects. Users can
+  set the prior probabilities of one or
+  more models of their choice. (0.1.2.7)
+- Updated `model_graph()` to plot
+  user-supplied models. (0.1.2.7)
+- Added a `c`-method for `partables`-class
+  and `model_set`-class objects. For the
+  ease of adding user models when calling
+  `model_set()`. (0.1.2.7)
 
 ## Miscellaneous
 
