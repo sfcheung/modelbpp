@@ -155,7 +155,7 @@ model_graph <- function(object,
                         color_original = "lightblue",
                         color_add = "burlywood1",
                         color_drop = "lightgreen",
-                        color_others = "grey50",
+                        color_others = "lightgrey",
                         color_label = "black",
                         node_label_size = 1,
                         ...) {
@@ -187,7 +187,6 @@ model_graph <- function(object,
     color_tmp[i_original] <- color_original
     color_tmp[i_add] <- color_add
     color_tmp[i_drop] <- color_drop
-    browser()
     igraph::V(out)$color <- color_tmp
     igraph::V(out)$frame.color <- "grey75"
     igraph::V(out)$label <- v_labels(m_names)
