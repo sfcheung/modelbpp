@@ -14,6 +14,7 @@ model_graph(
   color_original = "lightblue",
   color_add = "burlywood1",
   color_drop = "lightgreen",
+  color_others = "lightgrey",
   color_label = "black",
   node_label_size = 1,
   ...
@@ -63,6 +64,10 @@ the nodes of models formed by
 dropping one or more free parameters
 from the original model.
 Default is \code{"lightgreen"}.}
+
+\item{color_others}{The color
+of other models not specified above.
+Default is \code{"grey50"}.}
 
 \item{color_label}{The color of the
 text labels of the nodes. Default

@@ -11,6 +11,7 @@
   sort_models = TRUE,
   max_models = 20,
   bpp_target = NULL,
+  target_name = "original",
   ...
 )
 }
@@ -44,6 +45,10 @@ the minimum prior probability
 of the target model required to
 achieve \code{bpp_target}. Default
 is \code{NULL}.}
+
+\item{target_name}{The name of the
+target model as appeared in the
+model list. Default is \code{"original"}.}
 
 \item{...}{Optional arguments.
 Ignored.}
