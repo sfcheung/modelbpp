@@ -217,3 +217,73 @@ expect_identical(out$bpp,
 expect_identical(out$bpp,
                   out5$bpp,
                   info = "Test generated models")
+
+# Test user models
+
+mod2 <-
+"
+x2 ~ x1
+x3 ~ x2
+x4 ~ x3
+"
+
+mod3 <-
+"
+x2 ~ x4
+x3 ~ x4
+x1 ~ x2 + x3
+"
+
+fit2 <- sem(mod2, dat_path_model)
+fit3 <- sem(mod3, dat_path_model)
+
+pt_user <- out$models
+
+pt_user[["user2"]] <- parameterTable(fit2)
+pt_user[["user3"]] <- parameterTable(fit3)
+pt_user
+
+out_user <- model_set(sem_out = fit,
+                      partables = pt_user,
+                      progress = FALSE,
+                      parallel = FALSE)
+out_user
+
+out_user_prior <- model_set(sem_out = fit,
+                            partables = pt_user,
+                            prior_sem_out = .50,
+                            progress = FALSE,
+                            parallel = FALSE)
+out_user_prior
+
+out_user_prior2 <- model_set(sem_out = fit,
+                             partables = pt_user,
+                             prior_sem_out = c(original = .30,
+                                               user2 = .20,
+                                               user3 = .10),
+                             progress = FALSE,
+                             parallel = FALSE)
+out_user_prior2
+
+out_user_prior3 <- model_set(sem_out = fit,
+                             partables = pt_user,
+                             prior_sem_out = c(original = .31,
+                                               `drop: x2~~x1` = .21,
+                                               user1 = .10),
+                             progress = FALSE,
+                             parallel = FALSE)
+out_user_prior3
+
+min_prior(out_user_prior3$bic,
+          bpp_target = .95,
+          target_name = "original")
+min_prior(out_user_prior3$bic,
+          bpp_target = .25,
+          target_name = "user3")
+min_prior(out_user_prior3$bic,
+          bpp_target = .25,
+          target_name = "add: x1~x4")
+
+print(out_user_prior3,
+      bpp_target = .95,
+      target_name = "add: x1~x4")
