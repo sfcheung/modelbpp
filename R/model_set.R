@@ -372,7 +372,7 @@ model_set <- function(sem_out,
             function(x) as.numeric(lavaan::fitMeasures(x, "bic")))
       out$bic <- bic_list
       if (!is.null(prior_sem_out)) {
-          if (length(prior_sem_out) == 1) {
+          if ((length(prior_sem_out) == 1) && is.null(names(prior_sem_out))) {
               p <- length(out$bic)
               i_original <- which(names(out$models) == "original")
               prior_tmp <- rep((1 - prior_sem_out) / (p - 1), p)
