@@ -159,6 +159,12 @@ model_graph <- function(object,
                         color_label = "black",
                         node_label_size = 1,
                         ...) {
+    user_models <- sapply(added(object$models), is.null) &
+                   sapply(dropped(object$models), is.null)
+    if (sum(user_models, na.rm = TRUE) != 1) {
+        warning("One or more user models are present. ",
+            "User model(s) will be plotted separately.")
+      }
     net_out <- models_network(object)
     out <- igraph::graph_from_adjacency_matrix(net_out,
                                                mode = "directed")
