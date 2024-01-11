@@ -77,6 +77,10 @@
 #'
 #' fitb <- sem(modb, dat_path_model, fixed.x = TRUE)
 #'
+#' outb <- model_set(fitb,
+#'                   progress = FALSE,
+#'                   parallel = FALSE)
+#'
 #' mod2 <-
 #' "
 #' x2 ~ 0*x3 + 0*x4
