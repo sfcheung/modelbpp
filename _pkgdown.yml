@@ -41,6 +41,10 @@ reference:
   - get_add
   - get_drop
   - min_prior
+  - get_partables
+  - identical_partables
+  - is_partable
+  - same_variables
 - title: Methods
 - contents:
   - print.partables

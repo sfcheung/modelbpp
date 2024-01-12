@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.8
+# modelbpp 0.1.2.9
 
 ## New Features
 
@@ -19,6 +19,8 @@
   `model_set()`. (0.1.2.7)
 - Added more functions to manipulate
   a `partables`-class object. (0.1.2.8)
+- Added a few helper functions for
+  `partables`-class objects. (0.1.2.9)
 
 ## Miscellaneous
 
