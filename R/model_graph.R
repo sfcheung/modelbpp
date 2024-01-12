@@ -123,6 +123,10 @@
 #' the labels of the nodes. Default is
 #' 1.
 #'
+#' @param original String. The name
+#' of the original model (target model).
+#' Default is `"original"`.
+#'
 #' @param ... Optional arguments. Not
 #' used for now.
 #'
@@ -158,6 +162,7 @@ model_graph <- function(object,
                         color_others = "lightgrey",
                         color_label = "black",
                         node_label_size = 1,
+                        original = "original",
                         ...) {
     user_models <- sapply(added(object$models), is.null) &
                    sapply(dropped(object$models), is.null)
@@ -186,11 +191,13 @@ model_graph <- function(object,
     igraph::V(out)$size <- node_size
     p <- ncol(net_out)
     m_names <- colnames(net_out)
-    i_original <- which(m_names == "original")
+    i_original <- which(m_names == original)
     i_add <- grepl("^add: ", m_names)
     i_drop <- grepl("^drop: ", m_names)
     color_tmp <- rep(color_others, p)
-    color_tmp[i_original] <- color_original
+    if (length(i_original) > 0) {
+        color_tmp[i_original] <- color_original
+      }
     color_tmp[i_add] <- color_add
     color_tmp[i_drop] <- color_drop
     igraph::V(out)$color <- color_tmp

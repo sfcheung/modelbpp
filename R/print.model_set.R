@@ -44,6 +44,7 @@
 #' @param target_name The name of the
 #' target model as appeared in the
 #' model list. Default is `"original"`.
+#' Used if `bpp_target` is not `NULL`.
 #'
 #' @param ...  Optional arguments.
 #' Ignored.

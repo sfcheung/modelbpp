@@ -22,6 +22,7 @@ model_set(
   remove_duplicated = TRUE,
   fit_models = ifelse(!is.null(model_set_out$fit), FALSE, TRUE),
   compute_bpp = TRUE,
+  original = "original",
   parallel = FALSE,
   ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
   make_cluster_args = list(),
@@ -144,6 +145,11 @@ default is \code{TRUE}.}
 posterior probabilities will be
 computed. Default
 is \code{TRUE}.}
+
+\item{original}{String. The name of the
+original (traget) model. Default is
+\code{"original"}. Used if \code{prior_sem_out}
+is unnamed and only has one value.}
 
 \item{parallel}{If \code{TRUE}, parallel
 processing will be used to fit the

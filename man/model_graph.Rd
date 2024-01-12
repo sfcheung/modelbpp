@@ -17,6 +17,7 @@ model_graph(
   color_others = "lightgrey",
   color_label = "black",
   node_label_size = 1,
+  original = "original",
   ...
 )
 }
@@ -76,6 +77,10 @@ is \code{"black"}.}
 \item{node_label_size}{The size of
 the labels of the nodes. Default is
 1.}
+
+\item{original}{String. The name
+of the original model (target model).
+Default is \code{"original"}.}
 
 \item{...}{Optional arguments. Not
 used for now.}

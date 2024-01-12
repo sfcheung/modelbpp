@@ -138,6 +138,11 @@
 #' computed. Default
 #' is `TRUE`.
 #'
+#' @param original String. The name of the
+#' original (traget) model. Default is
+#' `"original"`. Used if `prior_sem_out`
+#' is unnamed and only has one value.
+#'
 #' @param parallel If `TRUE`, parallel
 #' processing will be used to fit the
 #' models. Default is `FALSE`.
@@ -284,6 +289,7 @@ model_set <- function(sem_out,
                                           FALSE,
                                           TRUE),
                       compute_bpp = TRUE,
+                      original = "original",
                       parallel = FALSE,
                       ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
                       make_cluster_args = list(),
@@ -374,7 +380,7 @@ model_set <- function(sem_out,
       if (!is.null(prior_sem_out)) {
           if ((length(prior_sem_out) == 1) && is.null(names(prior_sem_out))) {
               p <- length(out$bic)
-              i_original <- which(names(out$models) == "original")
+              i_original <- which(names(out$models) == original)
               prior_tmp <- rep((1 - prior_sem_out) / (p - 1), p)
               prior_tmp[i_original] <- prior_sem_out
               out$prior <- prior_tmp

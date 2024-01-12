@@ -48,7 +48,8 @@ is \code{NULL}.}
 
 \item{target_name}{The name of the
 target model as appeared in the
-model list. Default is \code{"original"}.}
+model list. Default is \code{"original"}.
+Used if \code{bpp_target} is not \code{NULL}.}
 
 \item{...}{Optional arguments.
 Ignored.}
