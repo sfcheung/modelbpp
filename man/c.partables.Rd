@@ -66,10 +66,7 @@ partables and then call the c-method of \code{partables} objects.
 }}
 \examples{
 
-# TO UPDATE
-
 library(lavaan)
-
 
 moda <-
 "
