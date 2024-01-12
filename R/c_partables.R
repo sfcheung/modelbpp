@@ -50,10 +50,7 @@
 #'
 #' @examples
 #'
-#' # TO UPDATE
-#'
 #' library(lavaan)
-#'
 #'
 #' moda <-
 #' "
