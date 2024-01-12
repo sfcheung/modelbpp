@@ -48,6 +48,90 @@ models_network <- function(object) {
     net_out
   }
 
+#' @title Convert a 'model_set'-Object
+#' to an Adjacency Matrix Using 'semTools::net()' Method
+#'
+#' @description Convert a
+#' 'model_set'-Object to an adjacency
+#' matrix for 'igraph'.
+#'
+#' @details
+#' Work-in-progress. Does not work for now.
+#'
+#' @param object A `model_set`-class
+#' object.
+#'
+#' @return
+#' A numeric matrix of zeros and ones,
+#' to indicate the relations between
+#' models.
+#'
+#' @noRd
+
+models_network2 <- function(object) {
+    if (inherits(object, "model_set")) {
+        models <- object$fit
+      } else {
+        models <- object
+      }
+    if (!all(sapply(models, inherits, what = "lavaan"))) {
+        stop("The object must be either a",
+              "model_set object or a",
+              "list of lavaan objects")
+      }
+    fixedx <- sapply(models, lavaan::lavInspect,
+                     what = "fixed.x")
+    if (any(!fixedx)) {
+        models <- lapply(models,
+                         lavaan_fast_update)
+      }
+    #semTools::net does not work in this case.
+    #TODO: Need an internal version.
+    # net_out <- do.call(semTools::net, unname(models))
+  }
+
+#' @title Net Without Call
+#'
+#' @description Based on semTools:::x.within.y().
+#'
+#' @noRd
+
+x_within_y <- function(x,
+                       y,
+                       crit = 1e-4) {
+    #TODO: Work on it later
+  }
+
+#' @noRd
+
+check_x_within_y <- function(x,
+                             y) {
+    #TODO: Work on it later
+  }
+
+#' @title Internal Fast Update
+#'
+#' @noRd
+
+lavaan_fast_update <- function(x) {
+    slot_opt <- x@Options
+    slot_pat <- x@ParTable
+    slot_mod <- x@Model
+    slot_smp <- x@SampleStats
+    slot_dat <- x@Data
+
+    slot_opt2 <- slot_opt
+    slot_opt2$se <- "none"
+    slot_opt2$fixed.x <- FALSE
+    slot_opt2$baseline <- FALSE
+
+    fit2 <- lavaan::lavaan(slotOptions = slot_opt2,
+                           slotParTable = slot_pat,
+                           slotModel = slot_mod,
+                           slotSampleStats = slot_smp,
+                           slotData = slot_dat)
+    fit2
+  }
 
 #' @title Mark Models Formed by Adding Free Parameters
 #'

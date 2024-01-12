@@ -14,8 +14,10 @@ model_graph(
   color_original = "lightblue",
   color_add = "burlywood1",
   color_drop = "lightgreen",
+  color_others = "lightgrey",
   color_label = "black",
   node_label_size = 1,
+  original = "original",
   ...
 )
 }
@@ -64,6 +66,10 @@ dropping one or more free parameters
 from the original model.
 Default is \code{"lightgreen"}.}
 
+\item{color_others}{The color
+of other models not specified above.
+Default is \code{"grey50"}.}
+
 \item{color_label}{The color of the
 text labels of the nodes. Default
 is \code{"black"}.}
@@ -71,6 +77,10 @@ is \code{"black"}.}
 \item{node_label_size}{The size of
 the labels of the nodes. Default is
 1.}
+
+\item{original}{String. The name
+of the original model (target model).
+Default is \code{"original"}.}
 
 \item{...}{Optional arguments. Not
 used for now.}

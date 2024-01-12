@@ -111,6 +111,10 @@
 #' from the original model.
 #' Default is `"lightgreen"`.
 #'
+#' @param color_others The color
+#' of other models not specified above.
+#' Default is `"grey50"`.
+#'
 #' @param color_label The color of the
 #' text labels of the nodes. Default
 #' is `"black"`.
@@ -118,6 +122,10 @@
 #' @param node_label_size The size of
 #' the labels of the nodes. Default is
 #' 1.
+#'
+#' @param original String. The name
+#' of the original model (target model).
+#' Default is `"original"`.
 #'
 #' @param ... Optional arguments. Not
 #' used for now.
@@ -151,9 +159,17 @@ model_graph <- function(object,
                         color_original = "lightblue",
                         color_add = "burlywood1",
                         color_drop = "lightgreen",
+                        color_others = "lightgrey",
                         color_label = "black",
                         node_label_size = 1,
+                        original = "original",
                         ...) {
+    user_models <- sapply(added(object$models), is.null) &
+                   sapply(dropped(object$models), is.null)
+    # if (sum(user_models, na.rm = TRUE) != 1) {
+    #     warning("One or more user models are present. ",
+    #         "User model(s) will be plotted separately.")
+    #   }
     net_out <- models_network(object)
     out <- igraph::graph_from_adjacency_matrix(net_out,
                                                mode = "directed")
@@ -175,11 +191,13 @@ model_graph <- function(object,
     igraph::V(out)$size <- node_size
     p <- ncol(net_out)
     m_names <- colnames(net_out)
-    i_original <- which(m_names == "original")
+    i_original <- which(m_names == original)
     i_add <- grepl("^add: ", m_names)
     i_drop <- grepl("^drop: ", m_names)
-    color_tmp <- rep("", p)
-    color_tmp[i_original] <- color_original
+    color_tmp <- rep(color_others, p)
+    if (length(i_original) > 0) {
+        color_tmp[i_original] <- color_original
+      }
     color_tmp[i_add] <- color_add
     color_tmp[i_drop] <- color_drop
     igraph::V(out)$color <- color_tmp

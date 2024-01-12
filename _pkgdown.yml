@@ -47,6 +47,7 @@ reference:
   - print.sem_outs
   - print.model_set
   - plot.model_graph
+  - c.partables
 - title: Datasets
   desc: Datasets used in examples.
 - contents:

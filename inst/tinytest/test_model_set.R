@@ -217,3 +217,196 @@ expect_identical(out$bpp,
 expect_identical(out$bpp,
                   out5$bpp,
                   info = "Test generated models")
+
+# Test user models
+
+if (interactive() &&
+    length(unclass(packageVersion("modelbpp"))[[1]]) == 4) {
+
+mod2 <-
+"
+x2 ~ x1
+x3 ~ x2
+x4 ~ x3
+"
+
+mod3 <-
+"
+x2 ~ x4
+x3 ~ x4
+x1 ~ x2 + x3
+"
+
+fit2 <- sem(mod2, dat_path_model)
+fit3 <- sem(mod3, dat_path_model)
+
+pt_user <- out$models
+
+pt_user[["user2"]] <- parameterTable(fit2)
+pt_user[["user3"]] <- parameterTable(fit3)
+pt_user
+
+out_user <- model_set(sem_out = fit,
+                      partables = pt_user,
+                      progress = FALSE,
+                      parallel = FALSE)
+names(out_user$models)
+
+out_user_prior <- model_set(sem_out = fit,
+                            partables = pt_user,
+                            prior_sem_out = .50,
+                            progress = FALSE,
+                            parallel = FALSE)
+
+expect_true(all(c("user2", "user3") %in% names(out_user_prior$models)))
+
+out_user_prior2 <- model_set(sem_out = fit,
+                             partables = pt_user,
+                             prior_sem_out = c(original = .30,
+                                               user2 = .20,
+                                               user3 = .10),
+                             progress = FALSE,
+                             parallel = FALSE)
+
+tmp <- out_user_prior2$prior
+names(tmp) <- names(out_user_prior2$models)
+expect_equal(unname(tmp[c("user2", "original", "user3")]),
+             c(.20, .30, .10))
+
+out_user_prior3 <- model_set(sem_out = fit,
+                             partables = pt_user,
+                             prior_sem_out = c(original = .31,
+                                               `drop: x2~~x1` = .21,
+                                               user1 = .10),
+                             progress = FALSE,
+                             parallel = FALSE)
+
+tmp <- out_user_prior3$prior
+names(tmp) <- names(out_user_prior3$models)
+expect_equal(unname(tmp[c("drop: x2~~x1", "original")]),
+             c(.21, .31))
+
+expect_stdout(print(out_user_prior3,
+                    bpp_target = .95,
+                    target_name = "add: x1~x4"),
+              pattern = "Target Model: add: x1~x4")
+}
+
+if (interactive() &&
+    length(unclass(packageVersion("modelbpp"))[[1]]) == 4) {
+
+suppressMessages(library(igraph))
+
+mod4 <-
+"
+x2 ~ 0*x3 + 0*x4
+x1 ~ 0*x3
+"
+fit4 <- sem(mod4, dat_path_model)
+
+pt_user <- out$models
+
+pt_user[["user2"]] <- parameterTable(fit2)
+pt_user[["user3"]] <- parameterTable(fit3)
+pt_user[["user4"]] <- parameterTable(fit3)
+
+out_user_prior5 <- model_set(sem_out = fit,
+                            partables = pt_user,
+                            prior_sem_out = c(original = .11,
+                                              user2 = .50),
+                            progress = FALSE,
+                            parallel = FALSE)
+g <- model_graph(out_user_prior5)
+# expect_warning(g <- model_graph(out_user_prior5),
+#                pattern = "One or more")
+expect_true(all(c("user2", "user4", "user3") %in%
+                names(V(g))))
+plot(g)
+
+}
+
+# Test c()
+
+moda <-
+"
+x3 ~ a*x1 + b*x2
+x4 ~ a*x1
+ab := a*b
+"
+
+fita <- sem(moda, dat_path_model, fixed.x = TRUE)
+
+outa <- model_set(fita,
+                  progress = FALSE,
+                  parallel = FALSE)
+
+modb <-
+"
+x3 ~ a*x1 + b*x2
+x4 ~ a*x2
+ab := a*b
+"
+
+fitb <- sem(modb, dat_path_model, fixed.x = TRUE)
+
+outb <- model_set(fitb,
+                  progress = FALSE,
+                  parallel = FALSE)
+
+tmp <- c(outa$models, outb$models)
+expect_true(inherits(tmp, "partables"))
+expect_identical(setdiff(names(tmp),
+                         unique(c(names(outa$models),
+                                  names(outb$models)))),
+                 character(0))
+
+tmp <- c(outb, outa$models)
+expect_true(inherits(tmp, "partables"))
+expect_identical(setdiff(names(tmp),
+                         unique(c(names(outa$models),
+                                  names(outb$models)))),
+                 character(0))
+
+mod2 <-
+"
+x2 ~ x1
+x3 ~ x2
+x4 ~ x3
+"
+
+mod3 <-
+"
+x2 ~ x4
+x3 ~ x4
+x1 ~ x2 + x3
+"
+
+fit2 <- sem(mod2, dat_path_model)
+fit3 <- sem(mod3, dat_path_model)
+
+pt2 <- parameterTable(fit2)
+
+tmp <- c(outa, pt2, fit3, outb$models)
+expect_true(inherits(tmp, "partables"))
+expect_true(all(c("pt2", "fit3") %in% names(tmp)))
+
+tmp <- c(outb, user2 = pt2, user3 = fit3, outa$models)
+expect_true(inherits(tmp, "partables"))
+expect_true(all(c("user2", "user3") %in% names(tmp)))
+
+if (length(unclass(packageVersion("modelbpp"))[[1]]) == 4) {
+
+out_all <- model_set(sem_out = fit,
+                     partables = tmp,
+                     progress = FALSE,
+                     parallel = FALSE)
+expect_equal(length(out_all$fit),
+             9)
+out_all2 <- model_set(sem_out = fit,
+                      partables = partables_drop(tmp,
+                                                 c("user3",
+                                                   "add: x4~x1")),
+                      progress = FALSE,
+                      parallel = FALSE)
+expect_false(any(c("user3", "add: x4~x1") %in% out_all2))
+}
