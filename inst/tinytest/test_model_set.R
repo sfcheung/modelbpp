@@ -327,8 +327,6 @@ plot(g)
 
 # Test c()
 
-# Work-in-progress
-
 moda <-
 "
 x3 ~ a*x1 + b*x2
@@ -395,3 +393,20 @@ expect_true(all(c("pt2", "fit3") %in% names(tmp)))
 tmp <- c(outb, user2 = pt2, user3 = fit3, outa$models)
 expect_true(inherits(tmp, "partables"))
 expect_true(all(c("user2", "user3") %in% names(tmp)))
+
+if (length(unclass(packageVersion("modelbpp"))[[1]]) == 4) {
+
+out_all <- model_set(sem_out = fit,
+                     partables = tmp,
+                     progress = FALSE,
+                     parallel = FALSE)
+expect_equal(length(out_all$fit),
+             9)
+out_all2 <- model_set(sem_out = fit,
+                      partables = partables_drop(tmp,
+                                                 c("user3",
+                                                   "add: x4~x1")),
+                      progress = FALSE,
+                      parallel = FALSE)
+expect_false(any(c("user3", "add: x4~x1") %in% out_all2))
+}
