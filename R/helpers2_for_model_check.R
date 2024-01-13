@@ -1,6 +1,7 @@
 #' @noRd
 
-unique_models <- function(partables) {
+unique_models <- function(partables,
+                          original = "original") {
     i_added <- added(partables)
     i_dropped <- dropped(partables)
     i_added <- lapply(i_added, sort)
@@ -29,6 +30,34 @@ unique_models <- function(partables) {
         j_comb2 <- NULL
       }
     out <- partables[unique(c(j_comb2, i_comb2))]
+    out <- duplicated_by_pt(out,
+                            original = original)
+    out
+  }
+
+#' @noRd
+
+duplicated_by_pt <- function(partables_list,
+                             original = "original") {
+    p <- length(partables_list)
+    if (p <= 1) {
+        return(partables_list)
+      }
+    p_names <- names(partables_list)
+    chk <- rep(FALSE, p)
+    for (i in seq_len(p - 1)) {
+        for (j in seq(from = i + 1, to = p)) {
+            if (identical_partables(partables_list[[i]],
+                                    partables_list[[j]])) {
+                if (p_names[j] == original) {
+                    chk[i] <- TRUE
+                  } else {
+                    chk[j] <- TRUE
+                  }
+              }
+          }
+      }
+    out <- partables_list[!chk]
     out
   }
 

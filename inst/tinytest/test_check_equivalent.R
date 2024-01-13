@@ -30,7 +30,7 @@ x ~ m2 + y + m1
 "
 fit4 <- sem(mod4, dat_serial_4_weak, fixed.x = FALSE)
 
-fits <- list(original = fit1,
+fits <- list(fit1 = fit1,
              fit2 = fit2,
              fit3 = fit3,
              fit4 = fit4)
@@ -39,11 +39,5 @@ class(pts) <- c("partables", class(pts))
 
 out1_df2 <- model_set(fit1,
                       partables = pts,
-                      progress = FALSE,
-                      prior_sem_out = c(original = .001,
-                                        fit2 = .0005,
-                                        fit4 = .97))
-g <- model_graph(out1_df2)
-plot(g)
-expect_equal(g$layout$layout[, 2],
-             c(2, 2, 1, 1))
+                      progress = FALSE)
+expect_false("fit1" %in% names(out1_df2$models))
