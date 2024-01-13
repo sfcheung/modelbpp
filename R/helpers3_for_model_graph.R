@@ -243,8 +243,8 @@ check_x_net_y <- function(x,
         stop("The two models do not have the same observed variables.")
       }
     # Clustered?
-    if ((lavaan::lavInspect(x, "nclusters") != 1) ||
-        (lavaan::lavInspect(y, "nclusters") != 1)) {
+    if (any(lavaan::lavInspect(x, "nclusters") != 1) ||
+        any(lavaan::lavInspect(y, "nclusters") != 1)) {
         stop("Models with clustered data not supported.")
       }
     # Check sample sizes
