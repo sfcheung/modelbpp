@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.15
+# modelbpp 0.1.2.16
 
 ## New Features
 
@@ -48,6 +48,9 @@
 - Updated the `print` method of
   `model_set` objects to print original
   model *df*s. (0.1.2.15)
+- When calling `fit_many()`, can set the
+  model with which`fit_many()` will compute
+  model *df* difference. (0.1.2.16)
 
 ## Bug Fixes
 

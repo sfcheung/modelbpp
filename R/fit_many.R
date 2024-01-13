@@ -32,6 +32,18 @@
 #' [get_drop()] to generate the list of
 #' models.
 #'
+#' @param original String. If provided,
+#' it should be a name of a model
+#' in `model_list`, with which
+#' differences in model degrees of
+#' freedom will be computed for other
+#' models. If `NULL`, the default,
+#' then the model in `sem_out` will
+#' be used to computed the differences
+#' in model degrees of freedom. If `NA`,
+#' then differences in model *df* will
+#' not be computed.
+#'
 #' @param parallel If `TRUE`, parallel
 #' processing will be used to fit the
 #' models. Default is `FALSE`.
@@ -109,6 +121,7 @@
 
 fit_many <- function(model_list,
                      sem_out,
+                     original = NULL,
                      parallel = FALSE,
                      ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
                      make_cluster_args = list(),
@@ -286,9 +299,21 @@ fit_many <- function(model_list,
         }
     }
 
-  sem_out_df <- as.numeric(lavaan::fitMeasures(sem_out, "df"))
-  change_list <- sapply(fit_list,
-      function(x) sem_out_df - as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
+  if (is.null(original)) {
+      sem_out_df <- as.numeric(lavaan::fitMeasures(sem_out, "df"))
+      change_list <- sapply(fit_list,
+          function(x) sem_out_df - as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
+    } else {
+      if (original %in% names(model_list)) {
+          i_original <- match(original, names(model_list))
+          change_list <- sapply(fit_list,
+              function(x) as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
+          df_original <- change_list[i_original]
+          change_list <- df_original - change_list
+        } else {
+          change_list <- rep(NA, p_models)
+        }
+    }
   converged_list <- sapply(fit_list,
       function(x) lavaan::lavInspect(x, "converged"))
   post_check_list <- sapply(fit_list,
