@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.11
+# modelbpp 0.1.2.12
 
 ## New Features
 
@@ -20,7 +20,7 @@
 - Added more functions to manipulate
   a `partables`-class object. (0.1.2.8)
 - Added a few helper functions for
-  `partables`-class objects. (0.1.2.9)
+  `partables`-class objects. (0.1.2.9, 0.1.2.12)
 - Updated `model_graph()` to determine
   nested relation using the method
   by Bentler and Satorra (2010). This

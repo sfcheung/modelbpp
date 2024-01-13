@@ -6,6 +6,7 @@
 \alias{is_partable}
 \alias{same_variables}
 \alias{get_partables}
+\alias{to_partables}
 \title{Helper Functions For \code{partables}-Class Objects}
 \usage{
 identical_partables(object1, object2)
@@ -15,6 +16,8 @@ is_partable(x)
 same_variables(x)
 
 get_partables(x)
+
+to_partables(...)
 }
 \arguments{
 \item{object1}{A \code{lavaan} parameter
@@ -24,6 +27,8 @@ table or similar object.}
 table or similar object.}
 
 \item{x}{An object to be checked.}
+
+\item{...}{The objects to be combined.}
 }
 \value{
 The function \code{\link[=identical_partables]{identical_partables()}}
@@ -38,6 +43,11 @@ returns either \code{TRUE} or \code{FALSE}.
 The function \code{\link[=get_partables]{get_partables()}}
 returns a \code{partables}-class
 object.
+
+The function \code{\link[=to_partables]{to_partables()}}
+returns a \code{partables}-class
+object, created from the objects
+supplied.
 }
 \description{
 For tasks such as comparing two parameter
@@ -70,6 +80,14 @@ the same observed variables.
 The function \code{\link[=get_partables]{get_partables()}}
 extract the \code{partable} object from
 a \code{model_set}-class object.
+
+The function \code{\link[=to_partables]{to_partables()}}
+combine objects to create a
+\code{partables}-class object.
+The objects to be combined can be
+a \code{lavaan}-class object (e.g.,
+the output of \code{\link[lavaan:sem]{lavaan::sem()}})
+or a parameter table of \code{lavaan}.
 }
 \examples{
 
@@ -103,5 +121,14 @@ same_variables(get_partables(out))
 out <- model_set(fit1,
                  fit_models = FALSE)
 get_partables(out)
+
+
+fit1 <- sem(mod1, dat_path_model)
+fit2 <- sem(mod2, dat_path_model)
+pt1 <- parameterTable(fit1)
+pt2 <- parameterTable(fit2)
+
+to_partables(fit1, fit2)
+to_partables(pt1, pt2)
 
 }

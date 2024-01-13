@@ -65,3 +65,9 @@ ptsb <- c(pts, parameterTable(fitb))
 
 expect_true(same_variables(pts))
 expect_false(same_variables(ptsb))
+
+# Test to_partables
+
+tmp <- to_partables(fitb, pt1, model3 = fit)
+expect_equal(names(tmp), c("fitb", "pt1", "model3"))
+expect_identical(tmp[[2]], pt1)

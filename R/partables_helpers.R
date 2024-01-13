@@ -216,6 +216,64 @@ get_partables <- function(x) {
     out
   }
 
+
+#' @details
+#' The function [to_partables()]
+#' combine objects to create a
+#' `partables`-class object.
+#' The objects to be combined can be
+#' a `lavaan`-class object (e.g.,
+#' the output of [lavaan::sem()])
+#' or a parameter table of `lavaan`.
+#'
+#' @return
+#' The function [to_partables()]
+#' returns a `partables`-class
+#' object, created from the objects
+#' supplied.
+#'
+#' @param ... The objects to be combined.
+#'
+#' @examples
+#'
+#' fit1 <- sem(mod1, dat_path_model)
+#' fit2 <- sem(mod2, dat_path_model)
+#' pt1 <- parameterTable(fit1)
+#' pt2 <- parameterTable(fit2)
+#'
+#' to_partables(fit1, fit2)
+#' to_partables(pt1, pt2)
+#'
+#' @rdname partables_helpers
+#' @export
+
+to_partables <- function(...) {
+    ddd <- list(...)
+    ddd_names <- sapply(as.list(match.call()[-1]), deparse)
+    if (!is.null(names(ddd_names))) {
+        i <- which(sapply(names(ddd_names), function(x) {nchar(x) > 0}))
+        if (length(i) > 0) {
+            ddd_names[i] <- names(ddd_names)[i]
+            ddd_names <- unname(ddd_names)
+          }
+      }
+    out <- lapply(ddd,
+                  function(x) {
+                      if (inherits(x, "lavaan")) {
+                          return(lavaan::parameterTable(x))
+                        }
+                      if (is_partable(x)) {
+                          return(x)
+                        }
+                      stop("At least one object is neither a lavaan object ",
+                           "nor a parameter table.")
+                    })
+    names(out) <- ddd_names
+    class(out) <- c("partables", class(out))
+    out
+  }
+
+
 #' @noRd
 
 fix_cov <- function(x) {

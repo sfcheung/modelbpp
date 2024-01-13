@@ -45,6 +45,7 @@ reference:
   - identical_partables
   - is_partable
   - same_variables
+  - to_partables
 - title: Methods
 - contents:
   - print.partables
