@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.14
+# modelbpp 0.1.2.15
 
 ## New Features
 
@@ -45,6 +45,9 @@
 - `model_set()` will check whether
   the sum of user-supplied prior
   probabilities is less than 1. (0.1.2.14)
+- Updated the `print` method of
+  `model_set` objects to print original
+  model *df*s. (0.1.2.15)
 
 ## Bug Fixes
 

@@ -97,17 +97,22 @@ print.model_set <- function(x,
       }
     if (!models_fitted) {
         change_tmp <- rep(NA, fit_n)
+        model_df_tmp <- rep(NA, fit_n)
         prior_tmp <- rep(NA, fit_n)
         bic_tmp <- rep(NA, fit_n)
         postprob_tmp <- rep(NA, fit_n)
       } else {
         change_tmp <- x$change
+        model_df_tmp <- sapply(x$fit, lavaan::fitMeasures,
+                               fit.measures = "df")
+        model_df_tmp <- unname(model_df_tmp)
         prior_tmp <- x$prior
         bic_tmp <- x$bic
         postprob_tmp <- x$bpp
       }
     out_table <- data.frame(modification = fit_names,
-                            df = change_tmp,
+                            model_df = model_df_tmp,
+                            df_diff = change_tmp,
                             Prior = prior_tmp,
                             BIC = bic_tmp,
                             BPP = postprob_tmp)
@@ -200,6 +205,8 @@ print.model_set <- function(x,
     cat("\nNote:\n")
     cat("- BIC: Bayesian Information Criterion.\n")
     cat("- BPP: BIC posterior probability.\n")
+    cat("- model_df: Model degrees of freedom.\n")
+    cat("- df_diff: Difference in df compared to the original/target model.\n")
     if (sort_models) {
         cat("- Cumulative: Cumulative BIC posterior probability.\n")
       }
