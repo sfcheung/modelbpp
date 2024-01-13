@@ -220,6 +220,7 @@ Structural Equation Models.
 \author{
 Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}
 The internal function for nesting
-inspired by \code{\link[semTools:net]{semTools::net()}} by
+inspired by \code{\link[semTools:net]{semTools::net()}},
+which was developed by
 Terrence D. Jorgensen.
 }
