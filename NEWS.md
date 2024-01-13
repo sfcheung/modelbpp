@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.10
+# modelbpp 0.1.2.11
 
 ## New Features
 
@@ -26,6 +26,9 @@
   by Bentler and Satorra (2010). This
   can be done only if `fixed.x`
   is set to `FALSE`. (0.1.2.10)
+- Duplicated models with identical
+  parameter tables
+  will be removed by `model_set()`. (0.1.2.11)
 
 ## Miscellaneous
 

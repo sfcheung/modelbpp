@@ -339,7 +339,7 @@ pt_user <- out$models
 
 pt_user[["user2"]] <- parameterTable(fit2)
 pt_user[["user3"]] <- parameterTable(fit3)
-pt_user[["user4"]] <- parameterTable(fit3)
+pt_user[["user4"]] <- parameterTable(fit4)
 
 out_user_prior5 <- model_set(sem_out = fit,
                              partables = pt_user,
@@ -353,7 +353,6 @@ g <- model_graph(out_user_prior5)
 expect_true(all(c("user2", "user4", "user3") %in%
                 names(V(g))))
 plot(g)
-
 }
 
 # Test c()
