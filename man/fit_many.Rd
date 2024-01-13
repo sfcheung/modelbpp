@@ -7,6 +7,7 @@
 fit_many(
   model_list,
   sem_out,
+  original = NULL,
   parallel = FALSE,
   ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
   make_cluster_args = list(),
@@ -30,6 +31,18 @@ the one used in \code{\link[=model_set]{model_set()}},
 \code{\link[=get_add]{get_add()}} or
 \code{\link[=get_drop]{get_drop()}} to generate the list of
 models.}
+
+\item{original}{String. If provided,
+it should be a name of a model
+in \code{model_list}, with which
+differences in model degrees of
+freedom will be computed for other
+models. If \code{NULL}, the default,
+then the model in \code{sem_out} will
+be used to computed the differences
+in model degrees of freedom. If \code{NA},
+then differences in model \emph{df} will
+not be computed.}
 
 \item{parallel}{If \code{TRUE}, parallel
 processing will be used to fit the

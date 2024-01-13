@@ -326,3 +326,34 @@ fit_many <- function(model_list,
   class(out) <- c("sem_outs", class(out))
   out
 }
+
+#' @noRd
+
+lavaan_to_sem_outs <- function(x,
+                               original = NULL) {
+    p_models <- length(x)
+    if (is.null(original)) {
+        change_list <- rep(NA, x)
+      } else {
+        if (original %in% names(x)) {
+            i_original <- match(original, names(x))
+            change_list <- sapply(x,
+                function(x) as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
+            df_original <- change_list[i_original]
+            change_list <- df_original - change_list
+          } else {
+            change_list <- rep(NA, p_models)
+          }
+      }
+    converged_list <- sapply(x,
+        function(x) lavaan::lavInspect(x, "converged"))
+    post_check_list <- sapply(x,
+        function(x) lavaan::lavInspect(x, "post.check"))
+    out <- list(fit = x,
+                change = change_list,
+                converged = converged_list,
+                post_check = post_check_list,
+                call = match.call())
+    class(out) <- c("sem_outs", class(out))
+    out
+  }
