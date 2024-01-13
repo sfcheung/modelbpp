@@ -105,6 +105,10 @@ matrix, and then creates an \code{igraph}
 object customized for visualizing
 model relations.
 \subsection{Construction of the Graph}{
+
+This is the default way to construct
+the graph when the model set is
+automatically by \code{\link[=model_set]{model_set()}}.
 \itemize{
 \item Each model is connected by an
 arrow, pointing from one model to
@@ -117,7 +121,10 @@ between two parameters.
 }
 
 That is, it points to a model with
-one \emph{less} degree of freedom.
+one \emph{less} degree of freedom, and
+is nested within that model in
+parameter sense (but see below on
+results with user-provided models).
 \itemize{
 \item By default, the size of the node
 for each model is scaled by its
@@ -142,6 +149,32 @@ The output is an \code{igraph} object.
 Users can customize it in any way
 they want using functions from
 the \code{igraph} package.
+
+If a model does not differ from any
+other models by exactly one \emph{df},
+by default, it will not be connected
+to any other model.
+
+If no model is named \code{original}
+(default is \code{"original"}), then no
+model is colored as the original model.
+}
+
+\subsection{User-Provided Models}{
+
+If \code{object} contained one or more
+user-provided models which are not
+generated automatically by
+\code{\link[=model_set]{model_set()}} or similar functions
+(e.g., \code{\link[=gen_models]{gen_models()}}), then the
+method by Bentler and Satorra (2010)
+will be used to determine model
+relations. Models connected by an
+arrow has a nested relation based on
+the NET method by Bentler and Satorra
+(2010). An internal function inspired
+by \code{\link[semTools:net]{semTools::net()}} is used to
+implement the NET method.
 }
 
 \subsection{The Size of a Node}{
@@ -172,4 +205,22 @@ out
 g <- model_graph(out)
 plot(g)
 
+}
+\references{
+Bentler, P. M., & Satorra, A. (2010).
+Testing model nesting and equivalence.
+\emph{Psychological Methods, 15}(2),
+111--123. \doi{10.1037/a0019625}
+Asparouhov, T., & Muthén, B. (2019).
+Nesting and Equivalence Testing for
+Structural Equation Models.
+\emph{Structural Equation Modeling: A Multidisciplinary Journal, 26}(2),
+302--309. \doi{10.1080/10705511.2018.1513795}
+}
+\author{
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}
+The internal function for nesting
+inspired by \code{\link[semTools:net]{semTools::net()}},
+which was developed by
+Terrence D. Jorgensen.
 }

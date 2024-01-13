@@ -297,6 +297,37 @@ if (interactive() &&
 
 suppressMessages(library(igraph))
 
+mod <-
+"
+x2 ~ x3 + 0*x4
+x1 ~ x3
+"
+
+fit <- sem(mod,
+           dat_path_model,
+           fixed.x = FALSE)
+out <- model_set(fit,
+                 fit_models = FALSE,
+                 progress = FALSE,
+                 parallel = FALSE)
+
+mod2 <-
+"
+x2 ~ x1
+x3 ~ x2
+x4 ~ x3
+"
+
+mod3 <-
+"
+x2 ~ x4
+x3 ~ x4
+x1 ~ x2 + x3
+"
+
+fit2 <- sem(mod2, dat_path_model, fixed.x = FALSE)
+fit3 <- sem(mod3, dat_path_model, fixed.x = FALSE)
+
 mod4 <-
 "
 x2 ~ 0*x3 + 0*x4
@@ -311,11 +342,11 @@ pt_user[["user3"]] <- parameterTable(fit3)
 pt_user[["user4"]] <- parameterTable(fit3)
 
 out_user_prior5 <- model_set(sem_out = fit,
-                            partables = pt_user,
-                            prior_sem_out = c(original = .11,
-                                              user2 = .50),
-                            progress = FALSE,
-                            parallel = FALSE)
+                             partables = pt_user,
+                             prior_sem_out = c(original = .11,
+                                               user2 = .50),
+                             progress = FALSE,
+                             parallel = FALSE)
 g <- model_graph(out_user_prior5)
 # expect_warning(g <- model_graph(out_user_prior5),
 #                pattern = "One or more")

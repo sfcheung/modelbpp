@@ -56,10 +56,24 @@ models_network <- function(object) {
 #' matrix for 'igraph'.
 #'
 #' @details
-#' Work-in-progress. Does not work for now.
+#' The function [semTools::net()] cannot
+#' be used here because the models are
+#' not fitted by function calls, but by
+#' setting slots directly.
 #'
 #' @param object A `model_set`-class
 #' object.
+#'
+#' @references
+#' Bentler, P. M., & Satorra, A. (2010).
+#' Testing model nesting and equivalence.
+#' *Psychological Methods, 15*(2),
+#' 111--123. \doi{10.1037/a0019625}
+#' Asparouhov, T., & Muthén, B. (2019).
+#' Nesting and Equivalence Testing for
+#' Structural Equation Models.
+#' *Structural Equation Modeling: A Multidisciplinary Journal, 26*(2),
+#' 302--309. \doi{10.1080/10705511.2018.1513795}
 #'
 #' @return
 #' A numeric matrix of zeros and ones,
@@ -68,7 +82,8 @@ models_network <- function(object) {
 #'
 #' @noRd
 
-models_network2 <- function(object) {
+models_network2 <- function(object,
+                            one_df_only = TRUE) {
     if (inherits(object, "model_set")) {
         models <- object$fit
       } else {
@@ -79,15 +94,27 @@ models_network2 <- function(object) {
               "model_set object or a",
               "list of lavaan objects")
       }
-    fixedx <- sapply(models, lavaan::lavInspect,
-                     what = "fixed.x")
-    if (any(!fixedx)) {
-        models <- lapply(models,
-                         lavaan_fast_update)
+    p <- length(models)
+    i <- which(names(models) == "original")
+    net_out <- matrix(0, p, p)
+    colnames(net_out) <- rownames(net_out) <- names(models)
+    for (i in seq_len(p)) {
+        for (j in seq_len(p)) {
+            df_i <- unname(lavaan::fitMeasures(models[[i]],
+                                        fit.measures = "df"))
+            df_j <- unname(lavaan::fitMeasures(models[[j]],
+                                        fit.measures = "df"))
+            net_chk <- x_net_y(models[[i]],
+                               models[[j]])
+            if (net_chk == "x_within_y") {
+                net_out[i, j] <- df_i - df_j
+              }
+          }
       }
-    #semTools::net does not work in this case.
-    #TODO: Need an internal version.
-    # net_out <- do.call(semTools::net, unname(models))
+    if (one_df_only) {
+        net_out[net_out > 1] <- 0
+      }
+    net_out
   }
 
 #' @title Net Without Call
@@ -96,41 +123,282 @@ models_network2 <- function(object) {
 #'
 #' @noRd
 
-x_within_y <- function(x,
-                       y,
-                       crit = 1e-4) {
-    #TODO: Work on it later
+x_net_y <- function(x,
+                    y,
+                    crit = 1e-4,
+                    check_x_y = TRUE) {
+    # Based on semTools:::x.within.y().
+    if (check_x_y) {
+        chk <- check_x_net_y(x, y,
+                             ignore_fixed_x = FALSE)
+      }
+    x_df <- lavaan::fitMeasures(x, fit.measures = "df")
+    y_df <- lavaan::fitMeasures(y, fit.measures = "df")
+    # Reorder the models f1 >= f2 on df
+    if (x_df < y_df) {
+        f1 <- y
+        f2 <- x
+        out <- "y_within_x"
+      } else {
+        f1 <- x
+        f2 <- y
+        out <- "x_within_y"
+      }
+
+    f1_fixed <- (lavaan::lavInspect(f1, "options")$fixed.x &&
+                 length(lavaan::lavNames(f1, "ov.x")) > 0)
+    if (f1_fixed) {
+        stop("The net-method does not support models with fixed.x = TRUE. ",
+             "Please fit the models with fixed.x = FALSE.")
+        # f1 <- lavaan_full_update(f1,
+        #                          new_options = list(se = "none",
+        #                                             baseline = FALSE,
+        #                                             test = "standard",
+        #                                             fixed.x = FALSE))
+      }
+
+    slot_opt <- f2@Options
+    slot_pat <- f2@ParTable
+    slot_mod <- f2@Model
+
+    slot_opt2 <- slot_opt
+    slot_opt2$se <- "none"
+    slot_opt2$fixed.x <- FALSE
+    slot_opt2$baseline <- FALSE
+    slot_opt2$test <- "standard"
+
+    f1_nobs <- lavaan::lavInspect(f1, "nobs")
+
+    implied_sigma <- lavaan::lavInspect(f1, "cov.ov")
+    implied_mean <- lavaan::lavInspect(f1, "mean.ov")
+    if (is.list(implied_mean)) {
+        if (all(sapply(implied_mean, length) == 0)) {
+            implied_mean <- NULL
+          }
+      } else {
+        if (length(implied_mean) == 0) {
+            implied_mean <- NULL
+          }
+      }
+    implied_threshold <- lavaan::lavInspect(f1, "thresholds")
+    if (is.list(implied_threshold)) {
+        if (all(sapply(implied_threshold, length) == 0)) {
+            implied_threshold <- NULL
+          }
+      } else {
+        if (length(implied_threshold) == 0) {
+            implied_threshold <- NULL
+          }
+      }
+
+    f1_estimator <- lavaan::lavInspect(f1, "options")$estimator
+    if (f1_estimator == "DWLS") {
+        f1_WLS.V <- lavaan::lavInspect(f1, "WLS.V")
+        f1_NACOV <- lavaan::lavInspect(f1, "gamma")
+      } else {
+        f1_WLS.V <- NULL
+        f1_NACOV <- NULL
+      }
+
+    f2_1 <- lavaan::lavaan(slotOptions = slot_opt2,
+                           slotParTable = slot_pat,
+                           slotModel = slot_mod,
+                           data = NULL,
+                           sample.cov = implied_sigma,
+                           sample.mean = implied_mean,
+                           sample.nobs = f1_nobs,
+                           sample.th = implied_threshold,
+                           WLS.V = f1_WLS.V,
+                           NACOV = f1_NACOV)
+    if (!lavaan::lavInspect(f2_1, "converged")) {
+        return(NA)
+      }
+    f2_1_chisq <- unname(lavaan::fitMeasures(f2_1, fit.measures = "chisq"))
+    chisq_eq <- f2_1_chisq < crit
+    if (chisq_eq) {
+        if (x_df == y_df) {
+            out <- "equivalent"
+          }
+      } else {
+        out <- "not_nested"
+      }
+    return(out)
   }
 
 #' @noRd
 
-check_x_within_y <- function(x,
-                             y) {
-    #TODO: Work on it later
+check_x_net_y <- function(x,
+                          y,
+                          ignore_fixed_x = FALSE) {
+    # Based on semTools::x.within.y()
+    # lavaan objects?
+    if (!inherits(x, what = "lavaan") ||
+        !inherits(y, what = "lavaan")) {
+        stop("One or both objects are not lavaan objects.")
+      }
+    # Same variables?
+    vnamesx <- lavaan::lavNames(x, type = "ov")
+    vnamesy <- lavaan::lavNames(y, type = "ov")
+    if (!setequal(vnamesx, vnamesy)) {
+        stop("The two models do not have the same observed variables.")
+      }
+    # Clustered?
+    if ((lavaan::lavInspect(x, "nclusters") != 1) ||
+        (lavaan::lavInspect(y, "nclusters") != 1)) {
+        stop("Models with clustered data not supported.")
+      }
+    # Check sample sizes
+    if (!identical(lavaan::lavInspect(x, "nobs"),
+                   lavaan::lavInspect(y, "nobs"))) {
+        stop("Sample sizes not identical.")
+      }
+    # fixed.x?
+    if (!ignore_fixed_x) {
+        x_fixed <- (lavaan::lavInspect(x, "options")$fixed.x &&
+                    length(lavaan::lavNames(x, "ov.x")) > 0)
+        y_fixed <- (lavaan::lavInspect(y, "options")$fixed.x &&
+                    length(lavaan::lavNames(y, "ov.x")) > 0)
+        if (x_fixed || y_fixed) {
+            stop("Does not support models with fixed.x = TRUE. ",
+                 "Please refit models with fixed.x = FALSE.")
+          }
+      }
+    # Meanstructure
+    if (!identical(lavaan::lavInspect(x, "meanstructure"),
+                   lavaan::lavInspect(y, "meanstructure"))) {
+        stop("One model has a mean structure but the other does not.")
+      }
+    # Same dataset?
+    x_sp <- lavaan::lavTech(x, "sampstat",
+                            drop.list.single.group = FALSE,
+                            add.labels = TRUE,
+                            list.by.group = TRUE)
+    y_sp <- lavaan::lavTech(y, "sampstat",
+                            drop.list.single.group = FALSE,
+                            add.labels = TRUE,
+                            list.by.group = TRUE)
+    x_g <- length(x_sp)
+    y_g <- length(y_sp)
+    x_names <- colnames(x_sp[[1]]$cov)
+    for (j in seq_len(x_g)) {
+        if (!identical(x_sp[[1]]$cov,
+                       y_sp[[1]]$cov[x_names, x_names])) {
+            stop("The sample statistics are not identical.")
+          }
+        # Identical if both mean vectors are NULL
+        if (!identical(x_sp[[1]]$mean,
+                       y_sp[[1]]$mean[x_names])) {
+            stop("The sample statistics are not identical.")
+          }
+      }
+    return(TRUE)
   }
 
 #' @title Internal Fast Update
 #'
 #' @noRd
 
-lavaan_fast_update <- function(x) {
-    slot_opt <- x@Options
-    slot_pat <- x@ParTable
-    slot_mod <- x@Model
-    slot_smp <- x@SampleStats
-    slot_dat <- x@Data
+lavaan_fast_update <- function(x,
+                               new_options = list()) {
+    stop("This function should not be called. It is a work-in-progress.")
+    # slot_opt <- x@Options
+    # slot_pat <- x@ParTable
+    # slot_mod <- x@Model
+    # slot_smp <- x@SampleStats
+    # slot_dat <- x@Data
 
-    slot_opt2 <- slot_opt
-    slot_opt2$se <- "none"
-    slot_opt2$fixed.x <- FALSE
-    slot_opt2$baseline <- FALSE
+    # slot_opt2 <- slot_opt
+    # slot_opt2$se <- "none"
+    # slot_opt2$fixed.x <- FALSE
+    # slot_opt2$baseline <- FALSE
+    # slot_opt2$test <- "none"
+    # slot_opt2 <- utils::modifyList(slot_opt2,
+    #                                new_options,
+    #                                keep.null = TRUE)
 
-    fit2 <- lavaan::lavaan(slotOptions = slot_opt2,
-                           slotParTable = slot_pat,
-                           slotModel = slot_mod,
-                           slotSampleStats = slot_smp,
-                           slotData = slot_dat)
-    fit2
+    # fit2 <- lavaan::lavaan(slotOptions = slot_opt2,
+    #                        slotParTable = slot_pat,
+    #                        slotModel = slot_mod,
+    #                        slotSampleStats = slot_smp,
+    #                        slotData = slot_dat)
+    # fit2
+  }
+
+#' @title Internal Full Update
+#'
+#' @noRd
+
+lavaan_full_update <- function(x,
+                               new_options = list()) {
+    stop("This function should not be called. It is a work-in-progress.")
+#     x_model <- lavaan::parameterTable(x)
+#     slot_opt <- x@Options
+#     slot_opt2 <- utils::modifyList(slot_opt,
+#                                   new_options,
+#                                   keep.null = TRUE)
+
+#     raw_data <- tryCatch(lavaan::lavInspect(x, "data"),
+#                         error = function(e) e)
+#     if (inherits(raw_data, "error")) {
+#         raw_data <- NULL
+#         has_data <- FALSE
+#       } else {
+#         colnames(raw_data) <- lavaan::lavNames(x)
+#         rownames(raw_data) <- lavaan::lavInspect(x, "case.idx")
+#         has_data <- TRUE
+#       }
+
+#     if (has_data) {
+#         # Placeholder
+#       } else {
+#         x_nobs <- lavaan::lavInspect(x, "nobs")
+#         x_sp <- lavaan::lavInspect(x, "sampstat")
+#         ng <- lavaan::lavInspect(x, "ngroups")
+#         if (ng > 1) {
+#             x_cov <- lapply(x_sp, function(x) x$cov)
+#           } else {
+#             x_cov <- x_sp$cov
+#           }
+#         if (ng > 1) {
+#             x_mean <- lapply(x_sp, function(x) x$mean)
+#           } else {
+#             x_mean <- x_sp$mean
+#           }
+#         x_thresholds <- lavaan::lavInspect(x, "thresholds")
+#         if (is.list(x_thresholds)) {
+#             if (all(sapply(x_thresholds, length) == 0)) {
+#                 x_thresholds <- NULL
+#               }
+#           } else {
+#             if (length(x_thresholds) == 0) {
+#                 x_thresholds <- NULL
+#               }
+#           }
+#         x_estimator <- lavaan::lavInspect(x, "options")$estimator
+#         if (x_estimator == "DWLS") {
+#             x_WLS.V <- lavaan::lavInspect(x, "WLS.V")
+#             x_NACOV <- lavaan::lavInspect(x, "gamma")
+#           } else {
+#             x_WLS.V <- NULL
+#             x_NACOV <- NULL
+#           }
+#       }
+
+#     if (has_data) {
+#         out <- lavaan::lavaan(model = x_model,
+#                               slotOptions = slot_opt2,
+#                               data = raw_data)
+#       } else {
+#         out <- lavaan::lavaan(model = x,
+#                               slotOptions = slot_opt2,
+#                               sample.cov = x_cov,
+#                               sample.mean = x_mean,
+#                               sample.nobs = x_nobs,
+#                               semple.th = x_thresholds,
+#                               WLS.V = x_WLS.V,
+#                               NACOV = x_NACOV)
+#       }
+#     return(out)
   }
 
 #' @title Mark Models Formed by Adding Free Parameters

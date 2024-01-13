@@ -12,6 +12,10 @@
 #'
 #' ## Construction of the Graph
 #'
+#' This is the default way to construct
+#' the graph when the model set is
+#' automatically by [model_set()].
+#'
 #' - Each model is connected by an
 #'  arrow, pointing from one model to
 #'  another model that is formed by
@@ -22,7 +26,10 @@
 #'  between two parameters.
 #'
 #'  That is, it points to a model with
-#'  one *less* degree of freedom.
+#'  one *less* degree of freedom, and
+#'  is nested within that model in
+#'  parameter sense (but see below on
+#'  results with user-provided models).
 #'
 #' - By default, the size of the node
 #'  for each model is scaled by its
@@ -48,6 +55,31 @@
 #' Users can customize it in any way
 #' they want using functions from
 #' the `igraph` package.
+#'
+#' If a model does not differ from any
+#' other models by exactly one *df*,
+#' by default, it will not be connected
+#' to any other model.
+#'
+#' If no model is named `original`
+#' (default is `"original"`), then no
+#' model is colored as the original model.
+#'
+#' ## User-Provided Models
+#'
+#' If `object` contained one or more
+#' user-provided models which are not
+#' generated automatically by
+#' [model_set()] or similar functions
+#' (e.g., [gen_models()]), then the
+#' method by Bentler and Satorra (2010)
+#' will be used to determine model
+#' relations. Models connected by an
+#' arrow has a nested relation based on
+#' the NET method by Bentler and Satorra
+#' (2010). An internal function inspired
+#' by [semTools::net()] is used to
+#' implement the NET method.
 #'
 #' ## The Size of a Node
 #'
@@ -130,6 +162,23 @@
 #' @param ... Optional arguments. Not
 #' used for now.
 #'
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+#' The internal function for nesting
+#' inspired by [semTools::net()],
+#' which was developed by
+#' Terrence D. Jorgensen.
+#'
+#' @references
+#' Bentler, P. M., & Satorra, A. (2010).
+#' Testing model nesting and equivalence.
+#' *Psychological Methods, 15*(2),
+#' 111--123. \doi{10.1037/a0019625}
+#' Asparouhov, T., & Muthén, B. (2019).
+#' Nesting and Equivalence Testing for
+#' Structural Equation Models.
+#' *Structural Equation Modeling: A Multidisciplinary Journal, 26*(2),
+#' 302--309. \doi{10.1080/10705511.2018.1513795}
+#'
 #' @examples
 #'
 #' library(lavaan)
@@ -166,11 +215,13 @@ model_graph <- function(object,
                         ...) {
     user_models <- sapply(added(object$models), is.null) &
                    sapply(dropped(object$models), is.null)
-    # if (sum(user_models, na.rm = TRUE) != 1) {
-    #     warning("One or more user models are present. ",
-    #         "User model(s) will be plotted separately.")
-    #   }
-    net_out <- models_network(object)
+    if (sum(user_models, na.rm = TRUE) != 1) {
+        # warning("One or more user models are present. ",
+        #     "User model(s) will be plotted separately.")
+        net_out <- models_network2(object)
+      } else {
+        net_out <- models_network(object)
+      }
     out <- igraph::graph_from_adjacency_matrix(net_out,
                                                mode = "directed")
     if (node_size_by_x) {
@@ -208,6 +259,8 @@ model_graph <- function(object,
     igraph::V(out)$label.family <- "sans"
     igraph::E(out)$arrow.size <- .75
     out <- igraph::add_layout_(out, igraph::with_sugiyama())
+    out <- layer_by_df(out,
+                       model_set_out = object)
     class(out) <- c("model_graph", class(out))
     out
   }
