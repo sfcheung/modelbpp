@@ -1,9 +1,3 @@
-if (FALSE &&
-    interactive() &&
-    length(unclass(packageVersion("modelbpp"))[[1]]) == 4) {
-
-# Work-In-Progress
-
 suppressMessages(library(lavaan))
 
 mod1 <-
@@ -49,20 +43,6 @@ out1_df2 <- model_set(fit1,
                       prior_sem_out = c(original = .001,
                                         fit2 = .0005,
                                         fit4 = .97))
-out1_df2
 g <- model_graph(out1_df2)
-plot(g)
-
-V(g)$name
-model_dfs <- sapply(out1_df2$fit, fitMeasures, fit.measures = "df")
-tmp <- sort(unique(model_dfs), decreasing = TRUE)
-model_layer <- model_dfs
-for (i in seq_along(tmp)) {
-    model_layer[which(model_dfs == tmp[i])] <- i
-  }
-model_layer <- model_layer - 1
-cbind(model_dfs, model_layer)
-g2 <- igraph::add_layout_(g, igraph::with_sugiyama(layers = model_layer))
-plot(g2)
-
-}
+expect_equal(g$layout$layout[, 2],
+             c(2, 2, 1, 1))

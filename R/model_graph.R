@@ -259,6 +259,8 @@ model_graph <- function(object,
     igraph::V(out)$label.family <- "sans"
     igraph::E(out)$arrow.size <- .75
     out <- igraph::add_layout_(out, igraph::with_sugiyama())
+    out <- layer_by_df(out,
+                       model_set_out = object)
     class(out) <- c("model_graph", class(out))
     out
   }
