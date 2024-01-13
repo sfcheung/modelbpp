@@ -12,53 +12,47 @@ m1 ~ x
 m2 ~ m1
 y ~ m2 + x
 "
-fit1 <- sem(mod1, dat_serial_4_weak)
+fit1 <- sem(mod1, dat_serial_4_weak, fixed.x = FALSE)
 
 mod2 <-
 "
 x ~ m1 + m2
 y ~ x
 "
-fit2 <- sem(mod1, dat_serial_4_weak)
+fit2 <- sem(mod1, dat_serial_4_weak, fixed.x = FALSE)
 
-mod1_df2 <- gen_models(fit1,
-                       df_change_add = 2,
-                       df_change_drop = 2)
-mod1_df2 <- c(mod1_df2, fit2)
-out1_df2 <- model_set(fit1,
-                      partables = mod1_df2,
-                      progress = FALSE)
-
-g <- model_graph(out1_df2)
-models_network2(out1_df2)
-tmp <- out1_df2$fit
-x_net_y(tmp[[18]], tmp[[1]])
-x_net_y(tmp[[1]], tmp[[18]])
-tmp[[18]]
-tmp[[1]]
-names(tmp)[18]
-names(tmp)[1]
-
-mod18 <-
+mod3 <-
 "
-m1 ~ x
+x ~ m1 + m2
+y ~ x + m2
+"
+fit3 <- sem(mod3, dat_serial_4_weak, fixed.x = FALSE)
+
+mod4 <-
+"
+m1 ~ y
 m2 ~ m1
-y ~ m2 + x
-m1 ~~ y
+x ~ m2 + y + m1
 "
-fit_tmp1 <- sem(mod18, dat_serial_4_weak, fixed.x = FALSE)
-fit_tmp2 <- sem(mod1, dat_serial_4_weak, fixed.x = FALSE)
-semTools::net(fit_tmp1, fit_tmp2)
-tmp[[1]]
-fit_tmp1
-tmp[[18]]
-fit_tmp2
-x_net_y(tmp[[18]], tmp[[1]])
-x_net_y(tmp[[1]], tmp[[18]])
-x_net_y(fit_tmp1, fit_tmp2)
-x_net_y(fit_tmp2, fit_tmp1)
+fit4 <- sem(mod4, dat_serial_4_weak, fixed.x = FALSE)
 
+fits <- list(original = fit1,
+             fit2 = fit2,
+             fit3 = fit3,
+             fit4 = fit4)
+pts <- lapply(fits, parameterTable)
+class(pts) <- c("partables", class(pts))
+
+out1_df2 <- model_set(fit1,
+                      partables = pts,
+                      progress = FALSE,
+                      prior_sem_out = c(original = .001,
+                                        fit2 = .0005,
+                                        fit4 = .97))
+out1_df2
+g <- model_graph(out1_df2)
 plot(g)
+
 V(g)$name
 model_dfs <- sapply(out1_df2$fit, fitMeasures, fit.measures = "df")
 tmp <- sort(unique(model_dfs), decreasing = TRUE)
