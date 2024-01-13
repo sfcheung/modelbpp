@@ -26,6 +26,10 @@
   by Bentler and Satorra (2010). This
   can be done only if `fixed.x`
   is set to `FALSE`. (0.1.2.10)
+- Users can supplied a named list of
+  fitted models (`lavaan`-class objects)
+  to `model_set()` through the
+  argument `sem_out`. (0.1.2.17)
 
 ## Miscellaneous
 
