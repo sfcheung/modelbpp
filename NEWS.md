@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.16
+# modelbpp 0.1.2.18
 
 ## New Features
 
@@ -55,6 +55,7 @@
 - When calling `fit_many()`, can set the
   model with which`fit_many()` will compute
   model *df* difference. (0.1.2.16)
+- Reorganized some test files. (0.1.2.18)
 
 ## Bug Fixes
 
