@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.12
+# modelbpp 0.1.2.13
 
 ## New Features
 
@@ -26,9 +26,6 @@
   by Bentler and Satorra (2010). This
   can be done only if `fixed.x`
   is set to `FALSE`. (0.1.2.10)
-- Duplicated models with identical
-  parameter tables
-  will be removed by `model_set()`. (0.1.2.11)
 
 ## Miscellaneous
 
@@ -40,6 +37,11 @@
   equality constraints. (0.1.2.5)
 - Updated `unique_models()` to handle
   user-supplied models. (0.1.2.6)
+- Duplicated models with identical
+  parameter tables
+  will be removed by `model_set()`. (0.1.2.11)
+- Improved the text in the `print`
+  method of `partables`. (0.1.2.13)
 
 ## Bug Fixes
 
