@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.13
+# modelbpp 0.1.2.14
 
 ## New Features
 
@@ -42,6 +42,9 @@
   will be removed by `model_set()`. (0.1.2.11)
 - Improved the text in the `print`
   method of `partables`. (0.1.2.13)
+- `model_set()` will check whether
+  the sum of user-supplied prior
+  probabilities is less than 1. (0.1.2.14)
 
 ## Bug Fixes
 

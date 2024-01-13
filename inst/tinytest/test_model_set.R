@@ -86,6 +86,12 @@ expect_equivalent(
     info = "Posterior probability as expected: User prior"
   )
 
+expect_error(model_set(fit,
+                       prior_sem_out = c(original = .80,
+                                         `add: x1~x4` = .30),
+                       parallel = FALSE,
+                       progress = FALSE))
+
 # Target BPP
 
 out <- model_set(fit,
