@@ -123,17 +123,83 @@ fit_many <- function(model_list,
   p_models <- length(model_list)
 
   slot_opt <- sem_out@Options
-  slot_smp <- sem_out@SampleStats
-  slot_dat <- sem_out@Data
+  # slot_smp <- sem_out@SampleStats
+  # slot_dat <- sem_out@Data
   slot_opt$se <- "none"
   slot_opt$baseline <- FALSE
   slot_opt$verbose <- FALSE
 
-  fit_i <- function(x) {
-      lavaan::lavaan(model = x,
-                     slotOptions = slot_opt,
-                     slotSampleStats = slot_smp,
-                     slotData = slot_dat)
+  raw_data <- tryCatch(lavaan::lavInspect(sem_out, "data"),
+                       error = function(e) e)
+  if (inherits(raw_data, "error")) {
+      raw_data <- NULL
+      has_data <- FALSE
+    } else {
+      colnames(raw_data) <- lavaan::lavNames(sem_out)
+      rownames(raw_data) <- lavaan::lavInspect(sem_out, "case.idx")
+      has_data <- TRUE
+    }
+
+  if (has_data) {
+      # Placeholder
+    } else {
+      sem_out_nobs <- lavaan::lavInspect(sem_out, "nobs")
+      sem_out_sp <- lavaan::lavInspect(sem_out, "sampstat")
+      ng <- lavaan::lavInspect(sem_out, "ngroups")
+      if (ng > 1) {
+          sem_out_cov <- lapply(sem_out_sp, function(x) x$cov)
+        } else {
+          sem_out_cov <- sem_out_sp$cov
+        }
+      if (ng > 1) {
+          sem_out_mean <- lapply(sem_out_sp, function(x) x$mean)
+        } else {
+          sem_out_mean <- sem_out_sp$mean
+        }
+      sem_thresholds <- lavaan::lavInspect(sem_out, "thresholds")
+      if (is.list(sem_thresholds)) {
+          if (all(sapply(sem_thresholds, length) == 0)) {
+              sem_thresholds <- NULL
+            }
+        } else {
+          if (length(sem_thresholds) == 0) {
+              sem_thresholds <- NULL
+            }
+        }
+      sem_out_estimator <- lavaan::lavInspect(sem_out, "options")$estimator
+      if (sem_out_estimator == "DWLS") {
+          sem_out_WLS.V <- lavaan::lavInspect(sem_out, "WLS.V")
+          sem_out_NACOV <- lavaan::lavInspect(sem_out, "gamma")
+        } else {
+          sem_out_WLS.V <- NULL
+          sem_out_NACOV <- NULL
+        }
+    }
+
+  # fit_i <- function(x) {
+  #     lavaan::lavaan(model = x,
+  #                    slotOptions = slot_opt,
+  #                    slotSampleStats = slot_smp,
+  #                    slotData = slot_dat)
+  #   }
+
+  if (has_data) {
+      fit_i <- function(x) {
+          lavaan::lavaan(model = x,
+                         slotOptions = slot_opt,
+                         data = raw_data)
+        }
+    } else {
+      fit_i <- function(x) {
+          lavaan::lavaan(model = x,
+                         slotOptions = slot_opt,
+                         sample.cov = sem_out_cov,
+                         sample.mean = sem_out_mean,
+                         sample.nobs = sem_out_nobs,
+                         semple.th = sem_thresholds,
+                         WLS.V = sem_out_WLS.V,
+                         NACOV = sem_out_NACOV)
+        }
     }
 
   # Check ncores
