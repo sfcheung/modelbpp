@@ -68,7 +68,8 @@ models_network <- function(object) {
 #'
 #' @noRd
 
-models_network2 <- function(object) {
+models_network2 <- function(object,
+                            one_df_only = TRUE) {
     if (inherits(object, "model_set")) {
         models <- object$fit
       } else {
@@ -79,15 +80,27 @@ models_network2 <- function(object) {
               "model_set object or a",
               "list of lavaan objects")
       }
-    fixedx <- sapply(models, lavaan::lavInspect,
-                     what = "fixed.x")
-    if (any(!fixedx)) {
-        models <- lapply(models,
-                         lavaan_fast_update)
+    p <- length(models)
+    i <- which(names(models) == "original")
+    net_out <- matrix(0, p, p)
+    colnames(net_out) <- rownames(net_out) <- names(models)
+    for (i in seq_len(p)) {
+        for (j in seq_len(p)) {
+            df_i <- unname(lavaan::fitMeasures(models[[i]],
+                                        fit.measures = "df"))
+            df_j <- unname(lavaan::fitMeasures(models[[j]],
+                                        fit.measures = "df"))
+            net_chk <- x_net_y(models[[i]],
+                               models[[j]])
+            if (net_chk == "x_within_y") {
+                net_out[i, j] <- df_i - df_j
+              }
+          }
       }
-    #semTools::net does not work in this case.
-    #TODO: Need an internal version.
-    # net_out <- do.call(semTools::net, unname(models))
+    if (one_df_only) {
+        net_out[net_out > 1] <- 0
+      }
+    net_out
   }
 
 #' @title Net Without Call
@@ -96,17 +109,171 @@ models_network2 <- function(object) {
 #'
 #' @noRd
 
-x_within_y <- function(x,
-                       y,
-                       crit = 1e-4) {
-    #TODO: Work on it later
+x_net_y <- function(x,
+                    y,
+                    crit = 1e-4,
+                    check_x_y = TRUE) {
+    # Based on semTools:::x.within.y().
+    if (check_x_y) {
+        chk <- check_x_net_y(x, y,
+                             ignore_fixed_x = TRUE)
+      }
+    x_df <- lavaan::fitMeasures(x, fit.measures = "df")
+    y_df <- lavaan::fitMeasures(y, fit.measures = "df")
+    # Reorder the models f1 >= f2 on df
+    if (x_df < y_df) {
+        f1 <- y
+        f2 <- x
+        out <- "y_within_x"
+      } else {
+        f1 <- x
+        f2 <- y
+        out <- "x_within_y"
+      }
+
+    # Refit f1 with fixed.x = FALSE if necessary
+
+    f1_fixed <- (lavaan::lavInspect(f1, "options")$fixed.x &&
+                 length(lavaan::lavNames(f1, "ov.x")) > 0)
+    if (f1_fixed) {
+        f1 <- lavaan_fast_update(f1)
+      }
+
+    slot_opt <- f2@Options
+    slot_pat <- f2@ParTable
+    slot_mod <- f2@Model
+
+    slot_opt2 <- slot_opt
+    slot_opt2$se <- "none"
+    slot_opt2$fixed.x <- FALSE
+    slot_opt2$baseline <- FALSE
+    slot_opt2$test <- "standard"
+
+    f1_nobs <- lavaan::lavInspect(f1, "nobs")
+
+    implied_sigma <- lavaan::lavInspect(f1, "cov.ov")
+    implied_mean <- lavaan::lavInspect(f1, "mean.ov")
+    if (is.list(implied_mean)) {
+        if (all(sapply(implied_mean, length) == 0)) {
+            implied_mean <- NULL
+          }
+      } else {
+        if (length(implied_mean) == 0) {
+            implied_mean <- NULL
+          }
+      }
+    implied_threshold <- lavaan::lavInspect(f1, "thresholds")
+    if (is.list(implied_threshold)) {
+        if (all(sapply(implied_threshold, length) == 0)) {
+            implied_threshold <- NULL
+          }
+      } else {
+        if (length(implied_threshold) == 0) {
+            implied_threshold <- NULL
+          }
+      }
+
+    f1_estimator <- lavaan::lavInspect(f1, "options")$estimator
+    if (f1_estimator == "DWLS") {
+        f1_WLS.V <- lavaan::lavInspect(f1, "WLS.V")
+        f1_NACOV <- lavaan::lavInspect(f1, "gamma")
+      } else {
+        f1_WLS.V <- NULL
+        f1_NACOV <- NULL
+      }
+
+    f2_1 <- lavaan::lavaan(slotOptions = slot_opt2,
+                           slotParTable = slot_pat,
+                           slotModel = slot_mod,
+                           data = NULL,
+                           sample.cov = implied_sigma,
+                           sample.mean = implied_mean,
+                           sample.nobs = f1_nobs,
+                           sample.th = implied_threshold,
+                           WLS.V = f1_WLS.V,
+                           NACOV = f1_NACOV)
+
+    if (!lavaan::lavInspect(f2_1, "converged")) {
+        return(NA)
+      }
+    f2_1_chisq <- unname(lavaan::fitMeasures(f2_1, fit.measures = "chisq"))
+    chisq_eq <- f2_1_chisq < crit
+    if (chisq_eq) {
+        if (x_df == y_df) {
+            out <- "equivalent"
+          }
+      } else {
+        out <- "not_nested"
+      }
+    return(out)
   }
 
 #' @noRd
 
-check_x_within_y <- function(x,
-                             y) {
-    #TODO: Work on it later
+check_x_net_y <- function(x,
+                          y,
+                          ignore_fixed_x = FALSE) {
+    # Based on semTools::x.within.y()
+    # lavaan objects?
+    if (!inherits(x, what = "lavaan") ||
+        !inherits(y, what = "lavaan")) {
+        stop("One or both objects are not lavaan objects.")
+      }
+    # Same variables?
+    vnamesx <- lavaan::lavNames(x, type = "ov")
+    vnamesy <- lavaan::lavNames(y, type = "ov")
+    if (!setequal(vnamesx, vnamesy)) {
+        stop("The two models do not have the same observed variables.")
+      }
+    # Clustered?
+    if ((lavaan::lavInspect(x, "nclusters") != 1) ||
+        (lavaan::lavInspect(y, "nclusters") != 1)) {
+        stop("Models with clustered data not supported.")
+      }
+    # Check sample sizes
+    if (!identical(lavaan::lavInspect(x, "nobs"),
+                   lavaan::lavInspect(y, "nobs"))) {
+        stop("Sample sizes not identical.")
+      }
+    # fixed.x?
+    if (!ignore_fixed_x) {
+        x_fixed <- (lavaan::lavInspect(x, "options")$fixed.x &&
+                    length(lavaan::lavNames(x, "ov.x")) > 0)
+        y_fixed <- (lavaan::lavInspect(y, "options")$fixed.x &&
+                    length(lavaan::lavNames(y, "ov.x")) > 0)
+        if (x_fixed || y_fixed) {
+            stop("Does not support models with 'fixed.x' = TRUE.")
+          }
+      }
+    # Meanstructure
+    if (!identical(lavaan::lavInspect(x, "meanstructure"),
+                   lavaan::lavInspect(y, "meanstructure"))) {
+        stop("One model has a mean structure but the other does not.")
+      }
+    # Same dataset?
+    x_sp <- lavaan::lavTech(x, "sampstat",
+                            drop.list.single.group = FALSE,
+                            add.labels = TRUE,
+                            list.by.group = TRUE)
+    y_sp <- lavaan::lavTech(y, "sampstat",
+                            drop.list.single.group = FALSE,
+                            add.labels = TRUE,
+                            list.by.group = TRUE)
+    x_g <- length(x_sp)
+    y_g <- length(y_sp)
+    x_names <- colnames(x_sp[[1]]$cov)
+    for (j in seq_len(x_g)) {
+        if (!identical(x_sp[[1]]$cov,
+                       y_sp[[1]]$cov[x_names, x_names])) {
+            stop("The sample statistics are not identical.")
+          }
+        # Identical if both mean vectors are NULL
+        if (!identical(x_sp[[1]]$mean,
+                       y_sp[[1]]$mean[x_names])) {
+            stop("The sample statistics are not identical.")
+          }
+      }
+    return(TRUE)
   }
 
 #' @title Internal Fast Update
@@ -124,6 +291,7 @@ lavaan_fast_update <- function(x) {
     slot_opt2$se <- "none"
     slot_opt2$fixed.x <- FALSE
     slot_opt2$baseline <- FALSE
+    slot_opt2$test <- "none"
 
     fit2 <- lavaan::lavaan(slotOptions = slot_opt2,
                            slotParTable = slot_pat,
