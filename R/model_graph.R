@@ -183,7 +183,7 @@
 #' connected through at least one
 #' another model. Default is `TRUE`.
 #'
-#' @param label_arrows_by_df If `TRUE`,
+#' @param label_arrow_by_df If `TRUE`,
 #' then an arrow (edge) is always labelled
 #' by the difference in model *df*s.
 #' If `FALSE`, then no arrows are
@@ -214,7 +214,7 @@
 #' this is the minimum width of an
 #' arrow.
 #'
-#' @param arrow_min_width If
+#' @param arrow_max_width If
 #' `weight_arrows_by_df` is not `"none"`,
 #' this is the maximum width of an
 #' arrow. If `weight_arrows_by_df` is

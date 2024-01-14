@@ -94,6 +94,15 @@ is redundant if two models are also
 connected through at least one
 another model. Default is \code{TRUE}.}
 
+\item{label_arrow_by_df}{If \code{TRUE},
+then an arrow (edge) is always labelled
+by the difference in model \emph{df}s.
+If \code{FALSE}, then no arrows are
+labelled. If \code{NULL}, then arrows are
+labelled when not all differences
+in model \emph{df}s are equal to one.
+Default is \code{NULL}.}
+
 \item{arrow_label_size}{The size of
 the labels of the arrows (edges), if labelled.
 Default is 1.}
@@ -113,6 +122,11 @@ Default is \code{"inverse"}.}
 
 \item{arrow_min_width}{If
 \code{weight_arrows_by_df} is not \code{"none"},
+this is the minimum width of an
+arrow.}
+
+\item{arrow_max_width}{If
+\code{weight_arrows_by_df} is not \code{"none"},
 this is the maximum width of an
 arrow. If \code{weight_arrows_by_df} is
 \code{"none"}, this is the width of all
@@ -120,15 +134,6 @@ arrows.}
 
 \item{...}{Optional arguments. Not
 used for now.}
-
-\item{label_arrows_by_df}{If \code{TRUE},
-then an arrow (edge) is always labelled
-by the difference in model \emph{df}s.
-If \code{FALSE}, then no arrows are
-labelled. If \code{NULL}, then arrows are
-labelled when not all differences
-in model \emph{df}s are equal to one.
-Default is \code{NULL}.}
 }
 \value{
 A \code{model_graph}-class object that
