@@ -1,7 +1,8 @@
 #' @noRd
 
 unique_models <- function(partables,
-                          original = "original") {
+                          original = "original",
+                          progress = FALSE) {
     i_added <- added(partables)
     i_dropped <- dropped(partables)
     i_added <- lapply(i_added, sort)
@@ -31,22 +32,42 @@ unique_models <- function(partables,
       }
     out <- partables[unique(c(j_comb2, i_comb2))]
     out <- duplicated_by_pt(out,
-                            original = original)
+                            original = original,
+                            progress = progress)
     out
   }
 
 #' @noRd
 
 duplicated_by_pt <- function(partables_list,
-                             original = "original") {
+                             original = "original",
+                             progress = FALSE) {
     p <- length(partables_list)
     if (p <= 1) {
         return(partables_list)
       }
     p_names <- names(partables_list)
     chk <- rep(FALSE, p)
+    if (progress) {
+        pstar <- p * (p - 1) / 2
+        cat("\nCheck for duplicated models (",
+             p,
+             " model[s] to check):\n",
+             sep = "")
+        pb <- utils::txtProgressBar(min = 0,
+                                    max = pstar,
+                                    width = 50,
+                                    char = "+",
+                                    style = 3)
+      }
+    k <- 0
     for (i in seq_len(p - 1)) {
         for (j in seq(from = i + 1, to = p)) {
+            k <- k + 1
+            if (progress) {
+                utils::setTxtProgressBar(pb,
+                                         value = k)
+              }
             if (identical_partables(partables_list[[i]],
                                     partables_list[[j]])) {
                 if (p_names[j] == original) {
@@ -56,6 +77,9 @@ duplicated_by_pt <- function(partables_list,
                   }
               }
           }
+      }
+    if (progress) {
+        close(pb)
       }
     out <- partables_list[!chk]
     out

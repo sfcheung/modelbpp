@@ -177,7 +177,7 @@ get_drop <- function(sem_out,
     attr(out, "sem_out") <- sem_out
     class(out) <- c("partables", class(out))
     if (remove_duplicated) {
-        out <- unique_models(out)
+        out <- unique_models(out, progress = progress)
       }
     out
   }

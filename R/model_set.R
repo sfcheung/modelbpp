@@ -372,7 +372,8 @@ model_set <- function(sem_out,
       mod_to_fit <- c(mod_all, list(`original` = pt0))
     }
   if (remove_duplicated) {
-      mod_to_fit <- unique_models(mod_to_fit)
+      mod_to_fit <- unique_models(mod_to_fit,
+                                  progress = progress)
     }
   if (!inherits(mod_to_fit, "partables")) {
       class(mod_to_fit) <- c("partables", class(mod_to_fit))
