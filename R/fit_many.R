@@ -273,7 +273,7 @@ fit_many <- function(model_list,
                     })
       if (progress) {
           op_old <- pbapply::pboptions(type = "timer")
-          cat("\nFit the", length(model_list), "models (duplicated models removed):\n")
+          cat("\nFit the", length(model_list), "models:\n")
           tmp <- tryCatch({rt <- system.time(fit_list <- suppressWarnings(
                             pbapply::pblapply(model_list,
                                               fit_i,
