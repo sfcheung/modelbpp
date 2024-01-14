@@ -18,18 +18,29 @@
 #'
 #' - Each model is connected by an
 #'  arrow, pointing from one model to
-#'  another model that is formed by
+#'  another model that
 #'
-#'    a. adding one free parameter, or
+#'    a. can be formed by adding one
+#'       or more free parameter, or
 #'
-#'    b, releasing one equality constraint
-#'  between two parameters.
+#'    b. can be formed by releasing one
+#'       or more equality constraint
+#'       between two
+#'       parameters.
+#'
+#'    c. has nested relation with this
+#'       model as determined by the
+#'       method proposed by Bentler
+#'       and Satorra (2010), if the
+#'       models are not generated
+#'       internally.
 #'
 #'  That is, it points to a model with
-#'  one *less* degree of freedom, and
-#'  is nested within that model in
-#'  parameter sense (but see below on
-#'  results with user-provided models).
+#'  more degrees of freedom (more
+#'  complicated),
+#'  and
+#'  is nested within that model in either
+#'  parameter sense or covariance sense.
 #'
 #' - By default, the size of the node
 #'  for each model is scaled by its
@@ -37,10 +48,15 @@
 #'  available. See *The Size of a Node*
 #'  below.
 #'
-#' - The original model, the models with
-#'  more degrees of freedom,
+#' - If a model is designated as the
+#'  original (target) model,
+#'  than he original model, the models
+#'  with
+#'  more degrees of freedom than the
+#'  original model,
 #'  and the models with fewer degrees
-#'  of freedom are colored differently.
+#'  of freedom than the original models,
+#'  are colored differently.
 #'
 #' - The default layout is the Sugiyama
 #'  layout, with simpler models (models
@@ -49,17 +65,18 @@
 #'  the network, the more the degrees
 #'  of freedom it has. This layout is
 #'  suitable for showing the nested
-#'  relations of the models.
+#'  relations of the models. Models on
+#'  the same level (layer) horizontally
+#'  have the same model *df*.
 #'
 #' The output is an `igraph` object.
 #' Users can customize it in any way
 #' they want using functions from
 #' the `igraph` package.
 #'
-#' If a model does not differ from any
-#' other models by exactly one *df*,
-#' by default, it will not be connected
-#' to any other model.
+#' If a model has no nested relation
+#' with all other model, it will not
+#' be connected to other models.
 #'
 #' If no model is named `original`
 #' (default is `"original"`), then no
@@ -166,6 +183,44 @@
 #' connected through at least one
 #' another model. Default is `TRUE`.
 #'
+#' @param label_arrows_by_df If `TRUE`,
+#' then an arrow (edge) is always labelled
+#' by the difference in model *df*s.
+#' If `FALSE`, then no arrows are
+#' labelled. If `NULL`, then arrows are
+#' labelled when not all differences
+#' in model *df*s are equal to one.
+#' Default is `NULL`.
+#'
+#' @param arrow_label_size The size of
+#' the labels of the arrows (edges), if labelled.
+#' Default is 1.
+#'
+#' @param weight_arrows_by_df String.
+#' Use if model *df*
+#' differences are stored.
+#' If `"inverse"`, larger the
+#' difference in model *df*, *narrower*
+#' an arrow. That is, more similar two
+#' models are, thicker the arrow. If
+#' `"normal"`, larger the difference
+#' in model *df*, *wider* an arrow.
+#' If `"none"`, then arrow width is
+#' constant, set to `arrow_max_width`.
+#' Default is `"inverse"`.
+#'
+#' @param arrow_min_width If
+#' `weight_arrows_by_df` is not `"none"`,
+#' this is the minimum width of an
+#' arrow.
+#'
+#' @param arrow_min_width If
+#' `weight_arrows_by_df` is not `"none"`,
+#' this is the maximum width of an
+#' arrow. If `weight_arrows_by_df` is
+#' `"none"`, this is the width of all
+#' arrows.
+#'
 #' @param ... Optional arguments. Not
 #' used for now.
 #'
@@ -220,6 +275,11 @@ model_graph <- function(object,
                         node_label_size = 1,
                         original = "original",
                         drop_redundant_direct_paths = TRUE,
+                        label_arrow_by_df = NULL,
+                        arrow_label_size = 1,
+                        weight_arrows_by_df = c("inverse", "normal", "none"),
+                        arrow_min_width = .5,
+                        arrow_max_width = 2,
                         ...) {
     user_models <- sapply(added(object$models), is.null) &
                    sapply(dropped(object$models), is.null)
@@ -274,6 +334,16 @@ model_graph <- function(object,
     igraph::V(out)$label.cex <- node_label_size
     igraph::V(out)$label.family <- "sans"
     igraph::E(out)$arrow.size <- .75
+    out <- label_by_df(out,
+                       mode = label_arrow_by_df)
+    if (!is.null(igraph::E(out)$df)) {
+        weight_arrows_by_df <- match.arg(weight_arrows_by_df)
+        out <- edge_weight(out,
+                           mode = weight_arrows_by_df,
+                           min_width = arrow_min_width,
+                           max_width = arrow_max_width)
+      }
+    igraph::E(out)$label.cex <- arrow_label_size
     out <- igraph::add_layout_(out, igraph::with_sugiyama())
     out <- layer_by_df(out,
                        model_set_out = object)
