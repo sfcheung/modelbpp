@@ -1,4 +1,5 @@
 suppressMessages(library(lavaan))
+suppressMessages(library(igraph))
 
 mod1 <-
 "

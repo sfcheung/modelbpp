@@ -159,6 +159,13 @@
 #' of the original model (target model).
 #' Default is `"original"`.
 #'
+#' @param drop_redundant_direct_paths
+#' Logical. Whether the redundant direct
+#' path between two models. A direct path
+#' is redundant if two models are also
+#' connected through at least one
+#' another model. Default is `TRUE`.
+#'
 #' @param ... Optional arguments. Not
 #' used for now.
 #'
@@ -212,18 +219,24 @@ model_graph <- function(object,
                         color_label = "black",
                         node_label_size = 1,
                         original = "original",
+                        drop_redundant_direct_paths = TRUE,
                         ...) {
     user_models <- sapply(added(object$models), is.null) &
                    sapply(dropped(object$models), is.null)
     if (sum(user_models, na.rm = TRUE) != 1) {
         # warning("One or more user models are present. ",
         #     "User model(s) will be plotted separately.")
-        net_out <- models_network2(object)
+        net_out <- models_network2(object,
+                                   one_df_only = FALSE)
       } else {
         net_out <- models_network(object)
       }
     out <- igraph::graph_from_adjacency_matrix(net_out,
-                                               mode = "directed")
+                                               mode = "directed",
+                                               weight = "df")
+    if (drop_redundant_direct_paths) {
+        out <- delete_all_redundant_direct(out)
+      }
     if (node_size_by_x) {
         if (is.null(x)) {
             if (inherits(object, "model_set")) {

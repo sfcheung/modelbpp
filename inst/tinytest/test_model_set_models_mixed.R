@@ -35,6 +35,9 @@ x1 ~ x2 + x3
 fit2 <- sem(mod2, dat_path_model)
 fit3 <- sem(mod3, dat_path_model)
 
+out <- model_set(fit,
+                 progress = FALSE)
+
 pt_user <- c(out$models,
              user2 = parameterTable(fit2),
              user3 = fit3)
@@ -72,14 +75,14 @@ expect_equal(unname(tmp[c("user2", "original", "user3")]),
 out_user_prior3 <- model_set(sem_out = fit,
                              partables = pt_user,
                              prior_sem_out = c(original = .31,
-                                               `drop: x2~~x1` = .21,
-                                               user1 = .10),
+                                               `add: x4~x2` = .21,
+                                               user2 = .10),
                              progress = FALSE,
                              parallel = FALSE)
 
 tmp <- out_user_prior3$prior
 names(tmp) <- names(out_user_prior3$models)
-expect_equal(unname(tmp[c("drop: x2~~x1", "original")]),
+expect_equal(unname(tmp[c("add: x4~x2", "original")]),
              c(.21, .31),
              info = "Add user models, with priors and nonstandard names")
 
