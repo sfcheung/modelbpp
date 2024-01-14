@@ -77,6 +77,11 @@
 #' only models with actual *df* change
 #' equal to expected *df* change.
 #'
+#' @param progress Whether a progress
+#' bar will be displayed, implemented
+#' by the `pbapply` package. Default
+#' is `FALSE`.
+#'
 #' @return An object of the class
 #' `partables`, a named list of parameter
 #' tables, each of them to be used by
@@ -112,7 +117,8 @@ get_add <- function(sem_out,
                      df_change = 1,
                      model_id = NA,
                      keep_correct_df_change = TRUE,
-                     remove_duplicated = TRUE
+                     remove_duplicated = TRUE,
+                     progress = FALSE
                     ) {
     if (missing(sem_out)) stop("sem_out is not supplied.")
     if (!inherits(sem_out, "lavaan")) {
@@ -177,8 +183,19 @@ get_add <- function(sem_out,
         sets_to_gen2_ok <- sets_remove_inadmissible(sets_to_gen2)
 
         # Generate parameter tables
-        out <- lapply(sets_to_gen2_ok, gen_pt_add, pt = pt, sem_out = sem_out,
-                      from = model_id)
+        if (progress) {
+            cat("\nGenerate", length(sets_to_gen2_ok), "less restrictive model(s):\n")
+            op_old <- pbapply::pboptions(type = "timer")
+            out <- pbapply::pblapply(sets_to_gen2_ok,
+                                     gen_pt_add,
+                                     pt = pt,
+                                     sem_out = sem_out,
+                                     from = model_id)
+            pbapply::pboptions(op_old)
+          } else {
+            out <- lapply(sets_to_gen2_ok, gen_pt_add, pt = pt, sem_out = sem_out,
+                          from = model_id)
+          }
       } else {
         out <- list()
       }

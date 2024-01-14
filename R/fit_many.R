@@ -273,6 +273,7 @@ fit_many <- function(model_list,
                     })
       if (progress) {
           op_old <- pbapply::pboptions(type = "timer")
+          cat("\nFit the", length(model_list), "models (duplicated models removed):\n")
           tmp <- tryCatch({rt <- system.time(fit_list <- suppressWarnings(
                             pbapply::pblapply(model_list,
                                               fit_i,
@@ -293,6 +294,7 @@ fit_many <- function(model_list,
       parallel::stopCluster(cl)
     } else {
       if (progress) {
+          cat("\nFit the", length(model_list), "model(s) (duplicated models removed):\n")
           rt <- system.time(fit_list <- suppressWarnings(pbapply::pblapply(model_list, fit_i)))
         } else {
           rt <- system.time(fit_list <- suppressWarnings(lapply(model_list, fit_i)))
