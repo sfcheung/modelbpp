@@ -152,3 +152,62 @@ doc_model_graph <- function(object,
       }
     graph
   }
+
+#' @title Label Arrows By 'df' Differences
+#'
+#' @noRd
+
+label_by_df <- function(graph,
+                              mode) {
+    mode0 <- mode
+    graph_df <- igraph::E(graph)$df
+    if (is.null(mode)) {
+        any_gt_1 <- (length(setdiff(graph_df, c(0, 1))) > 0)
+        if (any_gt_1) {
+            mode0 <- TRUE
+          } else {
+            mode0 <- FALSE
+          }
+      }
+    if (mode0) {
+        igraph::E(graph)$label <- graph_df
+      } else {
+        # Placehodler
+      }
+    graph
+  }
+
+#' @title Set Arrows Width By 'df' Differences
+#'
+#' @noRd
+
+edge_weight <- function(graph,
+                        mode = c("inverse", "normal", "none"),
+                        min_width = .5,
+                        max_width = 2) {
+    if (is.null(igraph::E(graph)$df)) {
+        igraph::E(graph)$width <- max_width
+        return(graph)
+      }
+    tmp1 <- igraph::E(graph)$df
+    tmp2 <- switch(mode,
+                   inverse = min(tmp1) / tmp1,
+                   normal = tmp1 / max(tmp1),
+                   none = rep(max_size, length(tmp1)))
+    tmp2 <- normalize_edge_width(tmp2)
+    igraph::E(graph)$width <- tmp2
+    graph
+  }
+
+#' @noRd
+
+normalize_edge_width <- function(x,
+                                 min_width = .5,
+                                 max_width = 2) {
+    x_min <- min(x)
+    x_max <- max(x)
+    x_range <- x_max - x_min
+    x_out <- max_width * (x - x_min)/x_range +
+             min_width
+    x_out
+  }
