@@ -352,17 +352,20 @@ model_set <- function(sem_out,
                                 remove_constraints = remove_constraints,
                                 exclude_error_cov = exclude_error_cov,
                                 df_change = df_change_add,
-                                remove_duplicated = remove_duplicated)
+                                remove_duplicated = FALSE)
           mod_to_drop <- get_drop(sem_out,
                                   must_drop = must_drop,
                                   must_not_drop = must_not_drop,
                                   df_change = df_change_drop,
-                                  remove_duplicated = remove_duplicated)
+                                  remove_duplicated = FALSE)
           mod_all <- c(mod_to_add, mod_to_drop)
         }
-      if (remove_duplicated) {
-          mod_all <- unique_models(mod_all)
-        }
+      # NOTE: No need to call unique_models() here.
+      # There is a final check below
+      # if (remove_duplicated) {
+      #     mod_all <- unique_models(mod_all)
+      #   }
+      class(mod_all) <- setdiff(class(mod_all), "partables")
       pt0 <- lavaan::parameterTable(sem_out)
       mod_to_fit <- c(mod_all, list(`original` = pt0))
     }

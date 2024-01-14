@@ -303,10 +303,10 @@ fix_cov <- function(x) {
     if (length(i) == 0) {
         return(x)
       }
-    for (j in i) {
-        tmp <- sort(c(x[j, "lhs"], x[j, "rhs"]))
-        x[j, "lhs"] <- tmp[1]
-        x[j, "rhs"] <- tmp[2]
-      }
+    jj <- x[i, "rhs"] > x[i, "lhs"]
+    ii <- i[jj]
+    a <- x[ii, "lhs"]
+    x[ii, "lhs"] <- x[ii, "rhs"]
+    x[ii, "rhs"] <- a
     return(x)
   }
