@@ -40,8 +40,8 @@ all_simples <- function(i, j, graph) {
 #' @noRd
 
 all_simples_list <- function(graph) {
-    p <- length(V(graph))
-    tmp <- combn(p, 2)
+    p <- length(igraph::V(graph))
+    tmp <- utils::combn(p, 2)
     ij <- cbind(tmp, tmp[2:1, ])
     i0 <- ij[1, ]
     j0 <- ij[2, ]
@@ -193,8 +193,10 @@ edge_weight <- function(graph,
     tmp2 <- switch(mode,
                    inverse = min(tmp1) / tmp1,
                    normal = tmp1 / max(tmp1),
-                   none = rep(max_size, length(tmp1)))
-    tmp2 <- normalize_edge_width(tmp2)
+                   none = rep(max_width, length(tmp1)))
+    tmp2 <- normalize_edge_width(tmp2,
+                                 min_width = min_width,
+                                 max_width = max_width)
     igraph::E(graph)$width <- tmp2
     graph
   }
