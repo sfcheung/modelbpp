@@ -1,4 +1,5 @@
 suppressMessages(library(lavaan))
+suppressMessages(library(igraph))
 
 mod1 <-
 "
@@ -44,6 +45,8 @@ out1_df2 <- model_set(fit1,
                                         fit2 = .0005,
                                         fit4 = .97))
 g <- model_graph(out1_df2)
+if (interactive()) {
 plot(g)
+}
 expect_equal(g$layout$layout[, 2],
              c(2, 2, 1, 1))

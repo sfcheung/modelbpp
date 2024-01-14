@@ -117,6 +117,7 @@ out <- model_set(fit1,
                  partables = ptables,
                  progress = FALSE)
 g <- model_graph(out)
+plot(g)
 tmp <- lapply(E(g), attributes)
 expect_equal(length(E(g)), 3)
 expect_equal(length(V(g)), 5)

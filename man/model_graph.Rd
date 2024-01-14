@@ -18,6 +18,12 @@ model_graph(
   color_label = "black",
   node_label_size = 1,
   original = "original",
+  drop_redundant_direct_paths = TRUE,
+  label_arrow_by_df = NULL,
+  arrow_label_size = 1,
+  weight_arrows_by_df = c("inverse", "normal", "none"),
+  arrow_min_width = 0.5,
+  arrow_max_width = 2,
   ...
 )
 }
@@ -82,6 +88,50 @@ the labels of the nodes. Default is
 of the original model (target model).
 Default is \code{"original"}.}
 
+\item{drop_redundant_direct_paths}{Logical. Whether the redundant direct
+path between two models. A direct path
+is redundant if two models are also
+connected through at least one
+another model. Default is \code{TRUE}.}
+
+\item{label_arrow_by_df}{If \code{TRUE},
+then an arrow (edge) is always labelled
+by the difference in model \emph{df}s.
+If \code{FALSE}, then no arrows are
+labelled. If \code{NULL}, then arrows are
+labelled when not all differences
+in model \emph{df}s are equal to one.
+Default is \code{NULL}.}
+
+\item{arrow_label_size}{The size of
+the labels of the arrows (edges), if labelled.
+Default is 1.}
+
+\item{weight_arrows_by_df}{String.
+Use if model \emph{df}
+differences are stored.
+If \code{"inverse"}, larger the
+difference in model \emph{df}, \emph{narrower}
+an arrow. That is, more similar two
+models are, thicker the arrow. If
+\code{"normal"}, larger the difference
+in model \emph{df}, \emph{wider} an arrow.
+If \code{"none"}, then arrow width is
+constant, set to \code{arrow_max_width}.
+Default is \code{"inverse"}.}
+
+\item{arrow_min_width}{If
+\code{weight_arrows_by_df} is not \code{"none"},
+this is the minimum width of an
+arrow.}
+
+\item{arrow_max_width}{If
+\code{weight_arrows_by_df} is not \code{"none"},
+this is the maximum width of an
+arrow. If \code{weight_arrows_by_df} is
+\code{"none"}, this is the width of all
+arrows.}
+
 \item{...}{Optional arguments. Not
 used for now.}
 }
@@ -112,29 +162,45 @@ automatically by \code{\link[=model_set]{model_set()}}.
 \itemize{
 \item Each model is connected by an
 arrow, pointing from one model to
-another model that is formed by
+another model that
 
-a. adding one free parameter, or
+a. can be formed by adding one
+or more free parameter, or
 
-b, releasing one equality constraint
-between two parameters.
+b. can be formed by releasing one
+or more equality constraint
+between two
+parameters.
+
+c. has nested relation with this
+model as determined by the
+method proposed by Bentler
+and Satorra (2010), if the
+models are not generated
+internally.
 }
 
 That is, it points to a model with
-one \emph{less} degree of freedom, and
-is nested within that model in
-parameter sense (but see below on
-results with user-provided models).
+more degrees of freedom (more
+complicated),
+and
+is nested within that model in either
+parameter sense or covariance sense.
 \itemize{
 \item By default, the size of the node
 for each model is scaled by its
 BIC posterior probability, if
 available. See \emph{The Size of a Node}
 below.
-\item The original model, the models with
-more degrees of freedom,
+\item If a model is designated as the
+original (target) model,
+than he original model, the models
+with
+more degrees of freedom than the
+original model,
 and the models with fewer degrees
-of freedom are colored differently.
+of freedom than the original models,
+are colored differently.
 \item The default layout is the Sugiyama
 layout, with simpler models (models
 with fewer degrees of freedom) on
@@ -142,7 +208,9 @@ the top. The lower a model is in
 the network, the more the degrees
 of freedom it has. This layout is
 suitable for showing the nested
-relations of the models.
+relations of the models. Models on
+the same level (layer) horizontally
+have the same model \emph{df}.
 }
 
 The output is an \code{igraph} object.
@@ -150,10 +218,9 @@ Users can customize it in any way
 they want using functions from
 the \code{igraph} package.
 
-If a model does not differ from any
-other models by exactly one \emph{df},
-by default, it will not be connected
-to any other model.
+If a model has no nested relation
+with all other model, it will not
+be connected to other models.
 
 If no model is named \code{original}
 (default is \code{"original"}), then no
