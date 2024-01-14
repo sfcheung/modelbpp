@@ -51,6 +51,22 @@ identical_partables <- function(object1,
         !is_partable(object2)) {
         stop("At least one of the objects is not a parameter table.")
       }
+    if (!identical(nrow(object1),
+                   nrow(object2))) {
+        return(FALSE)
+      }
+    if (!identical(sum(object1$free > 0),
+                   sum(object2$free > 0))) {
+        return(FALSE)
+      }
+    if (!identical(sort(object1$op),
+                   sort(object2$op))) {
+        return(FALSE)
+      }
+    if (!identical(sort(union(object1$lhs, object1$rhs)),
+                   sort(union(object2$lhs, object2$rhs)))) {
+        return(FALSE)
+      }
     # Drop nonessential columns
     object1$est <- NULL
     object2$est <- NULL
@@ -97,6 +113,12 @@ identical_partables <- function(object1,
           }
       }
     return(TRUE)
+  }
+
+#' @noRd
+
+check_lor <- function(object1, object2) {
+
   }
 
 #' @param x An object to be checked.
@@ -282,7 +304,7 @@ fix_cov <- function(x) {
         return(x)
       }
     for (j in i) {
-        tmp <- sort(unlist(x[j, c("lhs", "rhs")]))
+        tmp <- sort(c(x[j, "lhs"], x[j, "rhs"]))
         x[j, "lhs"] <- tmp[1]
         x[j, "rhs"] <- tmp[2]
       }

@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.21
+# modelbpp 0.1.2.22
 
 ## New Features
 
@@ -69,6 +69,8 @@
   model with which`fit_many()` will compute
   model *df* difference. (0.1.2.16)
 - Reorganized some test files. (0.1.2.18)
+- Improved the speed in identifying
+  identical parameter tables. (0.1.2.22)
 
 ## Bug Fixes
 
