@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.19
+# modelbpp 0.1.2.20
 
 ## New Features
 
@@ -30,6 +30,19 @@
   fitted models (`lavaan`-class objects)
   to `model_set()` through the
   argument `sem_out`. (0.1.2.17)
+- Updated `model_graph()` with new options.
+  If `drop_redundant_direct_paths`
+  is `TRUE` (default), redundant
+  direct paths will be removed.
+- Models differ by more than one *df*
+  will now be connected in `model_graph()`.
+  (0.1.2.20)
+- New arguments are added to `model_graph()`
+  to label arrows by model *df*
+  differences (see `label_arrow_by_df`),
+  and weight arrow widths by
+  model *df* differences (see
+  `weight_arrows_by_df`). (0.1.2.20)
 
 ## Miscellaneous
 
