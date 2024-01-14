@@ -237,6 +237,9 @@ model_graph <- function(object,
     if (drop_redundant_direct_paths) {
         out <- delete_all_redundant_direct(out)
       }
+    # Store Basic Info
+    out <- doc_model_graph(object,
+                           out)
     if (node_size_by_x) {
         if (is.null(x)) {
             if (inherits(object, "model_set")) {

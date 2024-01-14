@@ -109,3 +109,46 @@ delete_all_redundant_direct <- function(graph) {
       }
     out
   }
+
+#' @title Store Basic Info to A Graph
+#'
+#' @noRd
+
+doc_model_graph <- function(object,
+                            graph) {
+    p_V <- length(igraph::V(graph))
+    V_names <- names(igraph::V(graph))
+    V_order <- match(names(object$models), V_names)
+    if (!is.null(object$change)) {
+        igraph::V(graph)$change <- object$change[V_order]
+      } else {
+        igraph::V(graph)$change <- rep(NA, p_V)
+      }
+    if (!is.null(object$converged)) {
+        igraph::V(graph)$converged <- object$converged[V_order]
+      } else {
+        igraph::V(graph)$converged <- rep(NA, p_V)
+      }
+    if (!is.null(object$post_check)) {
+        igraph::V(graph)$post_check <- object$post_check[V_order]
+      } else {
+        igraph::V(graph)$post_check <- rep(NA, p_V)
+      }
+    igraph::V(graph)$model_name <- names(object$models)[V_order]
+    if (!is.null(object$bic)) {
+        igraph::V(graph)$bic <- object$bic[V_order]
+      } else {
+        igraph::V(graph)$bic <- rep(NA, p_V)
+      }
+    if (!is.null(object$prior)) {
+        igraph::V(graph)$prior <- object$prior[V_order]
+      } else {
+        igraph::V(graph)$prior <- rep(NA, p_V)
+      }
+    if (!is.null(object$bpp)) {
+        igraph::V(graph)$bpp <- object$bpp[V_order]
+      } else {
+        igraph::V(graph)$bpp <- rep(NA, p_V)
+      }
+    graph
+  }
