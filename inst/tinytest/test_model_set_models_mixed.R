@@ -88,8 +88,8 @@ expect_equal(unname(tmp[c("add: x4~x2", "original")]),
 
 expect_stdout(print(out_user_prior3,
                     bpp_target = .95,
-                    target_name = "add: x1~x4"),
-              pattern = "Target Model: add: x1~x4",
+                    target_name = "add: x4~x2"),
+              pattern = "Target Model: add: x4~x2",
               info = "Add user models, print method")
 
 # User models with graph

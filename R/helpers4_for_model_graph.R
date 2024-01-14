@@ -41,7 +41,8 @@ all_simples <- function(i, j, graph) {
 
 all_simples_list <- function(graph) {
     p <- length(V(graph))
-    ij <- combn(p, 2)
+    tmp <- combn(p, 2)
+    ij <- cbind(tmp, tmp[2:1, ])
     i0 <- ij[1, ]
     j0 <- ij[2, ]
     simples <- mapply(all_simples,
