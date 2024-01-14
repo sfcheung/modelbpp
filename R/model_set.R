@@ -352,12 +352,14 @@ model_set <- function(sem_out,
                                 remove_constraints = remove_constraints,
                                 exclude_error_cov = exclude_error_cov,
                                 df_change = df_change_add,
-                                remove_duplicated = FALSE)
+                                remove_duplicated = FALSE,
+                                progress = progress)
           mod_to_drop <- get_drop(sem_out,
                                   must_drop = must_drop,
                                   must_not_drop = must_not_drop,
                                   df_change = df_change_drop,
-                                  remove_duplicated = FALSE)
+                                  remove_duplicated = FALSE,
+                                  progress = progress)
           mod_all <- c(mod_to_add, mod_to_drop)
         }
       # NOTE: No need to call unique_models() here.
@@ -370,7 +372,8 @@ model_set <- function(sem_out,
       mod_to_fit <- c(mod_all, list(`original` = pt0))
     }
   if (remove_duplicated) {
-      mod_to_fit <- unique_models(mod_to_fit)
+      mod_to_fit <- unique_models(mod_to_fit,
+                                  progress = progress)
     }
   if (!inherits(mod_to_fit, "partables")) {
       class(mod_to_fit) <- c("partables", class(mod_to_fit))

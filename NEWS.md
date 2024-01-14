@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.23
+# modelbpp 0.1.2.25
 
 ## New Features
 
@@ -43,6 +43,9 @@
   and weight arrow widths by
   model *df* differences (see
   `weight_arrows_by_df`). (0.1.2.20)
+- The models generating progress can
+  display a progress bar.
+  (0.1.2.24, 0.1.2.25)
 
 ## Miscellaneous
 
