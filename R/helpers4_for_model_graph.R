@@ -209,7 +209,12 @@ normalize_edge_width <- function(x,
     x_min <- min(x)
     x_max <- max(x)
     x_range <- x_max - x_min
-    x_out <- max_width * (x - x_min)/x_range +
-             min_width
-    x_out
+    if (x_range == 0) {
+        x[] <- max_width
+        return(x)
+      } else {
+        x_out <- max_width * (x - x_min)/x_range +
+                min_width
+        x_out
+      }
   }

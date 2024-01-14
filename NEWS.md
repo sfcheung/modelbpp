@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.20
+# modelbpp 0.1.2.21
 
 ## New Features
 
@@ -77,6 +77,8 @@
   or no paths are added. (0.1.2.3)
 - Corrected a typo in the help page of
   `gen_models()`'s argument, `output`.
+- Fixed a bug in normalizing the width
+  of arrows. (0.1.2.21)
 
 # modelbpp 0.1.2
 
