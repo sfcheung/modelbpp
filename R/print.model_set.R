@@ -46,6 +46,12 @@
 #' model list. Default is `"original"`.
 #' Used if `bpp_target` is not `NULL`.
 #'
+#' @param more_fit_measures Character
+#' vector. To be passed to
+#' [lavaan::fitMeasures()]. Default is
+#' `NULL`. If not `NULL`, these are
+#' the additional measures to be printed.
+#'
 #' @param ...  Optional arguments.
 #' Ignored.
 #'
@@ -81,6 +87,7 @@ print.model_set <- function(x,
                             max_models = 20,
                             bpp_target = NULL,
                             target_name = "original",
+                            more_fit_measures = NULL,
                             ...) {
     fit_n <- length(x$models)
     fit_names <- names(x$models)
@@ -125,6 +132,12 @@ print.model_set <- function(x,
                        digits = bpp_digits,
                        format = "f")
         out_table["Cumulative"] <- tmp
+      }
+    if (!is.null(more_fit_measures)) {
+        fit_fm <- lapply(x$fit,
+                         lavaan::fitMeasures,
+                         fit.measures = more_fit_measures,
+                         output = "vector")
       }
     out_table_print <- out_table
     out_table_print$Prior <- round(out_table_print$Prior,
