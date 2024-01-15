@@ -49,7 +49,8 @@
 - The `print` method of `model_set()`
   supports printing additional fit
   measures available from
-  `lavaan::fitMeasures()`.
+  `lavaan::fitMeasures()`. Check the
+  argument `more_fit_measures`.
   (0.1.2.27)
 
 ## Miscellaneous
