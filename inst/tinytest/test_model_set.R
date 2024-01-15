@@ -120,11 +120,13 @@ out <- model_set(fit,
                  progress = FALSE,
                  parallel = FALSE)
 out2 <- gen_models(fit,
-                   output = "model_set")
+                   output = "model_set",
+                   progress = FALSE)
 out3 <- model_set(model_set_out = out2,
                   parallel = FALSE,
                   progress = FALSE)
-out4 <- gen_models(fit)
+out4 <- gen_models(fit,
+                   progress = FALSE)
 out5 <- model_set(sem_out = fit,
                   partables = out4,
                   progress = FALSE,

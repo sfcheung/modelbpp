@@ -51,7 +51,9 @@ ab := a*b
 
 fit <- sem(mod, dat_path_model, fixed.x = TRUE)
 out <- model_set(fit,
-                 fit_models = FALSE)
+                 fit_models = FALSE,
+                 parallel = FALSE,
+                 progress = FALSE)
 pts <- out$models
 
 modb <-

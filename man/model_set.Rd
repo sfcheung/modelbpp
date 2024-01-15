@@ -42,6 +42,7 @@ gen_models(
   df_change_add = 1,
   df_change_drop = 1,
   remove_duplicated = TRUE,
+  progress = TRUE,
   output = c("partables", "model_set")
 )
 }
