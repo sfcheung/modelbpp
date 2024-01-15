@@ -31,6 +31,13 @@ expect_equivalent(
     info = "BIC as expected"
   )
 
+# Check more_fit_measures
+
+expect_stdout(print(out,
+                    more_fit_measures = c("CFI", "RMSEA"),
+                    fit_measures_digits = 2),
+              "rmsea")
+
 out <- model_set(fit,
                  df_change_add = 2,
                  df_change_drop = 2,

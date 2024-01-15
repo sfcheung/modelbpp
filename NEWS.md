@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.26
+# modelbpp 0.1.2.27
 
 ## New Features
 
@@ -46,6 +46,12 @@
 - The models generating progress can
   display a progress bar.
   (0.1.2.24, 0.1.2.25, 0.1.2.26)
+- The `print` method of `model_set()`
+  supports printing additional fit
+  measures available from
+  `lavaan::fitMeasures()`. Check the
+  argument `more_fit_measures`.
+  (0.1.2.27)
 
 ## Miscellaneous
 

@@ -12,6 +12,8 @@
   max_models = 20,
   bpp_target = NULL,
   target_name = "original",
+  more_fit_measures = NULL,
+  fit_measures_digits = 3,
   ...
 )
 }
@@ -50,6 +52,17 @@ is \code{NULL}.}
 target model as appeared in the
 model list. Default is \code{"original"}.
 Used if \code{bpp_target} is not \code{NULL}.}
+
+\item{more_fit_measures}{Character
+vector. To be passed to
+\code{\link[lavaan:fitMeasures]{lavaan::fitMeasures()}}. Default is
+\code{NULL}. If not \code{NULL}, these are
+the additional measures to be printed.}
+
+\item{fit_measures_digits}{The number of
+decimal places to be displayed
+for additional fit measures, if
+requested. Default is 3.}
 
 \item{...}{Optional arguments.
 Ignored.}
