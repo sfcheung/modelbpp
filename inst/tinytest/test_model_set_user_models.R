@@ -49,5 +49,6 @@ fit_names <- c("fit1", "fit3", "fit2", "fit4")
 expect_true(all(is.na(names(out$change))))
 expect_equal(names(out$fit), fit_names)
 expect_equal(names(out$models), fit_names)
-g <- model_graph(out)
+g <- model_graph(out,
+                 progress = FALSE)
 expect_equal(V(g)$name, fit_names)

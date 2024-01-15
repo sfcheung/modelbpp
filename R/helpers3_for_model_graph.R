@@ -83,7 +83,8 @@ models_network <- function(object) {
 #' @noRd
 
 models_network2 <- function(object,
-                            one_df_only = TRUE) {
+                            one_df_only = TRUE,
+                            progress = FALSE) {
     if (inherits(object, "model_set")) {
         models <- object$fit
       } else {
@@ -98,8 +99,30 @@ models_network2 <- function(object,
     i <- which(names(models) == "original")
     net_out <- matrix(0, p, p)
     colnames(net_out) <- rownames(net_out) <- names(models)
-    for (i in seq_len(p)) {
-        for (j in seq_len(p)) {
+    if (p == 1) {
+        return(net_out)
+      }
+    if (progress) {
+        pstar <- p * (p - 1) / 2
+        cat("\nCheck for nested models (",
+             pstar,
+             " pair[s] of models to check):\n",
+             sep = "")
+        pb <- utils::txtProgressBar(min = 0,
+                                    max = pstar,
+                                    width = 50,
+                                    char = "+",
+                                    style = 3)
+      }
+    k <- 0
+    for (i in seq_len(p - 1)) {
+        for (j in seq(from = i + 1,
+                      to = p)) {
+            k <- k + 1
+            if (progress) {
+                utils::setTxtProgressBar(pb,
+                                         value = k)
+              }
             df_i <- unname(lavaan::fitMeasures(models[[i]],
                                         fit.measures = "df"))
             df_j <- unname(lavaan::fitMeasures(models[[j]],
@@ -108,8 +131,14 @@ models_network2 <- function(object,
                                models[[j]])
             if (net_chk == "x_within_y") {
                 net_out[i, j] <- df_i - df_j
+              } else if (net_chk == "y_within_x") {
+                net_out[j, i] <- df_j - df_i
               }
+            # TODO: Decide what to do with equivalent models
           }
+      }
+    if (progress) {
+        close(pb)
       }
     if (one_df_only) {
         net_out[net_out > 1] <- 0

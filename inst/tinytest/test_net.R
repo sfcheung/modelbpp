@@ -61,7 +61,8 @@ out <- model_set(fit1_nofix,
                  df_change_drop = 2,
                  progress = FALSE)
 expect_identical(models_network(out),
-                 models_network2(out))
+                 models_network2(out,
+                                 progress = FALSE))
 
 # User models
 
@@ -116,7 +117,8 @@ class(ptables) <- c("partables", class(ptables))
 out <- model_set(fit1,
                  partables = ptables,
                  progress = FALSE)
-g <- model_graph(out)
+g <- model_graph(out,
+                 progress = FALSE)
 plot(g)
 tmp <- lapply(E(g), attributes)
 expect_equal(length(E(g)), 3)

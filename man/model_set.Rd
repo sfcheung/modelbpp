@@ -178,7 +178,8 @@ Default is \code{list()}.}
 
 \item{progress}{Whether a progress
 bar will be displayed, implemented
-by the \code{pbapply} package. Default
+by the \code{pbapply} package or by
+\code{utils::txtProgressBar}. Default
 is \code{TRUE}.}
 
 \item{verbose}{Whether additional

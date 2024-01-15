@@ -56,8 +56,11 @@ out <- model_set(fits,
                                    fit2 = .20,
                                    fit4 = .28))
 out
-g <- model_graph(out)
-g2 <- model_graph(out, label_arrow_by_df = FALSE)
+g <- model_graph(out,
+                 progress = FALSE)
+g2 <- model_graph(out,
+                  label_arrow_by_df = FALSE,
+                  progress = FALSE)
 if (interactive()) {
 plot(g)
 plot(g2)
@@ -66,7 +69,9 @@ plot(g2)
 expect_false(is.null(E(g)$label))
 expect_true(is.null(E(g2)$label))
 
-g2 <- model_graph(out, drop_redundant_direct_paths = FALSE)
+g2 <- model_graph(out,
+                  drop_redundant_direct_paths = FALSE,
+                  progress = FALSE)
 if (interactive()) {
 plot(g2)
 }

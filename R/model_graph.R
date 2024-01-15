@@ -221,6 +221,12 @@
 #' `"none"`, this is the width of all
 #' arrows.
 #'
+#' @param progress Whether a progress
+#' bar will be displayed for some
+#' steps (e.g., checking for nested
+#' relations). Default
+#' is `TRUE`.
+#'
 #' @param ... Optional arguments. Not
 #' used for now.
 #'
@@ -280,6 +286,7 @@ model_graph <- function(object,
                         weight_arrows_by_df = c("inverse", "normal", "none"),
                         arrow_min_width = .5,
                         arrow_max_width = 2,
+                        progress = TRUE,
                         ...) {
     user_models <- sapply(added(object$models), is.null) &
                    sapply(dropped(object$models), is.null)
@@ -287,7 +294,8 @@ model_graph <- function(object,
         # warning("One or more user models are present. ",
         #     "User model(s) will be plotted separately.")
         net_out <- models_network2(object,
-                                   one_df_only = FALSE)
+                                   one_df_only = FALSE,
+                                   progress = progress)
       } else {
         net_out <- models_network(object)
       }

@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.27
+# modelbpp 0.1.2.28
 
 ## New Features
 
@@ -52,6 +52,9 @@
   `lavaan::fitMeasures()`. Check the
   argument `more_fit_measures`.
   (0.1.2.27)
+- A progress bar can be shown by
+  `model_graph()` if nested relations
+  need to be determined. (0.1.2.28)
 
 ## Miscellaneous
 
