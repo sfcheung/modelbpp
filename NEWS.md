@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.28
+# modelbpp 0.1.2.29
 
 ## New Features
 
@@ -55,6 +55,15 @@
 - A progress bar can be shown by
   `model_graph()` if nested relations
   need to be determined. (0.1.2.28)
+- The `print` method of `model_set()`
+  support printing short model names,
+  which can be used to interpret
+  the output of `model_graph()`.
+  (0.1.2.29)
+- Users can request `model_graph()`
+  to use short names in the
+  graph, if they are created and
+  stored by `model_set()`. (0.1.2.29)
 
 ## Miscellaneous
 

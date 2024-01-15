@@ -227,6 +227,13 @@
 #' relations). Default
 #' is `TRUE`.
 #'
+#' @param short_names If `TRUE` and
+#' short model names are stored,
+#' they will be used as model labels.
+#' Please print the object with
+#' `short_names = TRUE` to find the
+#' corresponding full model names.
+#'
 #' @param ... Optional arguments. Not
 #' used for now.
 #'
@@ -287,6 +294,7 @@ model_graph <- function(object,
                         arrow_min_width = .5,
                         arrow_max_width = 2,
                         progress = TRUE,
+                        short_names = FALSE,
                         ...) {
     user_models <- sapply(added(object$models), is.null) &
                    sapply(dropped(object$models), is.null)
@@ -355,6 +363,14 @@ model_graph <- function(object,
     out <- igraph::add_layout_(out, igraph::with_sugiyama())
     out <- layer_by_df(out,
                        model_set_out = object)
+    if (short_names) {
+        if (is.character(object$short_names)) {
+            tmp1 <- object$short_names
+            tmp2 <- igraph::V(out)$label
+            igraph::V(out)$full_name <- tmp2
+            igraph::V(out)$label <- tmp1[tmp2]
+          }
+      }
     class(out) <- c("model_graph", class(out))
     out
   }
