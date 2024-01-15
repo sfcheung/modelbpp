@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.29
+# modelbpp 0.1.2.30
 
 ## New Features
 
@@ -59,11 +59,12 @@
   support printing short model names,
   which can be used to interpret
   the output of `model_graph()`.
-  (0.1.2.29)
+  (0.1.2.29, 0.1.2.30)
 - Users can request `model_graph()`
   to use short names in the
   graph, if they are created and
-  stored by `model_set()`. (0.1.2.29)
+  stored by `model_set()`.
+  (0.1.2.29, 0.1.2.30)
 
 ## Miscellaneous
 

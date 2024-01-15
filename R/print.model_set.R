@@ -187,7 +187,7 @@ print.model_set <- function(x,
             tmp2 <- out_table_print$modification
             if (isTRUE(setequal(names(tmp1),
                                 tmp2))) {
-                xx <- unname(tmp1[names(tmp1)])
+                xx <- unname(tmp1[tmp2])
                 out_table_print <- cbind(Short = xx,
                                          out_table_print)
               }
