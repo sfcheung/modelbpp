@@ -52,6 +52,11 @@
 #' `NULL`. If not `NULL`, these are
 #' the additional measures to be printed.
 #'
+#' @param fit_measures_digits The number of
+#' decimal places to be displayed
+#' for additional fit measures, if
+#' requested. Default is 3.
+#'
 #' @param ...  Optional arguments.
 #' Ignored.
 #'
@@ -88,6 +93,7 @@ print.model_set <- function(x,
                             bpp_target = NULL,
                             target_name = "original",
                             more_fit_measures = NULL,
+                            fit_measures_digits = 3,
                             ...) {
     fit_n <- length(x$models)
     fit_names <- names(x$models)
@@ -134,10 +140,12 @@ print.model_set <- function(x,
         out_table["Cumulative"] <- tmp
       }
     if (!is.null(more_fit_measures)) {
-        fit_fm <- lapply(x$fit,
+        fit_fm <- sapply(x$fit,
                          lavaan::fitMeasures,
                          fit.measures = more_fit_measures,
                          output = "vector")
+        fit_fm <- t(fit_fm)
+        out_table <- cbind(out_table, fit_fm)
       }
     out_table_print <- out_table
     out_table_print$Prior <- round(out_table_print$Prior,
@@ -155,6 +163,14 @@ print.model_set <- function(x,
     out_table_print$BPP <- formatC(out_table_print$BPP,
                                    digits = bpp_digits,
                                    format = "f")
+    if (!is.null(more_fit_measures)) {
+        fm_names <- colnames(fit_fm)
+        for (xx in fm_names) {
+            out_table_print[xx] <- formatC(out_table_print[, xx, drop = TRUE],
+                                           digits = fit_measures_digits,
+                                           format = "f")
+          }
+      }
     if (isTRUE(fit_n > max_models)) {
         gt_max_models <- TRUE
         x_tmp <- out_table_print[seq_len(max_models), ]
