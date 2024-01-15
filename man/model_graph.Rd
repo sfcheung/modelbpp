@@ -25,6 +25,7 @@ model_graph(
   arrow_min_width = 0.5,
   arrow_max_width = 2,
   progress = TRUE,
+  short_names = FALSE,
   ...
 )
 }
@@ -138,6 +139,13 @@ bar will be displayed for some
 steps (e.g., checking for nested
 relations). Default
 is \code{TRUE}.}
+
+\item{short_names}{If \code{TRUE} and
+short model names are stored,
+they will be used as model labels.
+Please print the object with
+\code{short_names = TRUE} to find the
+corresponding full model names.}
 
 \item{...}{Optional arguments. Not
 used for now.}

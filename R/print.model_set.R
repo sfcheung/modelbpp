@@ -57,6 +57,15 @@
 #' for additional fit measures, if
 #' requested. Default is 3.
 #'
+#' @param short_names If `TRUE`,
+#' then simple short names will be
+#' printed
+#' along with full model names.
+#' Default is `FALSE`. Short names
+#' can be used when interpreting
+#' the graph from `model_graph()`
+#' if short names are used in the graph.
+#'
 #' @param ...  Optional arguments.
 #' Ignored.
 #'
@@ -94,6 +103,7 @@ print.model_set <- function(x,
                             target_name = "original",
                             more_fit_measures = NULL,
                             fit_measures_digits = 3,
+                            short_names = FALSE,
                             ...) {
     fit_n <- length(x$models)
     fit_names <- names(x$models)
@@ -169,6 +179,18 @@ print.model_set <- function(x,
             out_table_print[xx] <- formatC(out_table_print[, xx, drop = TRUE],
                                            digits = fit_measures_digits,
                                            format = "f")
+          }
+      }
+    if (short_names) {
+        if (is.character(x$short_names)) {
+            tmp1 <- x$short_names
+            tmp2 <- out_table_print$modification
+            if (isTRUE(setequal(names(tmp1),
+                                tmp2))) {
+                xx <- unname(tmp1[names(tmp1)])
+                out_table_print <- cbind(Short = xx,
+                                         out_table_print)
+              }
           }
       }
     if (isTRUE(fit_n > max_models)) {

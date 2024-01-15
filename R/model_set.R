@@ -449,6 +449,8 @@ model_set <- function(sem_out,
     }
   out$model_set_call <- match.call()
   out$sem_out <- sem_out
+  # Create Short Names
+  out <- short_model_names(out)
   class(out) <- c("model_set", class(out))
   out
 }
@@ -501,4 +503,17 @@ bpp <- function(bic,
     di <- exp(-.5 * (bic - bic[1])) * prior
     out <- di / sum(di)
     out
+  }
+
+#' @noRd
+
+short_model_names <- function(object) {
+    if (!is.character(names(object$models))) {
+        return(object)
+      }
+    p <- length(object$models)
+    short_names <- paste0("M", seq_len(p))
+    names(short_names) <- names(object$models)
+    object$short_names <- short_names
+    object
   }

@@ -14,6 +14,7 @@
   target_name = "original",
   more_fit_measures = NULL,
   fit_measures_digits = 3,
+  short_names = FALSE,
   ...
 )
 }
@@ -63,6 +64,15 @@ the additional measures to be printed.}
 decimal places to be displayed
 for additional fit measures, if
 requested. Default is 3.}
+
+\item{short_names}{If \code{TRUE},
+then simple short names will be
+printed
+along with full model names.
+Default is \code{FALSE}. Short names
+can be used when interpreting
+the graph from \code{model_graph()}
+if short names are used in the graph.}
 
 \item{...}{Optional arguments.
 Ignored.}
