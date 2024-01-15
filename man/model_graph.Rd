@@ -24,6 +24,7 @@ model_graph(
   weight_arrows_by_df = c("inverse", "normal", "none"),
   arrow_min_width = 0.5,
   arrow_max_width = 2,
+  progress = TRUE,
   ...
 )
 }
@@ -131,6 +132,12 @@ this is the maximum width of an
 arrow. If \code{weight_arrows_by_df} is
 \code{"none"}, this is the width of all
 arrows.}
+
+\item{progress}{Whether a progress
+bar will be displayed for some
+steps (e.g., checking for nested
+relations). Default
+is \code{TRUE}.}
 
 \item{...}{Optional arguments. Not
 used for now.}

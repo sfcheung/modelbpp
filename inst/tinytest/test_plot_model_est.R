@@ -22,7 +22,8 @@ if (interactive() &&
                                       "m1~y"),
                       progress = FALSE,
                       parallel = FALSE)
-    g1 <- model_graph(out1)
+    g1 <- model_graph(out1,
+                      progress = FALSE)
 
     chk_g1 <- structure(c("drop: m1~x", "drop: m2~m1", "drop: y~m2", "original",
     "original", "original", "original", "original", "original", "add: m2~x",
@@ -39,7 +40,8 @@ if (interactive() &&
                                       "m1~y"),
                       progress = FALSE,
                       parallel = FALSE)
-    g2 <- model_graph(out2)
+    g2 <- model_graph(out2,
+                      progress = FALSE)
 
     chk_g2 <- structure(c("add: m2~x", "add: m2~x", "add: y~m1", "add: y~m1",
     "add: y~x", "add: y~x", "drop: m1~x", "drop: m2~m1", "drop: y~m2",
@@ -72,7 +74,8 @@ if (interactive() &&
                       progress = FALSE,
                       parallel = FALSE)
 
-    g3 <- model_graph(out3)
+    g3 <- model_graph(out3,
+                      progress = FALSE)
     plot(g3)
 
 }

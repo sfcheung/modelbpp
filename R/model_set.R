@@ -169,7 +169,8 @@
 #'
 #' @param progress Whether a progress
 #' bar will be displayed, implemented
-#' by the `pbapply` package. Default
+#' by the `pbapply` package or by
+#' `utils::txtProgressBar`. Default
 #' is `TRUE`.
 #'
 #' @param verbose Whether additional

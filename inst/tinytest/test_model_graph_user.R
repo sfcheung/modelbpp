@@ -44,7 +44,8 @@ out1_df2 <- model_set(fit1,
                       prior_sem_out = c(original = .001,
                                         fit2 = .0005,
                                         fit4 = .97))
-g <- model_graph(out1_df2)
+g <- model_graph(out1_df2,
+                 progress = FALSE)
 if (interactive()) {
 plot(g)
 }

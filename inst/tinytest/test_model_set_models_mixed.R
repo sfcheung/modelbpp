@@ -151,7 +151,8 @@ out_user_prior5 <- model_set(sem_out = fit,
                                                user2 = .50),
                              progress = FALSE,
                              parallel = FALSE)
-g <- model_graph(out_user_prior5)
+g <- model_graph(out_user_prior5,
+                 progress = FALSE)
 # expect_warning(g <- model_graph(out_user_prior5),
 #                pattern = "One or more")
 expect_true(all(c("user2", "user4", "user3") %in%
