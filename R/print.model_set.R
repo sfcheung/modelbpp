@@ -113,10 +113,12 @@ print.model_set <- function(x,
         fit_many_call <- NULL
         k_converged <- NA
         k_post_check <- NA
+        all_converged <- NA
       } else {
         fit_many_call <- x$call
         k_converged <- sum(sapply(x$converged, isTRUE))
         k_post_check <- sum(sapply(x$post_check, isTRUE))
+        all_converged <- all(x$converged)
       }
     if (!models_fitted) {
         change_tmp <- rep(NA, fit_n)
@@ -126,8 +128,12 @@ print.model_set <- function(x,
         postprob_tmp <- rep(NA, fit_n)
       } else {
         change_tmp <- x$change
-        model_df_tmp <- sapply(x$fit, lavaan::fitMeasures,
-                               fit.measures = "df")
+        if (!is.null(x$model_df)) {
+            model_df_tmp <- x$model_df
+          } else {
+            model_df_tmp <- sapply(x$fit, lavaan::fitMeasures,
+                                  fit.measures = "df")
+          }
         model_df_tmp <- unname(model_df_tmp)
         prior_tmp <- x$prior
         bic_tmp <- x$bic
@@ -139,7 +145,12 @@ print.model_set <- function(x,
                             Prior = prior_tmp,
                             BIC = bic_tmp,
                             BPP = postprob_tmp)
-    if (sort_models && models_fitted) {
+    if (models_fitted && !all_converged) {
+        out_table$Converged <- ifelse(x$converged,
+                                      "Yes",
+                                      "No")
+      }
+    if (sort_models && models_fitted && all_converged) {
         i <- order(out_table$BPP,
                    decreasing = TRUE)
         out_table <- out_table[i, ]
@@ -150,6 +161,7 @@ print.model_set <- function(x,
         out_table["Cumulative"] <- tmp
       }
     if (!is.null(more_fit_measures)) {
+        # TODO: Handle nonconvergence
         fit_fm <- sapply(x$fit,
                          lavaan::fitMeasures,
                          fit.measures = more_fit_measures,
@@ -235,7 +247,7 @@ print.model_set <- function(x,
         cat("\n")
       }
     cat("\n")
-    tmp1 <- ifelse(sort_models,
+    tmp1 <- ifelse(sort_models && all(!is.na(out_table$BPP)),
                    " (sorted by BPP)",
                    "")
     if (!models_fitted) tmp1 <- ""
@@ -253,12 +265,21 @@ print.model_set <- function(x,
     rownames(x_tmp) <- x_tmp$modification
     x_tmp$modification <- NULL
     print(x_tmp)
+
+    if (models_fitted && !all_converged) {
+        x_tmp2 <- out_table_print[out_table_print$Converged != "Yes", ]
+        rownames(x_tmp2) <- x_tmp2$modification
+        x_tmp2$modification <- NULL
+        cat("\nModel(s) not converged:\n")
+        print(x_tmp2)
+      }
+
     cat("\nNote:\n")
     cat("- BIC: Bayesian Information Criterion.\n")
     cat("- BPP: BIC posterior probability.\n")
     cat("- model_df: Model degrees of freedom.\n")
     cat("- df_diff: Difference in df compared to the original/target model.\n")
-    if (sort_models) {
+    if (sort_models && ("Cumulative" %in% colnames(x_tmp))) {
         cat("- Cumulative: Cumulative BIC posterior probability.\n")
       }
     if (gt_max_models) {
@@ -269,6 +290,12 @@ print.model_set <- function(x,
                    "set 'max_models' to a larger number",
                    "to print more models, or set it to",
                    "NA to print all models.")
+        catwrap(x, initial = "- ", exdent = 2)
+      }
+    if (models_fitted &&
+        (k_converged != fit_n) &&
+        any(is.na(postprob_tmp))) {
+        x <- "BPP and/or prior not computed because one or more models not converged."
         catwrap(x, initial = "- ", exdent = 2)
       }
     invisible(x)
