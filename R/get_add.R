@@ -259,6 +259,7 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
                                          pt,
                                          add = x_free_str,
                                          do.fit = TRUE,
+                                         optim.force.converged = TRUE,
                                          control = list(max.iter = 1))
         pt_update <- lavaan::parameterTable(sem_out_update)
         pt_update$se <- NA
@@ -270,6 +271,7 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
         sem_out_update <- lavaan::update(sem_out,
                                          pt,
                                          do.fit = TRUE,
+                                         optim.force.converged = TRUE,
                                          control = list(max.iter = 1))
         pt_update <- lavaan::parameterTable(sem_out_update)
         pt_update$se <- NA
