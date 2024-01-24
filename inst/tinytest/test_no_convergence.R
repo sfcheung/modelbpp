@@ -15,4 +15,5 @@ suppressWarnings(out_nc <- model_set(fit,
 expect_true(all(is.na(out_nc$bpp)))
 expect_stdout(print(out_nc),
               "not converged")
+expect_error(model_graph(out_nc))
 }

@@ -296,6 +296,9 @@ model_graph <- function(object,
                         progress = TRUE,
                         short_names = FALSE,
                         ...) {
+    if (!all(object$converged)) {
+        stop("Not all models converged.")
+      }
     user_models <- sapply(added(object$models), is.null) &
                    sapply(dropped(object$models), is.null)
     if (sum(user_models, na.rm = TRUE) != 1) {

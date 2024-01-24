@@ -95,6 +95,27 @@ models_network2 <- function(object,
               "model_set object or a",
               "list of lavaan objects")
       }
+    converged <- sapply(models,
+                        lavaan::lavInspect,
+                        what = "converged")
+    if (!all(converged)) {
+        stop("One or more models did not converge.")
+      }
+    if (inherits(object, "model_set")) {
+        if (!is.null(object$model_df)) {
+            model_dfs <- object$model_df
+          } else {
+            model_dfs <- sapply(models, function(x) {
+                  unname(lavaan::fitMeasures(x,
+                                             fit.measures = "df"))
+                })
+          }
+      } else {
+        model_dfs <- sapply(models, function(x) {
+              unname(lavaan::fitMeasures(x,
+                                         fit.measures = "df"))
+            })
+      }
     p <- length(models)
     i <- which(names(models) == "original")
     net_out <- matrix(0, p, p)
@@ -123,12 +144,12 @@ models_network2 <- function(object,
                 utils::setTxtProgressBar(pb,
                                          value = k)
               }
-            df_i <- unname(lavaan::fitMeasures(models[[i]],
-                                        fit.measures = "df"))
-            df_j <- unname(lavaan::fitMeasures(models[[j]],
-                                        fit.measures = "df"))
-            net_chk <- x_net_y(models[[i]],
-                               models[[j]])
+            df_i <- model_dfs[i]
+            df_j <- model_dfs[j]
+            net_chk <- x_net_y(x = models[[i]],
+                               y = models[[j]],
+                               x_df = df_i,
+                               y_df = df_j)
             if (net_chk == "x_within_y") {
                 net_out[i, j] <- df_i - df_j
               } else if (net_chk == "y_within_x") {
@@ -154,6 +175,8 @@ models_network2 <- function(object,
 
 x_net_y <- function(x,
                     y,
+                    x_df = NULL,
+                    y_df= NULL,
                     crit = 1e-4,
                     check_x_y = TRUE) {
     # Based on semTools:::x.within.y().
@@ -161,8 +184,12 @@ x_net_y <- function(x,
         chk <- check_x_net_y(x, y,
                              ignore_fixed_x = FALSE)
       }
-    x_df <- lavaan::fitMeasures(x, fit.measures = "df")
-    y_df <- lavaan::fitMeasures(y, fit.measures = "df")
+    if (is.null(x_df)) {
+        x_df <- lavaan::fitMeasures(x, fit.measures = "df")
+      }
+    if (is.null(y_df)) {
+        y_df <- lavaan::fitMeasures(y, fit.measures = "df")
+      }
     # Reorder the models f1 >= f2 on df
     if (x_df < y_df) {
         f1 <- y
