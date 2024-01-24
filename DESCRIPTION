@@ -1,6 +1,6 @@
 Package: modelbpp
 Title: Model BIC Posterior Probability
-Version: 0.1.2.30
+Version: 0.1.2.31
 Authors@R:
     c(person(given = "Shu Fai",
              family = "Cheung",
@@ -23,7 +23,7 @@ Description: Fits the neighboring models of a fitted
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 Suggests:
     knitr,
     rmarkdown,
