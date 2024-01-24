@@ -197,15 +197,21 @@ fit_many <- function(model_list,
   #   }
 
   if (has_data) {
-      fit_i <- function(x) {
+      fit_i <- function(x,
+                        opt_args = list()) {
+          slot_opt1 <- utils::modifyList(slot_opt,
+                                         opt_args)
           lavaan::lavaan(model = x,
-                         slotOptions = slot_opt,
+                         slotOptions = slot_opt1,
                          data = raw_data)
         }
     } else {
-      fit_i <- function(x) {
+      fit_i <- function(x,
+                        opt_args = list()) {
+          slot_opt1 <- utils::modifyList(slot_opt,
+                                         opt_args)
           lavaan::lavaan(model = x,
-                         slotOptions = slot_opt,
+                         slotOptions = slot_opt1,
                          sample.cov = sem_out_cov,
                          sample.mean = sem_out_mean,
                          sample.nobs = sem_out_nobs,
@@ -300,18 +306,23 @@ fit_many <- function(model_list,
           rt <- system.time(fit_list <- suppressWarnings(lapply(model_list, fit_i)))
         }
     }
-
+  df_list <- mapply(fit_many_get_df,
+                    fit = fit_list,
+                    model = model_list,
+                    MoreArgs = list(fit_i = fit_i),
+                    SIMPLIFY = TRUE)
   if (is.null(original)) {
       sem_out_df <- as.numeric(lavaan::fitMeasures(sem_out, "df"))
-      change_list <- sapply(fit_list,
-          function(x) sem_out_df - as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
+      # change_list <- sapply(fit_list,
+      #     function(x) sem_out_df - as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
+      change_list <- sem_out_df - df_list
     } else {
       if (original %in% names(model_list)) {
           i_original <- match(original, names(model_list))
-          change_list <- sapply(fit_list,
-              function(x) as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
-          df_original <- change_list[i_original]
-          change_list <- df_original - change_list
+          # change_list <- sapply(fit_list,
+          #     function(x) as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
+          df_original <- df_list[i_original]
+          change_list <- df_original - df_list
         } else {
           change_list <- rep(NA, p_models)
         }
@@ -324,6 +335,7 @@ fit_many <- function(model_list,
               change = change_list,
               converged = converged_list,
               post_check = post_check_list,
+              model_df = df_list,
               call = match.call())
   class(out) <- c("sem_outs", class(out))
   out
@@ -358,4 +370,26 @@ lavaan_to_sem_outs <- function(x,
                 call = match.call())
     class(out) <- c("sem_outs", class(out))
     out
+  }
+
+#' @noRd
+
+fit_many_get_df <- function(fit,
+                            model,
+                            fit_i) {
+    out <- tryCatch(lavaan::fitMeasures(fit, fit.measures = "df"),
+                    error = function(e) e)
+    if (!inherits(out, "error")) {
+        return(as.numeric(out))
+      }
+    fit1 <- suppressWarnings(fit_i(model,
+                                   opt_args = list(optim.force.converged = TRUE,
+                                                   do.fit = FALSE,
+                                                   warn = FALSE)))
+    out <- tryCatch(lavaan::fitMeasures(fit1, fit.measures = "df"),
+                    error = function(e) e)
+    if (!inherits(out, "error")) {
+        return(as.numeric(out))
+      }
+    return(NA)
   }

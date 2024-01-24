@@ -319,6 +319,10 @@ model_set <- function(sem_out,
           if (is.null(names(sem_out))) {
               stop("The list for sem_out needs to be a named list.")
             }
+          tmp <- sapply(sem_out, lavaan::lavInspect, what = "converged")
+          if (any(!tmp)) {
+              stop("One or more supplied models have not converged.")
+            }
           user_fits <- TRUE
           model_set_out <- NULL
           remove_duplicated <- FALSE
@@ -408,6 +412,7 @@ model_set <- function(sem_out,
                       change = NULL,
                       converged = NULL,
                       post_check = NULL,
+                      model_df = NULL,
                       call = NULL)
           class(out) <- c("sem_outs", class(out))
         }
@@ -415,7 +420,11 @@ model_set <- function(sem_out,
   out$models <- mod_to_fit
   if (compute_bpp && !is.null(out$fit)) {
       bic_list <- sapply(out$fit,
-            function(x) as.numeric(lavaan::fitMeasures(x, "bic")))
+            function(x) {
+                out <- tryCatch(as.numeric(lavaan::fitMeasures(x, "bic")),
+                                error = function(e) NA)
+                out
+              })
       out$bic <- bic_list
       if (!is.null(prior_sem_out)) {
           if (sum(prior_sem_out) >= 1) {
@@ -446,6 +455,11 @@ model_set <- function(sem_out,
     } else {
       out$bic <- NULL
       out$bpp <- NULL
+    }
+  # TODO: Finalize what to do with NA BIC
+  if (any(is.na(out$bic)) && !is.null(out$bic)) {
+      out$prior <- rep(NA, length(bic_list))
+      out$bpp <- rep(NA, length(bic_list))
     }
   out$model_set_call <- match.call()
   out$sem_out <- sem_out

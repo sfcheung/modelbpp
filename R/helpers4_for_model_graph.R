@@ -3,10 +3,18 @@
 #' @noRd
 
 layer_by_df <- function(g,
-                         model_set_out) {
-  model_dfs <- sapply(model_set_out$fit,
-                      lavaan::fitMeasures,
-                      fit.measures = "df")
+                        model_set_out) {
+  if (!is.null(model_set_out$model_df)) {
+      model_dfs <- model_set_out$model_df
+    } else {
+      if (!all(model_set_out$converged)) {
+          stop("Not all models converged.")
+        } else {
+          model_dfs <- sapply(model_set_out$fit,
+                              lavaan::fitMeasures,
+                              fit.measures = "df")
+        }
+    }
   names(model_dfs) <- names(model_set_out$fit)
   tmp <- sort(unique(model_dfs),
               decreasing = TRUE)

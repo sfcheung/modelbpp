@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.30
+# modelbpp 0.1.2.31
 
 ## New Features
 
@@ -94,6 +94,8 @@
 - Improved the speed in identifying
   identical parameter tables.
   (0.1.2.22, 0.1.2.23)
+- Revised several functions to handle
+  nonconvergence. (0.1.2.31)
 
 ## Bug Fixes
 
