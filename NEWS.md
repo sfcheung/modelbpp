@@ -1,4 +1,4 @@
-# modelbpp 0.1.2.31
+# modelbpp 0.1.2.32
 
 ## New Features
 
@@ -96,6 +96,10 @@
   (0.1.2.22, 0.1.2.23)
 - Revised several functions to handle
   nonconvergence. (0.1.2.31)
+- Revised the print method for
+  `model_set`-class object to print
+  models that failed the past.check
+  of `lavaan`. (0.1.2.32)
 
 ## Bug Fixes
 

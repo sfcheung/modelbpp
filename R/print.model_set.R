@@ -114,11 +114,13 @@ print.model_set <- function(x,
         k_converged <- NA
         k_post_check <- NA
         all_converged <- NA
+        all_post_checked <- NA
       } else {
         fit_many_call <- x$call
         k_converged <- sum(sapply(x$converged, isTRUE))
         k_post_check <- sum(sapply(x$post_check, isTRUE))
         all_converged <- all(x$converged)
+        all_post_checked <- all(x$post_check)
       }
     if (!models_fitted) {
         change_tmp <- rep(NA, fit_n)
@@ -141,15 +143,21 @@ print.model_set <- function(x,
       }
     out_table <- data.frame(modification = fit_names,
                             model_df = model_df_tmp,
-                            df_diff = change_tmp,
-                            Prior = prior_tmp,
-                            BIC = bic_tmp,
-                            BPP = postprob_tmp)
+                            df_diff = change_tmp)
     if (models_fitted && !all_converged) {
         out_table$Converged <- ifelse(x$converged,
                                       "Yes",
                                       "No")
       }
+    if (models_fitted && !all_post_checked) {
+        out_table$Check <- ifelse(x$post_check,
+                                      "Passed",
+                                      "Failed")
+      }
+    out_table$Prior <- prior_tmp
+    out_table$BIC <- bic_tmp
+    out_table$BPP <- postprob_tmp
+
     if (sort_models && models_fitted && all_converged) {
         i <- order(out_table$BPP,
                    decreasing = TRUE)
@@ -274,6 +282,15 @@ print.model_set <- function(x,
         print(x_tmp2)
       }
 
+    if (models_fitted && !all_post_checked) {
+        x_tmp2 <- out_table_print[out_table_print$Check != "Passed", ]
+        rownames(x_tmp2) <- x_tmp2$modification
+        x_tmp2$modification <- NULL
+        cat("\nModel(s) failed lavaan's post.check:\n")
+        print(x_tmp2)
+      }
+
+
     cat("\nNote:\n")
     cat("- BIC: Bayesian Information Criterion.\n")
     cat("- BPP: BIC posterior probability.\n")
@@ -296,6 +313,11 @@ print.model_set <- function(x,
         (k_converged != fit_n) &&
         any(is.na(postprob_tmp))) {
         x <- "BPP and/or prior not computed because one or more models not converged."
+        catwrap(x, initial = "- ", exdent = 2)
+      }
+    if (models_fitted &&
+        (k_post_check != fit_n)) {
+        x <- "Interpret with caution. One or more models failed lavaan's post.check."
         catwrap(x, initial = "- ", exdent = 2)
       }
     invisible(x)
