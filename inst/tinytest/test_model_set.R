@@ -1,5 +1,7 @@
 suppressMessages(library(lavaan))
 
+# Basic Tests
+
 dat <- dat_path_model
 
 mod <-
@@ -29,6 +31,13 @@ expect_equivalent(
     info = "BIC as expected"
   )
 
+# Check more_fit_measures
+
+expect_stdout(print(out,
+                    more_fit_measures = c("CFI", "RMSEA"),
+                    fit_measures_digits = 2),
+              "rmsea")
+
 out <- model_set(fit,
                  df_change_add = 2,
                  df_change_drop = 2,
@@ -54,66 +63,6 @@ expect_equivalent(
 expect_stdout(print(out),
               "The models (sorted by BPP)",
               fixed = TRUE)
-
-# User Prior
-
-mod <-
-"
-x2 ~ x3 + 0*x4
-x1 ~ x3
-"
-
-fit <- sem(mod,
-           dat_path_model,
-           fixed.x = TRUE)
-
-prior0 <- .50
-out <- model_set(fit,
-                 prior_sem_out = prior0,
-                 parallel = FALSE,
-                 progress = FALSE)
-bic <- out$bic
-i <- which(names(bic) == "original")
-p <- length(bic)
-prior <- rep((1 - prior0) / (p - 1), p)
-prior[i] <- prior0
-d <- exp(-.5 * (bic - bic[1])) * prior
-chk_bpp <- d / sum(d)
-
-expect_equivalent(
-    out$bpp,
-    chk_bpp,
-    info = "Posterior probability as expected: User prior"
-  )
-
-# Target BPP
-
-out <- model_set(fit,
-                 progress = FALSE,
-                 parallel = FALSE)
-
-postprob0 <- .75
-
-e <- exp(-.5 * (out$bic - out$bic[1]))
-e1 <- e[5]
-estar <- sum(e[-5])
-k <- length(e)
-p1 <- (1 / (k - 1)) * postprob0 * estar / (e1 * (1 - postprob0) + postprob0 * estar / (k - 1))
-
-p1_out <- min_prior(out$bic,
-                    bpp_target = .75)
-
-out <- model_set(fit,
-                 prior_sem_out = unname(p1),
-                 progress = FALSE,
-                 parallel = FALSE)
-
-expect_equal(p1_out,
-              unname(p1),
-              info = "Target BPP")
-expect_equal(unname(out$bpp["original"]),
-              postprob0,
-              info = "Target BPP")
 
 # Test previous output
 
@@ -147,10 +96,10 @@ out1 <- model_set(fit,
 
 expect_identical(out0$bic,
                   out1$bic,
-                  info = "User supplied model_set")
+                  info = "User supplied partables")
 expect_identical(out0$bpp,
                   out1$bpp,
-                  info = "User supplied model_set")
+                  info = "User supplied partables")
 
 # Test no fit
 
@@ -169,28 +118,8 @@ out <- model_set(fit,
                  parallel = FALSE)
 expect_stdout(print(out),
               "not fitted",
-              fixed = TRUE)
-
-# Update bpp
-
-out <- model_set(fit,
-                 progress = FALSE,
-                 parallel = FALSE)
-
-out2 <- model_set(fit,
-                  prior_sem_out = .40,
-                  parallel = FALSE,
-                  progress = FALSE)
-
-out3 <- model_set(model_set_out = out,
-                  fit_models = FALSE,
-                  prior_sem_out = .40,
-                  progress = FALSE,
-                  parallel = FALSE)
-
-expect_equal(out2$bpp,
-              out3$bpp,
-              info = "BPP update")
+              fixed = TRUE,
+              info = "fit_models = FALSE")
 
 # Gen models
 
@@ -198,11 +127,13 @@ out <- model_set(fit,
                  progress = FALSE,
                  parallel = FALSE)
 out2 <- gen_models(fit,
-                   output = "model_set")
+                   output = "model_set",
+                   progress = FALSE)
 out3 <- model_set(model_set_out = out2,
                   parallel = FALSE,
                   progress = FALSE)
-out4 <- gen_models(fit)
+out4 <- gen_models(fit,
+                   progress = FALSE)
 out5 <- model_set(sem_out = fit,
                   partables = out4,
                   progress = FALSE,

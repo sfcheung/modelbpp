@@ -48,4 +48,4 @@ expect_true(
   )
 
 time1 <- proc.time()
-print(as.vector((time1 - time0)))
+# print(as.vector((time1 - time0)))

@@ -77,6 +77,11 @@
 #' only models with actual *df* change
 #' equal to expected *df* change.
 #'
+#' @param progress Whether a progress
+#' bar will be displayed, implemented
+#' by the `pbapply` package. Default
+#' is `FALSE`.
+#'
 #' @return An object of the class
 #' `partables`, a named list of parameter
 #' tables, each of them to be used by
@@ -112,7 +117,8 @@ get_add <- function(sem_out,
                      df_change = 1,
                      model_id = NA,
                      keep_correct_df_change = TRUE,
-                     remove_duplicated = TRUE
+                     remove_duplicated = TRUE,
+                     progress = FALSE
                     ) {
     if (missing(sem_out)) stop("sem_out is not supplied.")
     if (!inherits(sem_out, "lavaan")) {
@@ -124,9 +130,10 @@ get_add <- function(sem_out,
     pt <- pt[pt$op != ":=", ]
 
     # Get the MI table
-    mt <- lavaan::modificationIndices(sem_out,
+    # Suppress the warning about equality constraints.
+    mt <- suppressWarnings(lavaan::modificationIndices(sem_out,
                     standardized = FALSE,
-                    power = FALSE)
+                    power = FALSE))
 
     # Remove those already in the parameter tables
     mt1 <- mt_exclude_existing_pars(mt = mt, pt = pt)
@@ -176,8 +183,19 @@ get_add <- function(sem_out,
         sets_to_gen2_ok <- sets_remove_inadmissible(sets_to_gen2)
 
         # Generate parameter tables
-        out <- lapply(sets_to_gen2_ok, gen_pt_add, pt = pt, sem_out = sem_out,
-                      from = model_id)
+        if (progress) {
+            cat("\nGenerate", length(sets_to_gen2_ok), "less restrictive model(s):\n")
+            op_old <- pbapply::pboptions(type = "timer")
+            out <- pbapply::pblapply(sets_to_gen2_ok,
+                                     gen_pt_add,
+                                     pt = pt,
+                                     sem_out = sem_out,
+                                     from = model_id)
+            pbapply::pboptions(op_old)
+          } else {
+            out <- lapply(sets_to_gen2_ok, gen_pt_add, pt = pt, sem_out = sem_out,
+                          from = model_id)
+          }
       } else {
         out <- list()
       }
@@ -199,7 +217,7 @@ get_add <- function(sem_out,
     attr(out, "sem_out") <- sem_out
     class(out) <- c("partables", class(out))
     if (remove_duplicated) {
-        out <- unique_models(out)
+        out <- unique_models(out, progress = progress)
       }
     out
   }
@@ -241,6 +259,7 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
                                          pt,
                                          add = x_free_str,
                                          do.fit = TRUE,
+                                         optim.force.converged = TRUE,
                                          control = list(max.iter = 1))
         pt_update <- lavaan::parameterTable(sem_out_update)
         pt_update$se <- NA
@@ -252,6 +271,7 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
         sem_out_update <- lavaan::update(sem_out,
                                          pt,
                                          do.fit = TRUE,
+                                         optim.force.converged = TRUE,
                                          control = list(max.iter = 1))
         pt_update <- lavaan::parameterTable(sem_out_update)
         pt_update$se <- NA

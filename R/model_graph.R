@@ -12,17 +12,35 @@
 #'
 #' ## Construction of the Graph
 #'
+#' This is the default way to construct
+#' the graph when the model set is
+#' automatically by [model_set()].
+#'
 #' - Each model is connected by an
 #'  arrow, pointing from one model to
-#'  another model that is formed by
+#'  another model that
 #'
-#'    a. adding one free parameter, or
+#'    a. can be formed by adding one
+#'       or more free parameter, or
 #'
-#'    b, releasing one equality constraint
-#'  between two parameters.
+#'    b. can be formed by releasing one
+#'       or more equality constraint
+#'       between two
+#'       parameters.
+#'
+#'    c. has nested relation with this
+#'       model as determined by the
+#'       method proposed by Bentler
+#'       and Satorra (2010), if the
+#'       models are not generated
+#'       internally.
 #'
 #'  That is, it points to a model with
-#'  one *less* degree of freedom.
+#'  more degrees of freedom (more
+#'  complicated),
+#'  and
+#'  is nested within that model in either
+#'  parameter sense or covariance sense.
 #'
 #' - By default, the size of the node
 #'  for each model is scaled by its
@@ -30,10 +48,15 @@
 #'  available. See *The Size of a Node*
 #'  below.
 #'
-#' - The original model, the models with
-#'  more degrees of freedom,
+#' - If a model is designated as the
+#'  original (target) model,
+#'  than he original model, the models
+#'  with
+#'  more degrees of freedom than the
+#'  original model,
 #'  and the models with fewer degrees
-#'  of freedom are colored differently.
+#'  of freedom than the original models,
+#'  are colored differently.
 #'
 #' - The default layout is the Sugiyama
 #'  layout, with simpler models (models
@@ -42,12 +65,38 @@
 #'  the network, the more the degrees
 #'  of freedom it has. This layout is
 #'  suitable for showing the nested
-#'  relations of the models.
+#'  relations of the models. Models on
+#'  the same level (layer) horizontally
+#'  have the same model *df*.
 #'
 #' The output is an `igraph` object.
 #' Users can customize it in any way
 #' they want using functions from
 #' the `igraph` package.
+#'
+#' If a model has no nested relation
+#' with all other model, it will not
+#' be connected to other models.
+#'
+#' If no model is named `original`
+#' (default is `"original"`), then no
+#' model is colored as the original model.
+#'
+#' ## User-Provided Models
+#'
+#' If `object` contained one or more
+#' user-provided models which are not
+#' generated automatically by
+#' [model_set()] or similar functions
+#' (e.g., [gen_models()]), then the
+#' method by Bentler and Satorra (2010)
+#' will be used to determine model
+#' relations. Models connected by an
+#' arrow has a nested relation based on
+#' the NET method by Bentler and Satorra
+#' (2010). An internal function inspired
+#' by [semTools::net()] is used to
+#' implement the NET method.
 #'
 #' ## The Size of a Node
 #'
@@ -111,6 +160,10 @@
 #' from the original model.
 #' Default is `"lightgreen"`.
 #'
+#' @param color_others The color
+#' of other models not specified above.
+#' Default is `"grey50"`.
+#'
 #' @param color_label The color of the
 #' text labels of the nodes. Default
 #' is `"black"`.
@@ -119,8 +172,87 @@
 #' the labels of the nodes. Default is
 #' 1.
 #'
+#' @param original String. The name
+#' of the original model (target model).
+#' Default is `"original"`.
+#'
+#' @param drop_redundant_direct_paths
+#' Logical. Whether the redundant direct
+#' path between two models. A direct path
+#' is redundant if two models are also
+#' connected through at least one
+#' another model. Default is `TRUE`.
+#'
+#' @param label_arrow_by_df If `TRUE`,
+#' then an arrow (edge) is always labelled
+#' by the difference in model *df*s.
+#' If `FALSE`, then no arrows are
+#' labelled. If `NULL`, then arrows are
+#' labelled when not all differences
+#' in model *df*s are equal to one.
+#' Default is `NULL`.
+#'
+#' @param arrow_label_size The size of
+#' the labels of the arrows (edges), if labelled.
+#' Default is 1.
+#'
+#' @param weight_arrows_by_df String.
+#' Use if model *df*
+#' differences are stored.
+#' If `"inverse"`, larger the
+#' difference in model *df*, *narrower*
+#' an arrow. That is, more similar two
+#' models are, thicker the arrow. If
+#' `"normal"`, larger the difference
+#' in model *df*, *wider* an arrow.
+#' If `"none"`, then arrow width is
+#' constant, set to `arrow_max_width`.
+#' Default is `"inverse"`.
+#'
+#' @param arrow_min_width If
+#' `weight_arrows_by_df` is not `"none"`,
+#' this is the minimum width of an
+#' arrow.
+#'
+#' @param arrow_max_width If
+#' `weight_arrows_by_df` is not `"none"`,
+#' this is the maximum width of an
+#' arrow. If `weight_arrows_by_df` is
+#' `"none"`, this is the width of all
+#' arrows.
+#'
+#' @param progress Whether a progress
+#' bar will be displayed for some
+#' steps (e.g., checking for nested
+#' relations). Default
+#' is `TRUE`.
+#'
+#' @param short_names If `TRUE` and
+#' short model names are stored,
+#' they will be used as model labels.
+#' Please print the object with
+#' `short_names = TRUE` to find the
+#' corresponding full model names.
+#'
 #' @param ... Optional arguments. Not
 #' used for now.
+#'
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+#' The internal function for nesting
+#' inspired by [semTools::net()],
+#' which was developed by
+#' Terrence D. Jorgensen.
+#'
+#' @references
+#' Bentler, P. M., & Satorra, A. (2010).
+#' Testing model nesting and equivalence.
+#' *Psychological Methods, 15*(2),
+#' 111--123. \doi{10.1037/a0019625}
+#' Asparouhov, T., & Muthén, B. (2019).
+#' Nesting and Equivalence Testing for
+#' Structural Equation Models.
+#' *Structural Equation Modeling: A Multidisciplinary Journal, 26*(2),
+#' 302--309. \doi{10.1080/10705511.2018.1513795}
 #'
 #' @examples
 #'
@@ -151,12 +283,42 @@ model_graph <- function(object,
                         color_original = "lightblue",
                         color_add = "burlywood1",
                         color_drop = "lightgreen",
+                        color_others = "lightgrey",
                         color_label = "black",
                         node_label_size = 1,
+                        original = "original",
+                        drop_redundant_direct_paths = TRUE,
+                        label_arrow_by_df = NULL,
+                        arrow_label_size = 1,
+                        weight_arrows_by_df = c("inverse", "normal", "none"),
+                        arrow_min_width = .5,
+                        arrow_max_width = 2,
+                        progress = TRUE,
+                        short_names = FALSE,
                         ...) {
-    net_out <- models_network(object)
+    if (!all(object$converged)) {
+        stop("Not all models converged.")
+      }
+    user_models <- sapply(added(object$models), is.null) &
+                   sapply(dropped(object$models), is.null)
+    if (sum(user_models, na.rm = TRUE) != 1) {
+        # warning("One or more user models are present. ",
+        #     "User model(s) will be plotted separately.")
+        net_out <- models_network2(object,
+                                   one_df_only = FALSE,
+                                   progress = progress)
+      } else {
+        net_out <- models_network(object)
+      }
     out <- igraph::graph_from_adjacency_matrix(net_out,
-                                               mode = "directed")
+                                               mode = "directed",
+                                               weight = "df")
+    if (drop_redundant_direct_paths) {
+        out <- delete_all_redundant_direct(out)
+      }
+    # Store Basic Info
+    out <- doc_model_graph(object,
+                           out)
     if (node_size_by_x) {
         if (is.null(x)) {
             if (inherits(object, "model_set")) {
@@ -175,11 +337,13 @@ model_graph <- function(object,
     igraph::V(out)$size <- node_size
     p <- ncol(net_out)
     m_names <- colnames(net_out)
-    i_original <- which(m_names == "original")
+    i_original <- which(m_names == original)
     i_add <- grepl("^add: ", m_names)
     i_drop <- grepl("^drop: ", m_names)
-    color_tmp <- rep("", p)
-    color_tmp[i_original] <- color_original
+    color_tmp <- rep(color_others, p)
+    if (length(i_original) > 0) {
+        color_tmp[i_original] <- color_original
+      }
     color_tmp[i_add] <- color_add
     color_tmp[i_drop] <- color_drop
     igraph::V(out)$color <- color_tmp
@@ -189,7 +353,27 @@ model_graph <- function(object,
     igraph::V(out)$label.cex <- node_label_size
     igraph::V(out)$label.family <- "sans"
     igraph::E(out)$arrow.size <- .75
+    out <- label_by_df(out,
+                       mode = label_arrow_by_df)
+    if (!is.null(igraph::E(out)$df)) {
+        weight_arrows_by_df <- match.arg(weight_arrows_by_df)
+        out <- edge_weight(out,
+                           mode = weight_arrows_by_df,
+                           min_width = arrow_min_width,
+                           max_width = arrow_max_width)
+      }
+    igraph::E(out)$label.cex <- arrow_label_size
     out <- igraph::add_layout_(out, igraph::with_sugiyama())
+    out <- layer_by_df(out,
+                       model_set_out = object)
+    if (short_names) {
+        if (is.character(object$short_names)) {
+            tmp1 <- object$short_names
+            tmp2 <- igraph::V(out)$label
+            igraph::V(out)$full_name <- tmp2
+            igraph::V(out)$label <- tmp1[tmp2]
+          }
+      }
     class(out) <- c("model_graph", class(out))
     out
   }

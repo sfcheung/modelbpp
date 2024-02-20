@@ -32,6 +32,18 @@
 #' [get_drop()] to generate the list of
 #' models.
 #'
+#' @param original String. If provided,
+#' it should be a name of a model
+#' in `model_list`, with which
+#' differences in model degrees of
+#' freedom will be computed for other
+#' models. If `NULL`, the default,
+#' then the model in `sem_out` will
+#' be used to computed the differences
+#' in model degrees of freedom. If `NA`,
+#' then differences in model *df* will
+#' not be computed.
+#'
 #' @param parallel If `TRUE`, parallel
 #' processing will be used to fit the
 #' models. Default is `FALSE`.
@@ -109,6 +121,7 @@
 
 fit_many <- function(model_list,
                      sem_out,
+                     original = NULL,
                      parallel = FALSE,
                      ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
                      make_cluster_args = list(),
@@ -123,17 +136,89 @@ fit_many <- function(model_list,
   p_models <- length(model_list)
 
   slot_opt <- sem_out@Options
-  slot_smp <- sem_out@SampleStats
-  slot_dat <- sem_out@Data
+  # slot_smp <- sem_out@SampleStats
+  # slot_dat <- sem_out@Data
   slot_opt$se <- "none"
   slot_opt$baseline <- FALSE
   slot_opt$verbose <- FALSE
 
-  fit_i <- function(x) {
-      lavaan::lavaan(model = x,
-                     slotOptions = slot_opt,
-                     slotSampleStats = slot_smp,
-                     slotData = slot_dat)
+  raw_data <- tryCatch(lavaan::lavInspect(sem_out, "data"),
+                       error = function(e) e)
+  if (inherits(raw_data, "error")) {
+      raw_data <- NULL
+      has_data <- FALSE
+    } else {
+      colnames(raw_data) <- lavaan::lavNames(sem_out)
+      rownames(raw_data) <- lavaan::lavInspect(sem_out, "case.idx")
+      has_data <- TRUE
+    }
+
+  if (has_data) {
+      # Placeholder
+    } else {
+      sem_out_nobs <- lavaan::lavInspect(sem_out, "nobs")
+      sem_out_sp <- lavaan::lavInspect(sem_out, "sampstat")
+      ng <- lavaan::lavInspect(sem_out, "ngroups")
+      if (ng > 1) {
+          sem_out_cov <- lapply(sem_out_sp, function(x) x$cov)
+        } else {
+          sem_out_cov <- sem_out_sp$cov
+        }
+      if (ng > 1) {
+          sem_out_mean <- lapply(sem_out_sp, function(x) x$mean)
+        } else {
+          sem_out_mean <- sem_out_sp$mean
+        }
+      sem_thresholds <- lavaan::lavInspect(sem_out, "thresholds")
+      if (is.list(sem_thresholds)) {
+          if (all(sapply(sem_thresholds, length) == 0)) {
+              sem_thresholds <- NULL
+            }
+        } else {
+          if (length(sem_thresholds) == 0) {
+              sem_thresholds <- NULL
+            }
+        }
+      sem_out_estimator <- lavaan::lavInspect(sem_out, "options")$estimator
+      if (sem_out_estimator == "DWLS") {
+          sem_out_WLS.V <- lavaan::lavInspect(sem_out, "WLS.V")
+          sem_out_NACOV <- lavaan::lavInspect(sem_out, "gamma")
+        } else {
+          sem_out_WLS.V <- NULL
+          sem_out_NACOV <- NULL
+        }
+    }
+
+  # fit_i <- function(x) {
+  #     lavaan::lavaan(model = x,
+  #                    slotOptions = slot_opt,
+  #                    slotSampleStats = slot_smp,
+  #                    slotData = slot_dat)
+  #   }
+
+  if (has_data) {
+      fit_i <- function(x,
+                        opt_args = list()) {
+          slot_opt1 <- utils::modifyList(slot_opt,
+                                         opt_args)
+          lavaan::lavaan(model = x,
+                         slotOptions = slot_opt1,
+                         data = raw_data)
+        }
+    } else {
+      fit_i <- function(x,
+                        opt_args = list()) {
+          slot_opt1 <- utils::modifyList(slot_opt,
+                                         opt_args)
+          lavaan::lavaan(model = x,
+                         slotOptions = slot_opt1,
+                         sample.cov = sem_out_cov,
+                         sample.mean = sem_out_mean,
+                         sample.nobs = sem_out_nobs,
+                         semple.th = sem_thresholds,
+                         WLS.V = sem_out_WLS.V,
+                         NACOV = sem_out_NACOV)
+        }
     }
 
   # Check ncores
@@ -194,6 +279,7 @@ fit_many <- function(model_list,
                     })
       if (progress) {
           op_old <- pbapply::pboptions(type = "timer")
+          cat("\nFit the", length(model_list), "models:\n")
           tmp <- tryCatch({rt <- system.time(fit_list <- suppressWarnings(
                             pbapply::pblapply(model_list,
                                               fit_i,
@@ -214,15 +300,33 @@ fit_many <- function(model_list,
       parallel::stopCluster(cl)
     } else {
       if (progress) {
+          cat("\nFit the", length(model_list), "model(s) (duplicated models removed):\n")
           rt <- system.time(fit_list <- suppressWarnings(pbapply::pblapply(model_list, fit_i)))
         } else {
           rt <- system.time(fit_list <- suppressWarnings(lapply(model_list, fit_i)))
         }
     }
-
-  sem_out_df <- as.numeric(lavaan::fitMeasures(sem_out, "df"))
-  change_list <- sapply(fit_list,
-      function(x) sem_out_df - as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
+  df_list <- mapply(fit_many_get_df,
+                    fit = fit_list,
+                    model = model_list,
+                    MoreArgs = list(fit_i = fit_i),
+                    SIMPLIFY = TRUE)
+  if (is.null(original)) {
+      sem_out_df <- as.numeric(lavaan::fitMeasures(sem_out, "df"))
+      # change_list <- sapply(fit_list,
+      #     function(x) sem_out_df - as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
+      change_list <- sem_out_df - df_list
+    } else {
+      if (original %in% names(model_list)) {
+          i_original <- match(original, names(model_list))
+          # change_list <- sapply(fit_list,
+          #     function(x) as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
+          df_original <- df_list[i_original]
+          change_list <- df_original - df_list
+        } else {
+          change_list <- rep(NA, p_models)
+        }
+    }
   converged_list <- sapply(fit_list,
       function(x) lavaan::lavInspect(x, "converged"))
   post_check_list <- sapply(fit_list,
@@ -231,7 +335,61 @@ fit_many <- function(model_list,
               change = change_list,
               converged = converged_list,
               post_check = post_check_list,
+              model_df = df_list,
               call = match.call())
   class(out) <- c("sem_outs", class(out))
   out
 }
+
+#' @noRd
+
+lavaan_to_sem_outs <- function(x,
+                               original = NULL) {
+    p_models <- length(x)
+    if (is.null(original)) {
+        change_list <- rep(NA, x)
+      } else {
+        if (original %in% names(x)) {
+            i_original <- match(original, names(x))
+            change_list <- sapply(x,
+                function(x) as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
+            df_original <- change_list[i_original]
+            change_list <- df_original - change_list
+          } else {
+            change_list <- rep(NA, p_models)
+          }
+      }
+    converged_list <- sapply(x,
+        function(x) lavaan::lavInspect(x, "converged"))
+    post_check_list <- sapply(x,
+        function(x) lavaan::lavInspect(x, "post.check"))
+    out <- list(fit = x,
+                change = change_list,
+                converged = converged_list,
+                post_check = post_check_list,
+                call = match.call())
+    class(out) <- c("sem_outs", class(out))
+    out
+  }
+
+#' @noRd
+
+fit_many_get_df <- function(fit,
+                            model,
+                            fit_i) {
+    out <- tryCatch(lavaan::fitMeasures(fit, fit.measures = "df"),
+                    error = function(e) e)
+    if (!inherits(out, "error")) {
+        return(as.numeric(out))
+      }
+    fit1 <- suppressWarnings(fit_i(model,
+                                   opt_args = list(optim.force.converged = TRUE,
+                                                   do.fit = FALSE,
+                                                   warn = FALSE)))
+    out <- tryCatch(lavaan::fitMeasures(fit1, fit.measures = "df"),
+                    error = function(e) e)
+    if (!inherits(out, "error")) {
+        return(as.numeric(out))
+      }
+    return(NA)
+  }

@@ -41,6 +41,31 @@
 #' achieve `bpp_target`. Default
 #' is `NULL`.
 #'
+#' @param target_name The name of the
+#' target model as appeared in the
+#' model list. Default is `"original"`.
+#' Used if `bpp_target` is not `NULL`.
+#'
+#' @param more_fit_measures Character
+#' vector. To be passed to
+#' [lavaan::fitMeasures()]. Default is
+#' `NULL`. If not `NULL`, these are
+#' the additional measures to be printed.
+#'
+#' @param fit_measures_digits The number of
+#' decimal places to be displayed
+#' for additional fit measures, if
+#' requested. Default is 3.
+#'
+#' @param short_names If `TRUE`,
+#' then simple short names will be
+#' printed
+#' along with full model names.
+#' Default is `FALSE`. Short names
+#' can be used when interpreting
+#' the graph from `model_graph()`
+#' if short names are used in the graph.
+#'
 #' @param ...  Optional arguments.
 #' Ignored.
 #'
@@ -75,6 +100,10 @@ print.model_set <- function(x,
                             sort_models = TRUE,
                             max_models = 20,
                             bpp_target = NULL,
+                            target_name = "original",
+                            more_fit_measures = NULL,
+                            fit_measures_digits = 3,
+                            short_names = FALSE,
                             ...) {
     fit_n <- length(x$models)
     fit_names <- names(x$models)
@@ -84,28 +113,52 @@ print.model_set <- function(x,
         fit_many_call <- NULL
         k_converged <- NA
         k_post_check <- NA
+        all_converged <- NA
+        all_post_checked <- NA
       } else {
         fit_many_call <- x$call
         k_converged <- sum(sapply(x$converged, isTRUE))
         k_post_check <- sum(sapply(x$post_check, isTRUE))
+        all_converged <- all(x$converged)
+        all_post_checked <- all(x$post_check)
       }
     if (!models_fitted) {
         change_tmp <- rep(NA, fit_n)
+        model_df_tmp <- rep(NA, fit_n)
         prior_tmp <- rep(NA, fit_n)
         bic_tmp <- rep(NA, fit_n)
         postprob_tmp <- rep(NA, fit_n)
       } else {
         change_tmp <- x$change
+        if (!is.null(x$model_df)) {
+            model_df_tmp <- x$model_df
+          } else {
+            model_df_tmp <- sapply(x$fit, lavaan::fitMeasures,
+                                  fit.measures = "df")
+          }
+        model_df_tmp <- unname(model_df_tmp)
         prior_tmp <- x$prior
         bic_tmp <- x$bic
         postprob_tmp <- x$bpp
       }
     out_table <- data.frame(modification = fit_names,
-                            df = change_tmp,
-                            Prior = prior_tmp,
-                            BIC = bic_tmp,
-                            BPP = postprob_tmp)
-    if (sort_models && models_fitted) {
+                            model_df = model_df_tmp,
+                            df_diff = change_tmp)
+    if (models_fitted && !all_converged) {
+        out_table$Converged <- ifelse(x$converged,
+                                      "Yes",
+                                      "No")
+      }
+    if (models_fitted && !all_post_checked) {
+        out_table$Check <- ifelse(x$post_check,
+                                      "Passed",
+                                      "Failed")
+      }
+    out_table$Prior <- prior_tmp
+    out_table$BIC <- bic_tmp
+    out_table$BPP <- postprob_tmp
+
+    if (sort_models && models_fitted && all_converged) {
         i <- order(out_table$BPP,
                    decreasing = TRUE)
         out_table <- out_table[i, ]
@@ -114,6 +167,15 @@ print.model_set <- function(x,
                        digits = bpp_digits,
                        format = "f")
         out_table["Cumulative"] <- tmp
+      }
+    if (!is.null(more_fit_measures)) {
+        # TODO: Handle nonconvergence
+        fit_fm <- sapply(x$fit,
+                         lavaan::fitMeasures,
+                         fit.measures = more_fit_measures,
+                         output = "vector")
+        fit_fm <- t(fit_fm)
+        out_table <- cbind(out_table, fit_fm)
       }
     out_table_print <- out_table
     out_table_print$Prior <- round(out_table_print$Prior,
@@ -131,6 +193,26 @@ print.model_set <- function(x,
     out_table_print$BPP <- formatC(out_table_print$BPP,
                                    digits = bpp_digits,
                                    format = "f")
+    if (!is.null(more_fit_measures)) {
+        fm_names <- colnames(fit_fm)
+        for (xx in fm_names) {
+            out_table_print[xx] <- formatC(out_table_print[, xx, drop = TRUE],
+                                           digits = fit_measures_digits,
+                                           format = "f")
+          }
+      }
+    if (short_names) {
+        if (is.character(x$short_names)) {
+            tmp1 <- x$short_names
+            tmp2 <- out_table_print$modification
+            if (isTRUE(setequal(names(tmp1),
+                                tmp2))) {
+                xx <- unname(tmp1[tmp2])
+                out_table_print <- cbind(Short = xx,
+                                         out_table_print)
+              }
+          }
+      }
     if (isTRUE(fit_n > max_models)) {
         gt_max_models <- TRUE
         x_tmp <- out_table_print[seq_len(max_models), ]
@@ -156,12 +238,13 @@ print.model_set <- function(x,
         if (!is.null(bpp_target)) {
             bpp_min <- min_prior(x$bic,
                                  bpp_target = bpp_target,
-                                 target_name = "original")
+                                 target_name = target_name)
             tmp <- data.frame(x = c(
                       formatC(bpp_target, digits = bpp_digits, format = "f"),
                       formatC(bpp_min, digits = bpp_digits, format = "f"),
-                      formatC(x$bpp["original"], digits = bpp_digits, format = "f")))
-            colnames(tmp) <- "Target Model"
+                      formatC(x$bpp[target_name], digits = bpp_digits, format = "f")))
+            colnames(tmp) <- paste0("Target Model: ",
+                                    target_name)
             rownames(tmp) <- c("Desired minimum BIC posterior probability:",
                                "Required minimum prior probability:",
                                "Current BIC posterior probability:")
@@ -172,7 +255,7 @@ print.model_set <- function(x,
         cat("\n")
       }
     cat("\n")
-    tmp1 <- ifelse(sort_models,
+    tmp1 <- ifelse(sort_models && all(!is.na(out_table$BPP)),
                    " (sorted by BPP)",
                    "")
     if (!models_fitted) tmp1 <- ""
@@ -190,10 +273,30 @@ print.model_set <- function(x,
     rownames(x_tmp) <- x_tmp$modification
     x_tmp$modification <- NULL
     print(x_tmp)
+
+    if (models_fitted && !all_converged) {
+        x_tmp2 <- out_table_print[out_table_print$Converged != "Yes", ]
+        rownames(x_tmp2) <- x_tmp2$modification
+        x_tmp2$modification <- NULL
+        cat("\nModel(s) not converged:\n")
+        print(x_tmp2)
+      }
+
+    if (models_fitted && !all_post_checked) {
+        x_tmp2 <- out_table_print[out_table_print$Check != "Passed", ]
+        rownames(x_tmp2) <- x_tmp2$modification
+        x_tmp2$modification <- NULL
+        cat("\nModel(s) failed lavaan's post.check:\n")
+        print(x_tmp2)
+      }
+
+
     cat("\nNote:\n")
     cat("- BIC: Bayesian Information Criterion.\n")
     cat("- BPP: BIC posterior probability.\n")
-    if (sort_models) {
+    cat("- model_df: Model degrees of freedom.\n")
+    cat("- df_diff: Difference in df compared to the original/target model.\n")
+    if (sort_models && ("Cumulative" %in% colnames(x_tmp))) {
         cat("- Cumulative: Cumulative BIC posterior probability.\n")
       }
     if (gt_max_models) {
@@ -204,6 +307,17 @@ print.model_set <- function(x,
                    "set 'max_models' to a larger number",
                    "to print more models, or set it to",
                    "NA to print all models.")
+        catwrap(x, initial = "- ", exdent = 2)
+      }
+    if (models_fitted &&
+        (k_converged != fit_n) &&
+        any(is.na(postprob_tmp))) {
+        x <- "BPP and/or prior not computed because one or more models not converged."
+        catwrap(x, initial = "- ", exdent = 2)
+      }
+    if (models_fitted &&
+        (k_post_check != fit_n)) {
+        x <- "Interpret with caution. One or more models failed lavaan's post.check."
         catwrap(x, initial = "- ", exdent = 2)
       }
     invisible(x)

@@ -61,10 +61,10 @@ print.sem_outs <- function(x,
     cat("\n")
     if (fit_n > max_models) {
         x_tmp <- fit_names[seq_len(max_models)]
-        cat("The first", max_models, "modifications(s):\n")
+        cat("The first", max_models, "modifications(s)/model(s):\n")
       } else {
         x_tmp <- fit_names
-        cat("The modifications:\n")
+        cat("The modification(s)/model(s):\n")
       }
     cat(paste(x_tmp, collapse = "\n"), "\n")
     invisible(x)

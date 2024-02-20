@@ -65,7 +65,7 @@ print.partables <- function(x,
         cat("The first", max_tables, "modification(s):\n")
       } else {
         x_tmp <- x_names
-        cat("The modifications:\n")
+        cat("The modifications/models:\n")
       }
     cat(paste(x_tmp, collapse = "\n"), "\n")
     invisible(x)

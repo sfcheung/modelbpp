@@ -24,6 +24,23 @@ expect_equivalent(
     c(1, 1, -1, -1)
   )
 
+out <- fit_many(mod_to_fit,
+                fit,
+                original = "add: x4~x2",
+                progress = FALSE)
+
+expect_equivalent(
+    out$change,
+    c(0, 0, -2, -2)
+  )
+
+out <- fit_many(mod_to_fit,
+                fit,
+                original = NA,
+                progress = FALSE)
+
+expect_true(all(is.na(out$change)))
+
 # Test Print
 
 expect_stdout(print(out),

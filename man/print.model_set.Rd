@@ -11,6 +11,10 @@
   sort_models = TRUE,
   max_models = 20,
   bpp_target = NULL,
+  target_name = "original",
+  more_fit_measures = NULL,
+  fit_measures_digits = 3,
+  short_names = FALSE,
   ...
 )
 }
@@ -44,6 +48,31 @@ the minimum prior probability
 of the target model required to
 achieve \code{bpp_target}. Default
 is \code{NULL}.}
+
+\item{target_name}{The name of the
+target model as appeared in the
+model list. Default is \code{"original"}.
+Used if \code{bpp_target} is not \code{NULL}.}
+
+\item{more_fit_measures}{Character
+vector. To be passed to
+\code{\link[lavaan:fitMeasures]{lavaan::fitMeasures()}}. Default is
+\code{NULL}. If not \code{NULL}, these are
+the additional measures to be printed.}
+
+\item{fit_measures_digits}{The number of
+decimal places to be displayed
+for additional fit measures, if
+requested. Default is 3.}
+
+\item{short_names}{If \code{TRUE},
+then simple short names will be
+printed
+along with full model names.
+Default is \code{FALSE}. Short names
+can be used when interpreting
+the graph from \code{model_graph()}
+if short names are used in the graph.}
 
 \item{...}{Optional arguments.
 Ignored.}

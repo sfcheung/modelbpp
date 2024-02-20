@@ -11,7 +11,8 @@ get_drop(
   df_change = 1,
   model_id = NA,
   keep_correct_df_change = TRUE,
-  remove_duplicated = TRUE
+  remove_duplicated = TRUE,
+  progress = FALSE
 )
 }
 \arguments{
@@ -53,6 +54,11 @@ equal to expected \emph{df} change.}
 \item{remove_duplicated}{If \code{TRUE},
 the default, duplicated models are
 removed.}
+
+\item{progress}{Whether a progress
+bar will be displayed, implemented
+by the \code{pbapply} package. Default
+is \code{FALSE}.}
 }
 \value{
 An object of the class
