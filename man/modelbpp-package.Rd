@@ -27,5 +27,10 @@ Authors:
   \item Shing On Leung (\href{https://orcid.org/0000-0002-0962-339X}{ORCID})
 }
 
+Other contributors:
+\itemize{
+  \item Ivan Jacob Agaloos Pesigan \email{r.jeksterslab@gmail.com} (\href{https://orcid.org/0000-0003-4818-8420}{ORCID}) [contributor]
+}
+
 }
 \keyword{internal}

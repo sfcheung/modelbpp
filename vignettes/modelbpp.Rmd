@@ -119,7 +119,7 @@ from the target model by one on model
 degrees of freedom, fit them, and compute
 the BPPs:
 
-```{r}
+```{r results = FALSE}
 out1 <- model_set(fit1)
 ```
 
@@ -207,7 +207,7 @@ This can be done by setting `prior_sem_out`
 to the desired prior probability when calling
 `model_set()`:
 
-```{r}
+```{r results = FALSE}
 out1_prior <- model_set(fit1,
                         prior_sem_out = .50)
 ```
@@ -251,7 +251,7 @@ in model *df* to 2, to include models
 having two more or two less *df* than
 the original model:
 
-```{r}
+```{r results = FALSE}
 out1_df2 <- model_set(fit1,
                       df_change_add = 2,
                       df_change_drop = 2)
@@ -294,7 +294,7 @@ add the error covariance between `m1`
 and `y` (`m1~~y`). We can exclude it
 when calling `model_set()`
 
-```{r}
+```{r results = FALSE}
 out1_no_cov <- model_set(fit1,
                          must_not_add = "m1~~y")
 ```
@@ -334,7 +334,7 @@ refitting the models, by using
 the output of `model_set()` as the
 input, using the `model_set_out` argument:
 
-```{r}
+```{r results = FALSE}
 out1_new_prior <- model_set(model_set_out = out1,
                             prior_sem_out = .50)
 ```

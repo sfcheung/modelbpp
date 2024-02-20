@@ -1,6 +1,8 @@
-# modelbpp 0.1.2.32
+# modelbpp 0.1.3
 
 ## New Features
+
+### `model_set()`
 
 - Updated `model_set()` to work with
   user-supplied models. These models
@@ -11,25 +13,38 @@
   `model_set`-class objects. Users can
   set the prior probabilities of one or
   more models of their choice. (0.1.2.7)
-- Updated `model_graph()` to plot
-  user-supplied models. (0.1.2.7)
 - Added a `c`-method for `partables`-class
   and `model_set`-class objects. For the
   ease of adding user models when calling
   `model_set()`. (0.1.2.7)
-- Added more functions to manipulate
-  a `partables`-class object. (0.1.2.8)
-- Added a few helper functions for
-  `partables`-class objects. (0.1.2.9, 0.1.2.12)
+- Users can supplied a named list of
+  fitted models (`lavaan`-class objects)
+  to `model_set()` through the
+  argument `sem_out`. (0.1.2.17)
+- The `print` method of `model_set()`
+  supports printing additional fit
+  measures available from
+  `lavaan::fitMeasures()`. Check the
+  argument `more_fit_measures`.
+  (0.1.2.27)
+- The `print` method of `model_set()`
+  support printing short model names,
+  which can be used to interpret
+  the output of `model_graph()`.
+  (0.1.2.29, 0.1.2.30)
 - Updated `model_graph()` to determine
   nested relation using the method
   by Bentler and Satorra (2010). This
   can be done only if `fixed.x`
   is set to `FALSE`. (0.1.2.10, 0.1.2.19)
-- Users can supplied a named list of
-  fitted models (`lavaan`-class objects)
-  to `model_set()` through the
-  argument `sem_out`. (0.1.2.17)
+- A progress bar can be shown by
+  `model_graph()` if nested relations
+  need to be determined. (0.1.2.28)
+
+### `model_graph()`
+
+- Updated `model_graph()` to plot
+  user-supplied models. (0.1.2.7)
 - Updated `model_graph()` with new options.
   If `drop_redundant_direct_paths`
   is `TRUE` (default), redundant
@@ -43,23 +58,16 @@
   and weight arrow widths by
   model *df* differences (see
   `weight_arrows_by_df`). (0.1.2.20)
+
+### Others
+
+- Added more functions to manipulate
+  a `partables`-class object. (0.1.2.8)
+- Added a few helper functions for
+  `partables`-class objects. (0.1.2.9, 0.1.2.12)
 - The models generating progress can
   display a progress bar.
   (0.1.2.24, 0.1.2.25, 0.1.2.26)
-- The `print` method of `model_set()`
-  supports printing additional fit
-  measures available from
-  `lavaan::fitMeasures()`. Check the
-  argument `more_fit_measures`.
-  (0.1.2.27)
-- A progress bar can be shown by
-  `model_graph()` if nested relations
-  need to be determined. (0.1.2.28)
-- The `print` method of `model_set()`
-  support printing short model names,
-  which can be used to interpret
-  the output of `model_graph()`.
-  (0.1.2.29, 0.1.2.30)
 - Users can request `model_graph()`
   to use short names in the
   graph, if they are created and
