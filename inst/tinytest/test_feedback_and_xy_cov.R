@@ -52,3 +52,34 @@ expect_true(setequal(modelbpp:::df_to_lor(out$all_feedback),
 expect_true(setequal(modelbpp:::df_to_lor(out$all_xy_cov),
                      lor_xy_cov_check),
             info = "modelbpp:::feedback_and_xy_cov")
+
+out_add_fb <- get_add(fit, exclude_feedback = TRUE)
+names(out_add_fb)
+out2_add_fb <- get_add(fit2, exclude_feedback = TRUE)
+names(out2_add_fb)
+
+out_add_xy_cov <- get_add(fit, exclude_xy_cov = TRUE)
+names(out_add_xy_cov)
+out2_add_xy_cov <- get_add(fit2, exclude_xy_cov = TRUE)
+names(out2_add_xy_cov)
+
+out_add_both <- get_add(fit, exclude_xy_cov = TRUE,
+                             exclude_feedback = TRUE)
+names(out_add_both)
+out2_add_both <- get_add(fit2, exclude_xy_cov = TRUE,
+                             exclude_feedback = TRUE)
+names(out2_add_both)
+
+expect_false("add: x1~x4" %in% names(out_add_fb),
+            info = "modelbpp:::feedback_and_xy_cov")
+expect_false("add: x1~~x4" %in% names(out_add_xy_cov),
+            info = "modelbpp:::feedback_and_xy_cov")
+expect_true("add: x1~~x4" %in% names(out_add_fb),
+            info = "modelbpp:::feedback_and_xy_cov")
+expect_true("add: x1~x4" %in% names(out_add_xy_cov),
+            info = "modelbpp:::feedback_and_xy_cov")
+expect_false("add: x1~x4" %in% names(out_add_both),
+            info = "modelbpp:::feedback_and_xy_cov")
+expect_false("add: x1~~x4" %in% names(out_add_both),
+            info = "modelbpp:::feedback_and_xy_cov")
+

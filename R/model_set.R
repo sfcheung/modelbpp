@@ -99,6 +99,33 @@
 #' error covariances of indicators.
 #' Default is `TRUE`.
 #'
+#' @param exclude_feedback Exclude
+#' paths that will result in a feedback
+#' loop. For example, if there is
+#' path from `x` through `m` to `y`,
+#' then the path `x ~ y` will create
+#' a feedback loop. Default is `FALSE`
+#' for now, to maintain backward
+#' compatibility.
+#' Do not rely on the default value
+#' because it will be changed to `TRUE`
+#' in a future major version.
+#'
+#' @param exclude_xy_cov Exclude
+#' covariance between two variables,
+#' in which one has a path to another.
+#' For example, if there is
+#' path from `x` through `m` to `y`,
+#' then the covariance `x ~~ y`,
+#' which denotes the covariance between
+#' `x` and the error term of `y`, will
+#' be excluded if this argument is
+#' `TRUE`. Default is `FALSE` for now,
+#' to maintain backward compatibility.
+#' Do not rely on the default value
+#' because it will be changed to `TRUE`
+#' in a future major version.
+#'
 #' @param must_drop A character vector
 #' of parameters, named in
 #' `lavaan::lavaan()` style (e.g.,
@@ -292,6 +319,8 @@ model_set <- function(sem_out,
                       must_not_drop = NULL,
                       remove_constraints = TRUE,
                       exclude_error_cov = TRUE,
+                      exclude_feedback = FALSE,
+                      exclude_xy_cov = FALSE,
                       df_change_add = 1,
                       df_change_drop = 1,
                       remove_duplicated = TRUE,
@@ -356,6 +385,8 @@ model_set <- function(sem_out,
                                 must_not_add = must_not_add,
                                 remove_constraints = remove_constraints,
                                 exclude_error_cov = exclude_error_cov,
+                                exclude_feedback = exclude_feedback,
+                                exclude_xy_cov = exclude_xy_cov,
                                 df_change = df_change_add,
                                 remove_duplicated = FALSE,
                                 progress = progress)

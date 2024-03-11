@@ -17,6 +17,8 @@ model_set(
   must_not_drop = NULL,
   remove_constraints = TRUE,
   exclude_error_cov = TRUE,
+  exclude_feedback = FALSE,
+  exclude_xy_cov = FALSE,
   df_change_add = 1,
   df_change_drop = 1,
   remove_duplicated = TRUE,
@@ -119,6 +121,33 @@ removed. Default is ``TRUE`.}
 \item{exclude_error_cov}{Exclude
 error covariances of indicators.
 Default is \code{TRUE}.}
+
+\item{exclude_feedback}{Exclude
+paths that will result in a feedback
+loop. For example, if there is
+path from \code{x} through \code{m} to \code{y},
+then the path \code{x ~ y} will create
+a feedback loop. Default is \code{FALSE}
+for now, to maintain backward
+compatibility.
+Do not rely on the default value
+because it will be changed to \code{TRUE}
+in a future major version.}
+
+\item{exclude_xy_cov}{Exclude
+covariance between two variables,
+in which one has a path to another.
+For example, if there is
+path from \code{x} through \code{m} to \code{y},
+then the covariance \code{x ~~ y},
+which denotes the covariance between
+\code{x} and the error term of \code{y}, will
+be excluded if this argument is
+\code{TRUE}. Default is \code{FALSE} for now,
+to maintain backward compatibility.
+Do not rely on the default value
+because it will be changed to \code{TRUE}
+in a future major version.}
 
 \item{df_change_add}{How many degrees
 of freedom (\emph{df}) away in the list.
