@@ -286,7 +286,7 @@ pt_remove_end_var <- function(pt,
 feedback_and_xy_cov <- function(sem_out) {
     mod_all_paths_org <- suppressWarnings(manymome::all_indirect_paths(sem_out))
     if (length(mod_all_paths_org) == 0) {
-        return(character(0))
+        return(list())
       }
     mod_all_paths <- manymome::all_paths_to_df(mod_all_paths_org)
     all_feedback <- data.frame(lhs = mod_all_paths$x,
