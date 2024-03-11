@@ -1,3 +1,26 @@
+# modelbpp 0.1.3.2
+
+## New Features
+
+- Added the argument `exclude_xy_cov`
+  and `exclude_feedback` to `get_add()`
+  and `model_set()`, for excluding paths
+  that create feedback loops, and
+  covariances involving a predictor
+  and an outcome variable (including
+  those linked by indirect paths).
+  Default values are `FALSE` for now
+  to maintain backward compatibility but
+  will be changed to `TRUE` in the
+  future. (0.1.3.2)
+
+## Bug Fixes
+
+- The `must_not_add` argument should
+  work now for some parameters that may
+  not be recognized as interchangeable.
+  (0.1.3.1)
+
 # modelbpp 0.1.3
 
 ## New Features

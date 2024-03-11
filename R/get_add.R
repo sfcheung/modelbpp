@@ -56,6 +56,33 @@
 #' error covariances of indicators.
 #' Default is `TRUE`.
 #'
+#' @param exclude_feedback Exclude
+#' paths that will result in a feedback
+#' loop. For example, if there is
+#' path from `x` through `m` to `y`,
+#' then the path `x ~ y` will create
+#' a feedback loop. Default is `FALSE`
+#' for now, to maintain backward
+#' compatibility.
+#' Do not rely on the default value
+#' because it will be changed to `TRUE`
+#' in a future major version.
+#'
+#' @param exclude_xy_cov Exclude
+#' covariance between two variables,
+#' in which one has a path to another.
+#' For example, if there is
+#' path from `x` through `m` to `y`,
+#' then the covariance `x ~~ y`,
+#' which denotes the covariance between
+#' `x` and the error term of `y`, will
+#' be excluded if this argument is
+#' `TRUE`. Default is `FALSE` for now,
+#' to maintain backward compatibility.
+#' Do not rely on the default value
+#' because it will be changed to `TRUE`
+#' in a future major version.
+#'
 #' @param df_change How many degrees
 #' of freedom (*df*) away in the list.
 #' All models with *df* change less than
@@ -114,6 +141,8 @@ get_add <- function(sem_out,
                      must_not_add = NULL,
                      remove_constraints = TRUE,
                      exclude_error_cov = TRUE,
+                     exclude_feedback = FALSE,
+                     exclude_xy_cov = FALSE,
                      df_change = 1,
                      model_id = NA,
                      keep_correct_df_change = TRUE,
@@ -148,6 +177,28 @@ get_add <- function(sem_out,
     if (!is.null(must_add)) {
         mt1_must_add <- syntax_to_add_list(must_add)
         mt1_op2 <- union(mt1_op2, mt1_must_add)
+      }
+
+    # Remove feedback and xy_cov
+    if (exclude_feedback || exclude_xy_cov) {
+        tmp <- feedback_and_xy_cov(sem_out)
+        if (length(tmp) != 0) {
+          tmp1 <- df_to_lor(tmp$all_feedback)
+          tmp1 <- sapply(tmp1, paste, collapse = " ")
+          tmp2 <- df_to_lor(tmp$all_xy_cov)
+          tmp2 <- sapply(tmp2, paste, collapse = " ")
+          if (is.null(must_not_add)) {
+              must_not_add <- character(0)
+            }
+          if (exclude_feedback) {
+              must_not_add <- c(must_not_add,
+                                tmp1)
+            }
+          if (exclude_xy_cov) {
+              must_not_add <- c(must_not_add,
+                                tmp2)
+            }
+        }
       }
 
     # Remove must_not_add

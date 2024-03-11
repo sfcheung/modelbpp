@@ -35,7 +35,11 @@ add_list_duplicate_cov <- function(x) {
         return(x)
       }
     x0 <- lapply(x, function(y) {
-                        if (y[2] == "~~") return(y[3:1])
+                        if (y[2] == "~~") {
+                            out <- y[3:1]
+                            names(out) <- names(y)[3:1]
+                            return(out)
+                          }
                         NULL
                       })
     x0 <- x0[!sapply(x0, is.null)]
@@ -275,4 +279,44 @@ pt_remove_end_var <- function(pt,
       } else {
         return(pt[!i0, ])
       }
+  }
+
+#' @noRd
+
+feedback_and_xy_cov <- function(sem_out) {
+    mod_all_paths_org <- suppressWarnings(manymome::all_indirect_paths(sem_out))
+    if (length(mod_all_paths_org) == 0) {
+        return(list())
+      }
+    mod_all_paths <- manymome::all_paths_to_df(mod_all_paths_org)
+    all_feedback <- data.frame(lhs = mod_all_paths$x,
+                               op = "~",
+                               rhs = mod_all_paths$y)
+    all_feedback <- unique(all_feedback)
+    all_xy_cov <- data.frame(lhs = mod_all_paths$x,
+                             op = "~~",
+                             rhs = mod_all_paths$y)
+    all_xy_cov <- unique(all_xy_cov)
+    out <- list(all_feedback = all_feedback,
+                all_xy_cov = all_xy_cov)
+    out
+  }
+
+#' @noRd
+
+df_to_lor <- function(object) {
+    if (nrow(object) == 0) {
+        return(character(0))
+      }
+    out <- mapply(function(a1, a2, a3) {
+                      c(lhs = a1,
+                        op = a2,
+                        rhs = a3)
+                    },
+                    a1 = object$lhs,
+                    a2 = object$op,
+                    a3 = object$rhs,
+                    SIMPLIFY = FALSE,
+                    USE.NAMES = FALSE)
+    out
   }
