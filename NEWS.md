@@ -1,3 +1,12 @@
+# modelbpp 0.1.3.1
+
+## Bug Fixes
+
+- The `must_not_add` argument should
+  work now for some parameters that may
+  not be recognized as interchangeable.
+  (0.1.3.1)
+
 # modelbpp 0.1.3
 
 ## New Features

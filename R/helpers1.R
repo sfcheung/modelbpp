@@ -35,7 +35,11 @@ add_list_duplicate_cov <- function(x) {
         return(x)
       }
     x0 <- lapply(x, function(y) {
-                        if (y[2] == "~~") return(y[3:1])
+                        if (y[2] == "~~") {
+                            out <- y[3:1]
+                            names(out) <- names(y)[3:1]
+                            return(out)
+                          }
                         NULL
                       })
     x0 <- x0[!sapply(x0, is.null)]
