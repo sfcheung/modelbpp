@@ -39,7 +39,8 @@ Imports:
     lavaan,
     parallel,
     pbapply,
-    igraph
+    igraph,
+    manymome
 VignetteBuilder: knitr
 URL: https://sfcheung.github.io/modelbpp/
 BugReports: https://github.com/sfcheung/modelbpp/issues
