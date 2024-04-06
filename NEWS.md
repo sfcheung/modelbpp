@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.3
+# modelbpp 0.1.3.4
 
 ## New Features
 
@@ -13,6 +13,11 @@
   to maintain backward compatibility but
   will be changed to `TRUE` in the
   future. (0.1.3.2)
+
+- Added `min_bpp_labelled` to
+  `model_graph()`, to hide the labels
+  of models with small BPPs.
+  (0.1.3.4)
 
 ## Bug Fixes
 
