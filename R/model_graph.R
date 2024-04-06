@@ -234,6 +234,13 @@
 #' `short_names = TRUE` to find the
 #' corresponding full model names.
 #'
+#' @param min_bpp_labelled If not `NULL`,
+#' this is the minimum BPP for a model
+#' to be labelled. Models with BPP less
+#' than this value will not be labelled.
+#' Useful when the number of models
+#' is large.
+#'
 #' @param ... Optional arguments. Not
 #' used for now.
 #'
@@ -295,6 +302,7 @@ model_graph <- function(object,
                         arrow_max_width = 2,
                         progress = TRUE,
                         short_names = FALSE,
+                        min_bpp_labelled = NULL,
                         ...) {
     if (!all(object$converged)) {
         stop("Not all models converged.")
@@ -369,10 +377,19 @@ model_graph <- function(object,
     if (short_names) {
         if (is.character(object$short_names)) {
             tmp1 <- object$short_names
-            tmp2 <- igraph::V(out)$label
+            tmp2 <- igraph::V(out)$name
             igraph::V(out)$full_name <- tmp2
             igraph::V(out)$label <- tmp1[tmp2]
           }
+      }
+    if (is.numeric(min_bpp_labelled)) {
+        tmp2 <- igraph::V(out)$label
+        tmp3 <- igraph::V(out)$name
+        tmp1 <- (object$bpp < min_bpp_labelled)
+        tmp1 <- tmp1[tmp3]
+        tmp4 <- tmp2
+        tmp4[tmp1] <- ""
+        igraph::V(out)$label <- tmp4
       }
     class(out) <- c("model_graph", class(out))
     out

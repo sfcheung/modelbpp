@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.2
+# modelbpp 0.1.3.4
 
 ## New Features
 
@@ -14,12 +14,21 @@
   will be changed to `TRUE` in the
   future. (0.1.3.2)
 
+- Added `min_bpp_labelled` to
+  `model_graph()`, to hide the labels
+  of models with small BPPs.
+  (0.1.3.4)
+
 ## Bug Fixes
 
 - The `must_not_add` argument should
   work now for some parameters that may
   not be recognized as interchangeable.
   (0.1.3.1)
+
+- Fixed a bug in `model_graph()`.
+  Short names should now be properly
+  constructed. (0.1.3.3)
 
 # modelbpp 0.1.3
 

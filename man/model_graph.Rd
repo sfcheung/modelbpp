@@ -26,6 +26,7 @@ model_graph(
   arrow_max_width = 2,
   progress = TRUE,
   short_names = FALSE,
+  min_bpp_labelled = NULL,
   ...
 )
 }
@@ -146,6 +147,13 @@ they will be used as model labels.
 Please print the object with
 \code{short_names = TRUE} to find the
 corresponding full model names.}
+
+\item{min_bpp_labelled}{If not \code{NULL},
+this is the minimum BPP for a model
+to be labelled. Models with BPP less
+than this value will not be labelled.
+Useful when the number of models
+is large.}
 
 \item{...}{Optional arguments. Not
 used for now.}
