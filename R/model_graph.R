@@ -369,7 +369,7 @@ model_graph <- function(object,
     if (short_names) {
         if (is.character(object$short_names)) {
             tmp1 <- object$short_names
-            tmp2 <- igraph::V(out)$label
+            tmp2 <- igraph::V(out)$name
             igraph::V(out)$full_name <- tmp2
             igraph::V(out)$label <- tmp1[tmp2]
           }

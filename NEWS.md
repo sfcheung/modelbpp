@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.2
+# modelbpp 0.1.3.3
 
 ## New Features
 
@@ -20,6 +20,10 @@
   work now for some parameters that may
   not be recognized as interchangeable.
   (0.1.3.1)
+
+- Fixed a bug in `model_graph()`.
+  Short names should now be properly
+  constructed. (0.1.3.3)
 
 # modelbpp 0.1.3
 
