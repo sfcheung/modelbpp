@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.7
+# modelbpp 0.1.3.8
 
 ## New Features
 
@@ -28,6 +28,9 @@
   method of `model_set`-class object
   changed to `c("cfi", "rmseas")`.
   (0.1.3.7)
+
+- Revised `fit_many()` to support
+  multigroup models. (0.1.3.8)
 
 ## Bug Fixes
 
