@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.5
+# modelbpp 0.1.3.6
 
 ## New Features
 
@@ -33,6 +33,10 @@
 - Fixed a bug in `model_graph()`.
   Short names should now be properly
   constructed. (0.1.3.3)
+
+- Fixed a bug in `print.model_set()`
+  about the printing of additional fit
+  measures. (0.1.3.6)
 
 # modelbpp 0.1.3
 
