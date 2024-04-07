@@ -16,7 +16,7 @@ BIC posterior probabilities."><meta property="og:image" content="https://sfcheun
     
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +94,8 @@ BIC posterior probabilities.</p>
 <span>  make_cluster_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  skip_check_sem_out <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  skip_check_sem_out <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  drop_equivalent_models <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">gen_models</span><span class="op">(</span></span>
@@ -343,6 +344,17 @@ the functions on models not officially
 supported.</p></dd>
 
 
+<dt>drop_equivalent_models</dt>
+<dd><p>If
+<code>TRUE</code>, the default, equivalent
+models will be dropped in the final
+output. This check can only be
+conducted when no models are fitted
+in <code><a href="https://rdrr.io/pkg/lavaan/man/lavaan.html" class="external-link">lavaan::lavaan()</a></code> with
+<code>fixed.x = TRUE</code> (which is the
+default of <code><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">lavaan::sem()</a></code>).</p></dd>
+
+
 <dt>output</dt>
 <dd><p>If <code>"model_set"</code>,
 then the output is a <code>model_set</code>-class
@@ -515,6 +527,8 @@ moderation models.
 <span class="r-out co"><span class="r-pr">#&gt;</span> - model_df: Model degrees of freedom.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - df_diff: Difference in df compared to the original/target model.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Cumulative: Cumulative BIC posterior probability.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - At least one model has fixed.x = TRUE. The models are not checked for</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   equivalence.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Since Version 0.1.3.5, the default values of exclude_feedback and</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   results from previous versions.</span>
