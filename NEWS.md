@@ -9,10 +9,10 @@
   covariances involving a predictor
   and an outcome variable (including
   those linked by indirect paths).
-  Default values are `FALSE` for now
-  to maintain backward compatibility but
-  will be changed to `TRUE` in the
-  future. (0.1.3.2)
+  Default values has been changed
+  to `TRUE` since 0.1.3.5. To
+  reproduce results from previous version,
+  set them to `FALSE`. (0.1.3.2, 0.1.3.5)
 
 - Added `min_bpp_labelled` to
   `model_graph()`, to hide the labels

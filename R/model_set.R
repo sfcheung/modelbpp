@@ -104,12 +104,14 @@
 #' loop. For example, if there is
 #' path from `x` through `m` to `y`,
 #' then the path `x ~ y` will create
-#' a feedback loop. Default is `FALSE`
-#' for now, to maintain backward
-#' compatibility.
-#' Do not rely on the default value
-#' because it will be changed to `TRUE`
-#' in a future major version.
+#' a feedback loop.  Default has been
+#' changed to
+#' `TRUE` since Version 0.1.3.5 because
+#' feedback loops are usually
+#' not included except when theoretically
+#' justified. To reproduce results
+#' based on previous version, set this
+#' argument to `FALSE`.
 #'
 #' @param exclude_xy_cov Exclude
 #' covariance between two variables,
@@ -120,11 +122,12 @@
 #' which denotes the covariance between
 #' `x` and the error term of `y`, will
 #' be excluded if this argument is
-#' `TRUE`. Default is `FALSE` for now,
-#' to maintain backward compatibility.
-#' Do not rely on the default value
-#' because it will be changed to `TRUE`
-#' in a future major version.
+#' `TRUE`. Default has been changed to
+#' `TRUE` since Version 0.1.3.5 because
+#' these covariances rarely are
+#' interpretable. To reproduce results
+#' based on previous version, set this
+#' argument to `FALSE`.
 #'
 #' @param must_drop A character vector
 #' of parameters, named in
@@ -319,8 +322,8 @@ model_set <- function(sem_out,
                       must_not_drop = NULL,
                       remove_constraints = TRUE,
                       exclude_error_cov = TRUE,
-                      exclude_feedback = FALSE,
-                      exclude_xy_cov = FALSE,
+                      exclude_feedback = TRUE,
+                      exclude_xy_cov = TRUE,
                       df_change_add = 1,
                       df_change_drop = 1,
                       remove_duplicated = TRUE,
