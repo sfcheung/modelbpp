@@ -309,6 +309,7 @@ model_graph <- function(object,
       }
     user_models <- sapply(added(object$models), is.null) &
                    sapply(dropped(object$models), is.null)
+    # TODO: Should always use models_network2()?
     if (sum(user_models, na.rm = TRUE) != 1) {
         # warning("One or more user models are present. ",
         #     "User model(s) will be plotted separately.")
