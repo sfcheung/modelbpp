@@ -17,8 +17,8 @@ model_set(
   must_not_drop = NULL,
   remove_constraints = TRUE,
   exclude_error_cov = TRUE,
-  exclude_feedback = FALSE,
-  exclude_xy_cov = FALSE,
+  exclude_feedback = TRUE,
+  exclude_xy_cov = TRUE,
   df_change_add = 1,
   df_change_drop = 1,
   remove_duplicated = TRUE,
@@ -127,12 +127,14 @@ paths that will result in a feedback
 loop. For example, if there is
 path from \code{x} through \code{m} to \code{y},
 then the path \code{x ~ y} will create
-a feedback loop. Default is \code{FALSE}
-for now, to maintain backward
-compatibility.
-Do not rely on the default value
-because it will be changed to \code{TRUE}
-in a future major version.}
+a feedback loop.  Default has been
+changed to
+\code{TRUE} since Version 0.1.3.5 because
+feedback loops are usually
+not included except when theoretically
+justified. To reproduce results
+based on previous version, set this
+argument to \code{FALSE}.}
 
 \item{exclude_xy_cov}{Exclude
 covariance between two variables,
@@ -143,11 +145,12 @@ then the covariance \code{x ~~ y},
 which denotes the covariance between
 \code{x} and the error term of \code{y}, will
 be excluded if this argument is
-\code{TRUE}. Default is \code{FALSE} for now,
-to maintain backward compatibility.
-Do not rely on the default value
-because it will be changed to \code{TRUE}
-in a future major version.}
+\code{TRUE}. Default has been changed to
+\code{TRUE} since Version 0.1.3.5 because
+these covariances rarely are
+interpretable. To reproduce results
+based on previous version, set this
+argument to \code{FALSE}.}
 
 \item{df_change_add}{How many degrees
 of freedom (\emph{df}) away in the list.
