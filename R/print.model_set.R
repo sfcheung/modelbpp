@@ -157,7 +157,15 @@ print.model_set <- function(x,
     out_table$Prior <- prior_tmp
     out_table$BIC <- bic_tmp
     out_table$BPP <- postprob_tmp
-
+    if (!is.null(more_fit_measures)) {
+        # TODO: Handle nonconvergence
+        fit_fm <- sapply(x$fit,
+                         lavaan::fitMeasures,
+                         fit.measures = more_fit_measures,
+                         output = "vector")
+        fit_fm <- t(fit_fm)
+        out_table <- cbind(out_table, fit_fm)
+      }
     if (sort_models && models_fitted && all_converged) {
         i <- order(out_table$BPP,
                    decreasing = TRUE)
@@ -167,15 +175,6 @@ print.model_set <- function(x,
                        digits = bpp_digits,
                        format = "f")
         out_table["Cumulative"] <- tmp
-      }
-    if (!is.null(more_fit_measures)) {
-        # TODO: Handle nonconvergence
-        fit_fm <- sapply(x$fit,
-                         lavaan::fitMeasures,
-                         fit.measures = more_fit_measures,
-                         output = "vector")
-        fit_fm <- t(fit_fm)
-        out_table <- cbind(out_table, fit_fm)
       }
     out_table_print <- out_table
     out_table_print$Prior <- round(out_table_print$Prior,
