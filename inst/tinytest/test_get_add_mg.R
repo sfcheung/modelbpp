@@ -11,8 +11,6 @@ if (FALSE) {
     "
     f1 =~ x1 + x2 + x3 + x4
     f2 =~ x5 + x6 + x7 + x8
-    f3 =~ x9 + x10 + x11 + x12
-    f4 =~ x13 + x14 + x15 + x16
     "
 
     fit <- cfa(mod, dat_sem, group = "group", group.equal = "loadings")
