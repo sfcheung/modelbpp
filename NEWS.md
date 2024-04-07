@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.4
+# modelbpp 0.1.3.5
 
 ## New Features
 
@@ -17,7 +17,7 @@
 - Added `min_bpp_labelled` to
   `model_graph()`, to hide the labels
   of models with small BPPs.
-  (0.1.3.4)
+  (0.1.3.5)
 
 ## Bug Fixes
 
@@ -25,6 +25,10 @@
   work now for some parameters that may
   not be recognized as interchangeable.
   (0.1.3.1)
+
+- Fixed a bug in `must_not_drop` and
+  `must_drop` of `get_drop()`. They
+  should work properly now. (0.1.3.5)
 
 - Fixed a bug in `model_graph()`.
   Short names should now be properly
