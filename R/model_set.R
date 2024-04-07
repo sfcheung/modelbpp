@@ -224,6 +224,15 @@
 #' the functions on models not officially
 #' supported.
 #'
+#' @param drop_equivalent_models If
+#' `TRUE`, the default, equivalent
+#' models will be dropped in the final
+#' output. This check can only be
+#' conducted when no models are fitted
+#' in [lavaan::lavaan()] with
+#' `fixed.x = TRUE` (which is the
+#' default of [lavaan::sem()]).
+#'
 #' @return The function [model_set()]
 #' returns an object of the class
 #' `model_set`, a list with the following
@@ -337,7 +346,8 @@ model_set <- function(sem_out,
                       make_cluster_args = list(),
                       progress = TRUE,
                       verbose = TRUE,
-                      skip_check_sem_out = FALSE) {
+                      skip_check_sem_out = FALSE,
+                      drop_equivalent_models = TRUE) {
   # if (missing(sem_out)) stop("sem_out is not supplied.")
   user_fits <- FALSE
   if (!missing(sem_out)) {
@@ -451,7 +461,52 @@ model_set <- function(sem_out,
           class(out) <- c("sem_outs", class(out))
         }
     }
+  # Check equivalent clusters
+  any_fixedx <- any(sapply(out$fit, lavaan::lavInspect, what = "fixed.x"),
+                    na.rm = TRUE)
+  # if (drop_equivalent_models && isTRUE(any_fixedx)) {
+  #     warning("Cannot check for equivalent models if fixed.x = TRUE.")
+  #   }
+  if (!is.null(out$fit) && drop_equivalent_models && isFALSE(any_fixedx)) {
+      mod_eq <- tryCatch(equivalent_clusters(out$fit),
+                         error = function(e) e)
+      if (inherits(mod_eq, "error")) {
+          if (grepl("fixed.x = TRUE", mod_eq$message, fixed = TRUE)) {
+              warning("Cannot check for equivalent models if fixed.x = TRUE.")
+            }
+          mod_eq <- NULL
+        }
+      if (!is.null(mod_eq)) {
+          to_drop <- numeric(0)
+          m_names <- names(out$fit)
+          for (xx in mod_eq) {
+              i <- xx[-1]
+              to_drop <- c(to_drop, match(i, m_names))
+            }
+          out$fit <- out$fit[-to_drop]
+          if (!is.null(out$change)) {
+              out$change <- out$change[-to_drop]
+            }
+          out$post_check <- out$post_check[-to_drop]
+          out$converged <- out$converged[-to_drop]
+          if (!is.null(out$model_df)) {
+              out$model_df <- out$model_df[-to_drop]
+            }
+          mod_to_fit_equivalent <- mod_to_fit[to_drop]
+          mod_to_fit <- mod_to_fit[-to_drop]
+        } else {
+          mod_to_fit_equivalent <- NULL
+          mod_eq <- NULL
+        }
+    } else {
+      mod_to_fit_equivalent <- NULL
+      mod_eq <- NULL
+    }
   out$models <- mod_to_fit
+  out$models_equivalent <- mod_to_fit_equivalent
+  out$equivalent_clusters <- mod_eq
+  out$drop_equivalent_models <- drop_equivalent_models
+  out$fixed_x <- any_fixedx
   if (compute_bpp && !is.null(out$fit)) {
       bic_list <- sapply(out$fit,
             function(x) {

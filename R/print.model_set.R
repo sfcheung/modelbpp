@@ -296,6 +296,15 @@ print.model_set <- function(x,
         print(x_tmp2)
       }
 
+    if (!is.null(x$equivalent_clusters)) {
+        tmp <- as.vector(sapply(x$equivalent_clusters, paste, collapse = ", "))
+        tmp <- data.frame(Cluster = tmp)
+        tmp2 <- names(x$models_equivalent)
+        cat("\nModels that are equivalent:\n")
+        print(tmp, right = FALSE)
+        cat("\nEquivalent model(s) excluded from the analysis:\n")
+        catwrap(paste(tmp2, collapse = ", "))
+      }
 
     cat("\nNote:\n")
     cat("- BIC: Bayesian Information Criterion.\n")
@@ -324,6 +333,10 @@ print.model_set <- function(x,
     if (models_fitted &&
         (k_post_check != fit_n)) {
         tmp <- "Interpret with caution. One or more models failed lavaan's post.check."
+        catwrap(tmp, initial = "- ", exdent = 2)
+      }
+    if (x$drop_equivalent_models && x$fixed_x) {
+        tmp <- "At least one model has fixed.x = TRUE. The models are not checked for equivalence."
         catwrap(tmp, initial = "- ", exdent = 2)
       }
     tmp <- paste0("Since Version 0.1.3.5, the default values of ",
