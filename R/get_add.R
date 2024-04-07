@@ -175,7 +175,8 @@ get_add <- function(sem_out,
 
     # Add must_add
     if (!is.null(must_add)) {
-        mt1_must_add <- syntax_to_add_list(must_add)
+        mt1_must_add <- syntax_to_add_list(must_add,
+                                           ngroups = pt_ngroups(pt))
         mt1_op2 <- union(mt1_op2, mt1_must_add)
       }
 
@@ -203,7 +204,8 @@ get_add <- function(sem_out,
 
     # Remove must_not_add
     if (!is.null(must_not_add)) {
-        mt1_must_not_add <- syntax_to_add_list(must_not_add)
+        mt1_must_not_add <- syntax_to_add_list(must_not_add,
+                                               ngroups = pt_ngroups(pt))
         mt1_must_not_add1 <- add_list_duplicate_cov(mt1_must_not_add)
         mt1_op2 <- setdiff(mt1_op2, mt1_must_not_add1)
       }
@@ -250,7 +252,6 @@ get_add <- function(sem_out,
       } else {
         out <- list()
       }
-
     # Keep tables with expected df only?
     if (keep_correct_df_change) {
         chk1 <- sapply(out, attr, which = "df_actual")
@@ -276,6 +277,7 @@ get_add <- function(sem_out,
 #' @noRd
 
 gen_pt_add <- function(x, pt, sem_out, from = NA) {
+    ngroups <- pt_ngroups(pt)
     # Generate pt
     # Collects free parameters to add
     x_free <- x[sapply(x,
@@ -304,11 +306,20 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
       }
     # Add free parameters
     if (length(x_free) > 0) {
-        x_free_str <- par_names(pars_list = x_free)
-        p_to_add <- sapply(x_free, paste0, collapse = "")
+        x_free_str <- par_names(pars_list = x_free, ngroups = ngroups)
+        if (ngroups > 1) {
+            x_free_str1 <- free_str_to_pt(x_free)
+          } else {
+            x_free_str1 <- x_free_str
+          }
+        if (ngroups > 1) {
+            p_to_add <- x_free_str
+          } else {
+            p_to_add <- sapply(x_free, paste0, collapse = "")
+          }
         sem_out_update <- lavaan::update(sem_out,
                                          pt,
-                                         add = x_free_str,
+                                         add = x_free_str1,
                                          do.fit = TRUE,
                                          optim.force.converged = TRUE,
                                          control = list(max.iter = 1))

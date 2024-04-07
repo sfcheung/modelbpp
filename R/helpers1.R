@@ -14,17 +14,20 @@ syntax_to_id <- function(x,
 
 #' @noRd
 
-syntax_to_add_list <- function(x) {
+syntax_to_add_list <- function(x, ngroups = 1) {
+    # If no group, assume to be added to all groups
     x0 <- lavaan::lavParseModelString(
                         model.syntax = x,
                         as.data.frame. = TRUE,
                         warn = FALSE)
     x1 <- mapply(c,
-                 lhs = x0$lhs,
-                 op = x0$op,
-                 rhs = x0$rhs,
-                 USE.NAMES = FALSE,
-                 SIMPLIFY = FALSE)
+                lhs = x0$lhs,
+                op = x0$op,
+                rhs = x0$rhs,
+                group = sort(rep(seq_len(ngroups), nrow(x0))),
+                USE.NAMES = FALSE,
+                SIMPLIFY = FALSE)
+    # Always have the element "group"
     x1
   }
 
@@ -36,8 +39,11 @@ add_list_duplicate_cov <- function(x) {
       }
     x0 <- lapply(x, function(y) {
                         if (y[2] == "~~") {
-                            out <- y[3:1]
-                            names(out) <- names(y)[3:1]
+                            # Work whether group is present of not
+                            out <- y
+                            out[1] <- y[3]
+                            out[3] <- y[1]
+                            names(out) <- names(y)
                             return(out)
                           }
                         NULL
@@ -58,7 +64,12 @@ add_list_clean_duplicated_cov <- function(x) {
                     y0 <- x[[y]]
                     if (y0[2] != "~~") return(TRUE)
                     for (j in seq_len(y)) {
-                        if (identical(x[[j]], y0[3:1])) {
+                        if (length(y0) == 3) {
+                            chk <- identical(x[[j]], y0[3:1])
+                          } else {
+                            chk <- identical(x[[j]], y0[c(3:1, 4)])
+                          }
+                        if (chk) {
                             return(FALSE)
                           }
                       }
@@ -91,14 +102,32 @@ constr_pars <- function(constr, pt) {
                       (pt$rhs == z["rhs"]))
         i_lhs <- which(pt$plabel == pt[id_x, "lhs"])
         i_rhs <- which(pt$plabel == pt[id_x, "rhs"])
-        p_lhs <- paste0("(",
-                        paste(pt[i_lhs, c("lhs", "op", "rhs")],
-                              collapse = ""),
-                        ")")
-        p_rhs <- paste0("(",
-                        paste(pt[i_rhs, c("lhs", "op", "rhs")],
-                              collapse = ""),
-                        ")")
+        gp_lhs <- pt[i_lhs, "group"]
+        gp_rhs <- pt[i_rhs, "group"]
+        if (gp_lhs > 1) {
+            p_lhs <- paste0("(",
+                            paste(pt[i_lhs, c("lhs", "op", "rhs")],
+                                  collapse = ""),
+                            paste0(".g", pt[i_lhs, "group"]),
+                            ")")
+          } else {
+            p_lhs <- paste0("(",
+                            paste(pt[i_lhs, c("lhs", "op", "rhs")],
+                                  collapse = ""),
+                            ")")
+          }
+        if (gp_rhs > 1) {
+            p_rhs <- paste0("(",
+                            paste(pt[i_rhs, c("lhs", "op", "rhs")],
+                                  collapse = ""),
+                            paste0(".g", pt[i_rhs, "group"]),
+                            ")")
+          } else {
+            p_rhs <- paste0("(",
+                            paste(pt[i_rhs, c("lhs", "op", "rhs")],
+                                  collapse = ""),
+                            ")")
+          }
         paste0(p_lhs, ",", p_rhs)
       }, pt = pt)
     return(out)
@@ -106,9 +135,22 @@ constr_pars <- function(constr, pt) {
 
 #' @noRd
 
-par_names <- function(pars_list) {
-    out <- sapply(pars_list, paste, collapse = "")
-    out <- paste0(out, collapse = ";")
+par_names <- function(pars_list, ngroups = 1) {
+    if (ngroups == 1) {
+        out <- sapply(pars_list, paste, collapse = "")
+        out <- paste0(out, collapse = ";")
+      } else {
+        out <- sapply(pars_list, function(xx) {
+                  if (as.numeric(xx["group"]) == 1) {
+                      x_out <- paste(xx[1:3], collapse = "")
+                    } else {
+                      xx["group"] <- paste0(".g", xx["group"])
+                      x_out <- paste(xx[1:4], collapse = "")
+                    }
+                  x_out
+                })
+
+      }
     return(out)
   }
 
@@ -129,21 +171,31 @@ release_constr <- function(constr, pt) {
 #' @noRd
 
 mt_exclude_existing_pars <- function(mt, pt) {
+    ngroups <- pt_ngroups(pt)
     if (nrow(mt) == 0) {
         return(mt)
       }
+    if (ngroups == 1) {
+        mt$group <- 1
+      }
     # Remove those already in the parameter tables
-    mt_in_pt1 <- mapply(function(x, y) {
-                            any((pt$lhs == x) & (pt$rhs == y))
+    mt_in_pt1 <- mapply(function(x, y, g) {
+                            any((pt$lhs == x) &
+                                (pt$rhs == y) &
+                                (pt$group == g))
                           },
                         x = mt$lhs,
                         y = mt$rhs,
+                        g = mt$group,
                         USE.NAMES = FALSE)
-    mt_in_pt2 <- mapply(function(x, y) {
-                            any((pt$lhs == x) & (pt$rhs == y))
+    mt_in_pt2 <- mapply(function(x, y, g) {
+                            any((pt$lhs == x) &
+                                (pt$rhs == y) &
+                                (pt$group = g))
                           },
                         x = mt$rhs,
                         y = mt$lhs,
+                        g = mt$group,
                         USE.NAMES = FALSE)
     mt_exclude_in_pt2 <- mt_in_pt1 | mt_in_pt2
     out <- mt[!mt_exclude_in_pt2, ]
@@ -153,9 +205,14 @@ mt_exclude_existing_pars <- function(mt, pt) {
 #' @noRd
 
 mt_exclude_reversed <- function(mt, pt) {
+    ngroups <- pt_ngroups(pt)
     if (nrow(mt) == 0) {
         return(mt)
       }
+    if (ngroups == 1) {
+        mt$group <- 1
+      }
+    # Assume that the iv-dv statuses are the same between groups
     user_v <- unique(c(pt$lhs[pt$user %in% c(1, 0)],
                        pt$rhs[pt$user %in% c(1, 0)]))
     i_iv <- user_v[!user_v %in% pt$lhs[pt$op == "~"]]
@@ -167,6 +224,8 @@ mt_exclude_reversed <- function(mt, pt) {
 #' @noRd
 
 mt_remove_error_cov <- function(mt_list, sem_out) {
+    # Work for ngroups > 1
+    # Assume the structure is the same in all groups
     if (length(mt_list) == 0) {
         return(mt_list)
       }
@@ -191,6 +250,7 @@ lor_to_list <- function(x) {
                   lhs = x[, "lhs"],
                   op = x[, "op"],
                   rhs = x[, "rhs"],
+                  group = x[, "group"],
                   SIMPLIFY = FALSE,
                   USE.NAMES = FALSE)
     return(out)
@@ -319,4 +379,20 @@ df_to_lor <- function(object) {
                     SIMPLIFY = FALSE,
                     USE.NAMES = FALSE)
     out
+  }
+
+#' @noRd
+
+free_str_to_pt <- function(x_free) {
+    # Used when ngroups > 1
+    tmp1 <- sapply(x_free, function(xx) paste(xx[1:3], collapse = ""))
+    tmp2 <- lapply(tmp1, lavaan::lavParseModelString,
+                   as.data.frame = TRUE)
+    tmp2 <- do.call(rbind, tmp2)
+    tmp2 <- tmp2[, c("lhs", "op", "rhs", "block")]
+    tmp_gp <- sapply(x_free, function(xx) as.numeric(xx["group"]))
+    tmp2$block <- tmp_gp
+    tmp2$group <- tmp_gp
+    tmp2$free <- seq_len(nrow(tmp2))
+    tmp2
   }
