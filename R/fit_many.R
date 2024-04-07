@@ -219,15 +219,29 @@ fit_many <- function(model_list,
     }
 
   if (has_data) {
-      fit_i <- function(x,
-                        opt_args = list()) {
-          slot_opt1 <- utils::modifyList(slot_opt,
-                                         opt_args)
-          # We need the raw data because the order
-          # of variables may change
-          lavaan::lavaan(model = x,
-                         slotOptions = slot_opt1,
-                         data = raw_data)
+      if (has_groups) {
+          fit_i <- function(x,
+                            opt_args = list()) {
+              slot_opt1 <- utils::modifyList(slot_opt,
+                                             opt_args)
+              # We need the raw data because the order
+              # of variables may change
+              lavaan::lavaan(model = x,
+                             slotOptions = slot_opt1,
+                             group = group_var,
+                             data = raw_data)
+            }
+        } else {
+          fit_i <- function(x,
+                            opt_args = list()) {
+              slot_opt1 <- utils::modifyList(slot_opt,
+                                             opt_args)
+              # We need the raw data because the order
+              # of variables may change
+              lavaan::lavaan(model = x,
+                            slotOptions = slot_opt1,
+                            data = raw_data)
+            }
         }
     } else {
       fit_i <- function(x,

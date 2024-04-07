@@ -26,9 +26,21 @@ fit2 <- sem(mod2,
            dat_path_model,
            fixed.x = FALSE,
            group = "group")
+mod3 <-
+"
+x4 ~ x1
+x3 ~ x1 + x2
+"
+fit3 <- sem(mod3,
+           dat_path_model,
+           fixed.x = FALSE,
+           group = "group")
 out <- fit_many(list(parameterTable(fit1),
-                     parameterTable(fit2)),
+                     parameterTable(fit2),
+                     parameterTable(fit3)),
                 fit,
-                progress = FALSE)
-
+                parallel = 3,
+                ncores = 2)
+expect_equal(lavInspect(out$fit[[1]], "group.label"),
+             lavInspect(out$fit[[3]], "group.label"))
 }
