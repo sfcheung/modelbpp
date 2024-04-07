@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.8
+# modelbpp 0.1.3.9
 
 ## New Features
 
@@ -18,6 +18,16 @@
   `model_graph()`, to hide the labels
   of models with small BPPs.
   (0.1.3.5)
+
+- Added the argument `drop_equivalent_models`,
+  to `model_set()`. If `TRUE`, the
+  default, the models fitted will be
+  checked for equivalence. If two or
+  more more models are equivalent, only
+  one of them will be retained.
+  The groups of equivalent models identified,
+  and the models dropped, will be
+  printed by the print method. (0.1.3.9)
 
 ## Miscellaneous
 

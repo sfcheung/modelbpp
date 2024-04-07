@@ -30,7 +30,8 @@ model_set(
   make_cluster_args = list(),
   progress = TRUE,
   verbose = TRUE,
-  skip_check_sem_out = FALSE
+  skip_check_sem_out = FALSE,
+  drop_equivalent_models = TRUE
 )
 
 gen_models(
@@ -228,6 +229,15 @@ not, an error will be raised.
 Can be set to \code{FALSE} for experimenting
 the functions on models not officially
 supported.}
+
+\item{drop_equivalent_models}{If
+\code{TRUE}, the default, equivalent
+models will be dropped in the final
+output. This check can only be
+conducted when no models are fitted
+in \code{\link[lavaan:lavaan]{lavaan::lavaan()}} with
+\code{fixed.x = TRUE} (which is the
+default of \code{\link[lavaan:sem]{lavaan::sem()}}).}
 
 \item{output}{If \code{"model_set"},
 then the output is a \code{model_set}-class
