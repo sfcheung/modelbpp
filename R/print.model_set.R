@@ -300,25 +300,30 @@ print.model_set <- function(x,
         cat("- Cumulative: Cumulative BIC posterior probability.\n")
       }
     if (gt_max_models) {
-        x <- paste(fit_n,
+        tmp <- paste(fit_n,
                    "models were fitted but",
                    max_models,
                    "were printed. Call print() and",
                    "set 'max_models' to a larger number",
                    "to print more models, or set it to",
                    "NA to print all models.")
-        catwrap(x, initial = "- ", exdent = 2)
+        catwrap(tmp, initial = "- ", exdent = 2)
       }
     if (models_fitted &&
         (k_converged != fit_n) &&
         any(is.na(postprob_tmp))) {
-        x <- "BPP and/or prior not computed because one or more models not converged."
-        catwrap(x, initial = "- ", exdent = 2)
+        tmp <- "BPP and/or prior not computed because one or more models not converged."
+        catwrap(tmp, initial = "- ", exdent = 2)
       }
     if (models_fitted &&
         (k_post_check != fit_n)) {
-        x <- "Interpret with caution. One or more models failed lavaan's post.check."
-        catwrap(x, initial = "- ", exdent = 2)
+        tmp <- "Interpret with caution. One or more models failed lavaan's post.check."
+        catwrap(tmp, initial = "- ", exdent = 2)
       }
+    tmp <- paste0("Since Version 0.1.3.5, the default values of ",
+                  "exclude_feedback and exclude_xy_cov changed to TRUE. ",
+                  "Set them to FALSE to reproduce results from previous versions.")
+    catwrap(tmp, initial = "- ", exdent = 2)
+
     invisible(x)
   }

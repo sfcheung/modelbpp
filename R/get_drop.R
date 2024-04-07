@@ -128,11 +128,11 @@ get_drop <- function(sem_out,
     # User specified parameters
     if (!is.null(must_drop)) {
         id_must_drop <- syntax_to_id(must_drop, ptable = pt)
-        id_to_drop <- union(id_to_drop, id_must_drop)
+        id_to_drop[id_must_drop] <- TRUE
       }
     if (!is.null(must_not_drop)) {
         id_must_not_drop <- syntax_to_id(must_not_drop, ptable = pt)
-        id_to_drop <- setdiff(id_to_drop, id_must_not_drop)
+        id_to_drop[id_must_not_drop] <- FALSE
       }
     if (any(id_to_drop)) {
         # Determine the sets of changes

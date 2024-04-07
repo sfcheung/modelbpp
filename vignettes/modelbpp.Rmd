@@ -138,7 +138,12 @@ out1_bpp_2 <- sort(out1_bpp, decreasing = TRUE)[2]
 ```
 
 The total number of models examined,
-including the original model, is 9.
+including the original model, is `r  length(out1$models)`.
+
+(Note: The total number of models
+was 9 in previous version. Please
+refer to the Note in the printout for
+the changes.)
 
 The BIC posterior probabilities
 (BPPs) suggest that
@@ -186,17 +191,17 @@ equally probable before having data
 prior probabilities). A researcher
 fits the original model because
 
-  - its
-    prior probability is higher than other
-    models, at least other neighboring
-    models (otherwise, it is not worthy
-    of collecting data assess thi original
-    model), but
+- its
+  prior probability is higher than other
+  models, at least other neighboring
+  models (otherwise, it is not worthy
+  of collecting data assess thi original
+  model), but
 
-  - the prior probability
-    is not so high to eliminate the need
-    for collecting data to see how much it is
-    supported by data.
+- the prior probability
+  is not so high to eliminate the need
+  for collecting data to see how much it is
+  supported by data.
 
 Suppose we decide that the prior probability
 of the original model is .50: probable, but
@@ -258,7 +263,7 @@ out1_df2 <- model_set(fit1,
 ```
 
 This is the printout. By default, when there
-are more than 10 models, only the top 10
+are more than 20 models, only the top 20
 models on BPP will be printed:
 
 ```{r}
@@ -266,7 +271,7 @@ out1_df2
 ```
 
 The number of models examined, including
-the original model, is 18.
+the original model, is `r  length(out1_df2$models)`.
 
 This is the output of `model_graph()`:
 
@@ -289,32 +294,32 @@ specify parameters that must be excluded
 from the list to be added (`must_not_add`),
 or must not be dropped (`must_not_drop`).
 
-For example, it may not make sense To
-add the error covariance between `m1`
-and `y` (`m1~~y`). We can exclude it
+For example, suppose it is well
+established that `m1~x` exists and should
+not be dropped, we can exclude it
 when calling `model_set()`
 
 ```{r results = FALSE}
-out1_no_cov <- model_set(fit1,
-                         must_not_add = "m1~~y")
+out1_no_m1_x <- model_set(fit1,
+                          must_not_drop = "m1~x")
 ```
 
 This is the output:
 
 ```{r}
-out1_no_cov
+out1_no_m1_x
 ```
 
-The number of models reduced to 8.
+The number of models reduced to `r  length(out1_df2$models)`.
 
 This is the plot:
 
-```{r graph1_no_cov, ig.height = 8, fig.width = 8, eval = FALSE}
-graph1_no_cov <- model_graph(out1_no_cov)
-plot(graph1_no_cov)
+```{r out1_no_m1_x, ig.height = 8, fig.width = 8, eval = FALSE}
+out1_no_m1_x <- model_graph(out1_no_m1_x)
+plot(out1_no_m1_x)
 ```
 
-![](graph1_no_cov-1.png)
+![](out1_no_m1_x-1.png)
 
 ## Models With Constraints
 
