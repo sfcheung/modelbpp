@@ -48,9 +48,10 @@
 #'
 #' @param more_fit_measures Character
 #' vector. To be passed to
-#' [lavaan::fitMeasures()]. Default is
-#' `NULL`. If not `NULL`, these are
-#' the additional measures to be printed.
+#' [lavaan::fitMeasures()]. Default
+#' is `c("cfi", "rmsea")`. Set it to
+#' `NULL` to disable printing additional
+#' fit measures.
 #'
 #' @param fit_measures_digits The number of
 #' decimal places to be displayed
@@ -101,7 +102,7 @@ print.model_set <- function(x,
                             max_models = 20,
                             bpp_target = NULL,
                             target_name = "original",
-                            more_fit_measures = NULL,
+                            more_fit_measures = c("cfi", "rmsea"),
                             fit_measures_digits = 3,
                             short_names = FALSE,
                             ...) {
@@ -158,11 +159,17 @@ print.model_set <- function(x,
     out_table$BIC <- bic_tmp
     out_table$BPP <- postprob_tmp
     if (!is.null(more_fit_measures)) {
-        # TODO: Handle nonconvergence
         fit_fm <- sapply(x$fit,
-                         lavaan::fitMeasures,
-                         fit.measures = more_fit_measures,
-                         output = "vector")
+                         function(xx) {
+                            out <- tryCatch(lavaan::fitMeasures(xx,
+                                            fit.measures = more_fit_measures,
+                                            output = "vector"),
+                                            error = function(e) e)
+                            if (inherits(out, "error")) {
+                                out <- rep(NA, length(more_fit_measures))
+                              }
+                            out
+                          })
         fit_fm <- t(fit_fm)
         out_table <- cbind(out_table, fit_fm)
       }

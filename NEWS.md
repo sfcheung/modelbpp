@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.6
+# modelbpp 0.1.3.7
 
 ## New Features
 
@@ -19,6 +19,16 @@
   of models with small BPPs.
   (0.1.3.5)
 
+## Miscellaneous
+
+- Because it is very likely that users
+  would like to see come fit measures
+  along with BPPs, the default of
+  `more_fit_measures` of the print
+  method of `model_set`-class object
+  changed to `c("cfi", "rmseas")`.
+  (0.1.3.7)
+
 ## Bug Fixes
 
 - The `must_not_add` argument should
@@ -34,9 +44,9 @@
   Short names should now be properly
   constructed. (0.1.3.3)
 
-- Fixed a bug in `print.model_set()`
+- Fixed some bugs in `print.model_set()`
   about the printing of additional fit
-  measures. (0.1.3.6)
+  measures. (0.1.3.6, 0.1.3.7)
 
 # modelbpp 0.1.3
 
