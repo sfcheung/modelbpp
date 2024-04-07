@@ -141,21 +141,30 @@ fit_many <- function(model_list,
   slot_opt$se <- "none"
   slot_opt$baseline <- FALSE
   slot_opt$verbose <- FALSE
-
-  raw_data <- tryCatch(lavaan::lavInspect(sem_out, "data"),
+  has_groups <- lavaan::lavTech(sem_out, "ngroups") > 1
+  if (has_groups) {
+      group_var <- lavaan::lavTech(sem_out, "group")
+    }
+  raw_data <- tryCatch(lavaan::lavInspect(sem_out, "data",
+                                          drop.list.single.group = FALSE),
                        error = function(e) e)
   if (inherits(raw_data, "error")) {
       raw_data <- NULL
       has_data <- FALSE
     } else {
-      colnames(raw_data) <- lavaan::lavNames(sem_out)
-      rownames(raw_data) <- lavaan::lavInspect(sem_out, "case.idx")
+      for (i in seq_along(raw_data)) {
+          idx <- lavaan::lavInspect(sem_out, "case.idx",
+                                    drop.list.single.group = FALSE)
+          colnames(raw_data[[i]]) <- lavaan::lavNames(sem_out)
+          rownames(raw_data[[i]]) <- idx[[i]]
+        }
       has_data <- TRUE
     }
 
   if (has_data) {
       # Placeholder
     } else {
+      # This block works with ngroups > 1
       sem_out_nobs <- lavaan::lavInspect(sem_out, "nobs")
       sem_out_sp <- lavaan::lavInspect(sem_out, "sampstat")
       ng <- lavaan::lavInspect(sem_out, "ngroups")
@@ -197,10 +206,25 @@ fit_many <- function(model_list,
   #   }
 
   if (has_data) {
+      # Merge into one data frame
+      if (length(raw_data) == 1) {
+          raw_data <- as.data.frame(raw_data[[1]])
+        } else {
+          for (i in seq_along(raw_data)) {
+              raw_data[[i]] <- as.data.frame(raw_data[[i]])
+              raw_data[[i]][, group_var] <- names(raw_data)[i]
+            }
+          raw_data <- do.call(rbind, raw_data)
+        }
+    }
+
+  if (has_data) {
       fit_i <- function(x,
                         opt_args = list()) {
           slot_opt1 <- utils::modifyList(slot_opt,
                                          opt_args)
+          # We need the raw data because the order
+          # of variables may change
           lavaan::lavaan(model = x,
                          slotOptions = slot_opt1,
                          data = raw_data)
