@@ -29,6 +29,11 @@
   and the models dropped, will be
   printed by the print method. (0.1.3.9)
 
+- Added `measurement_invariance_models()`,
+  for generating metric and scalar
+  invariance models and their partial
+  invariance versions. (0.1.3.10)
+
 ## Miscellaneous
 
 - Because it is very likely that users
