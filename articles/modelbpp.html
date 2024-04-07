@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,7 @@
                         <h4 data-toc-skip class="author">Shu Fai
 Cheung</h4>
             
-            <h4 data-toc-skip class="date">2024-04-06</h4>
+            <h4 data-toc-skip class="date">2024-04-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/modelbpp/blob/HEAD/vignettes/modelbpp.Rmd" class="external-link"><code>vignettes/modelbpp.Rmd</code></a></small>
       <div class="d-none name"><code>modelbpp.Rmd</code></div>
@@ -258,34 +258,37 @@ compute the BPPs:</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; model_set(sem_out = fit1)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of model(s) fitted           : 9</span></span>
-<span><span class="co">#&gt; Number of model(s) converged        : 9</span></span>
-<span><span class="co">#&gt; Number of model(s) passed post.check: 9</span></span>
+<span><span class="co">#&gt; Number of model(s) fitted           : 7</span></span>
+<span><span class="co">#&gt; Number of model(s) converged        : 7</span></span>
+<span><span class="co">#&gt; Number of model(s) passed post.check: 7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; The models (sorted by BPP):</span></span>
 <span><span class="co">#&gt;             model_df df_diff Prior     BIC   BPP Cumulative</span></span>
-<span><span class="co">#&gt; original           2       0 0.111 464.320 0.253      0.253</span></span>
-<span><span class="co">#&gt; drop: y~x          3      -1 0.111 464.340 0.251      0.504</span></span>
-<span><span class="co">#&gt; add: m1~~y         1       1 0.111 465.900 0.115      0.619</span></span>
-<span><span class="co">#&gt; add: y~m1          1       1 0.111 465.900 0.115      0.733</span></span>
-<span><span class="co">#&gt; drop: m2~m1        3      -1 0.111 465.953 0.112      0.845</span></span>
-<span><span class="co">#&gt; add: m1~y          1       1 0.111 466.142 0.102      0.947</span></span>
-<span><span class="co">#&gt; add: m2~x          1       1 0.111 468.575 0.030      0.977</span></span>
-<span><span class="co">#&gt; drop: m1~x         3      -1 0.111 469.403 0.020      0.997</span></span>
-<span><span class="co">#&gt; drop: y~m2         3      -1 0.111 473.291 0.003      1.000</span></span>
+<span><span class="co">#&gt; original           2       0 0.143 464.320 0.323      0.323</span></span>
+<span><span class="co">#&gt; drop: y~x          3      -1 0.143 464.340 0.320      0.643</span></span>
+<span><span class="co">#&gt; add: y~m1          1       1 0.143 465.900 0.147      0.790</span></span>
+<span><span class="co">#&gt; drop: m2~m1        3      -1 0.143 465.953 0.143      0.932</span></span>
+<span><span class="co">#&gt; add: m2~x          1       1 0.143 468.575 0.038      0.971</span></span>
+<span><span class="co">#&gt; drop: m1~x         3      -1 0.143 469.403 0.025      0.996</span></span>
+<span><span class="co">#&gt; drop: y~m2         3      -1 0.143 473.291 0.004      1.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
 <span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
 <span><span class="co">#&gt; - model_df: Model degrees of freedom.</span></span>
 <span><span class="co">#&gt; - df_diff: Difference in df compared to the original/target model.</span></span>
-<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
+<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span>
+<span><span class="co">#&gt; - Since Version 0.1.3.5, the default values of exclude_feedback and</span></span>
+<span><span class="co">#&gt;   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce</span></span>
+<span><span class="co">#&gt;   results from previous versions.</span></span></code></pre></div>
 <p>The total number of models examined, including the original model, is
-9.</p>
+7.</p>
+<p>(Note: The total number of models was 9 in previous version. Please
+refer to the Note in the printout for the changes.)</p>
 <p>The BIC posterior probabilities (BPPs) suggest that the original
 model is indeed the most probable model based on BPP. However, the model
 with the direct path dropped, <code>drop: y~x</code>, only has slightly
-lower BPP (0.251)</p>
+lower BPP (0.320)</p>
 <p>This suggests that, with equal prior probabilities <span class="citation">(Wu et al., 2020)</span>, the support for the model
 with the direct and without the direct path have similar support from
 the data based on BPP.</p>
@@ -334,28 +337,29 @@ probability of the other eight model is (1 - .50) / 8 or .0625.</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; model_set(sem_out = fit1, prior_sem_out = 0.5)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of model(s) fitted           : 9</span></span>
-<span><span class="co">#&gt; Number of model(s) converged        : 9</span></span>
-<span><span class="co">#&gt; Number of model(s) passed post.check: 9</span></span>
+<span><span class="co">#&gt; Number of model(s) fitted           : 7</span></span>
+<span><span class="co">#&gt; Number of model(s) converged        : 7</span></span>
+<span><span class="co">#&gt; Number of model(s) passed post.check: 7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; The models (sorted by BPP):</span></span>
 <span><span class="co">#&gt;             model_df df_diff Prior     BIC   BPP Cumulative</span></span>
-<span><span class="co">#&gt; original           2       0 0.500 464.320 0.730      0.730</span></span>
-<span><span class="co">#&gt; drop: y~x          3      -1 0.062 464.340 0.090      0.821</span></span>
-<span><span class="co">#&gt; add: m1~~y         1       1 0.062 465.900 0.041      0.862</span></span>
-<span><span class="co">#&gt; add: y~m1          1       1 0.062 465.900 0.041      0.904</span></span>
-<span><span class="co">#&gt; drop: m2~m1        3      -1 0.062 465.953 0.040      0.944</span></span>
-<span><span class="co">#&gt; add: m1~y          1       1 0.062 466.142 0.037      0.981</span></span>
-<span><span class="co">#&gt; add: m2~x          1       1 0.062 468.575 0.011      0.992</span></span>
-<span><span class="co">#&gt; drop: m1~x         3      -1 0.062 469.403 0.007      0.999</span></span>
-<span><span class="co">#&gt; drop: y~m2         3      -1 0.062 473.291 0.001      1.000</span></span>
+<span><span class="co">#&gt; original           2       0 0.500 464.320 0.741      0.741</span></span>
+<span><span class="co">#&gt; drop: y~x          3      -1 0.083 464.340 0.122      0.863</span></span>
+<span><span class="co">#&gt; add: y~m1          1       1 0.083 465.900 0.056      0.920</span></span>
+<span><span class="co">#&gt; drop: m2~m1        3      -1 0.083 465.953 0.055      0.974</span></span>
+<span><span class="co">#&gt; add: m2~x          1       1 0.083 468.575 0.015      0.989</span></span>
+<span><span class="co">#&gt; drop: m1~x         3      -1 0.083 469.403 0.010      0.999</span></span>
+<span><span class="co">#&gt; drop: y~m2         3      -1 0.083 473.291 0.001      1.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
 <span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
 <span><span class="co">#&gt; - model_df: Model degrees of freedom.</span></span>
 <span><span class="co">#&gt; - df_diff: Difference in df compared to the original/target model.</span></span>
-<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
+<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span>
+<span><span class="co">#&gt; - Since Version 0.1.3.5, the default values of exclude_feedback and</span></span>
+<span><span class="co">#&gt;   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce</span></span>
+<span><span class="co">#&gt;   results from previous versions.</span></span></code></pre></div>
 <p>If the prior of the target is set to .50, then, taking into account
 both the prior probabilities and the data, the target model is strongly
 supported by the data.</p>
@@ -380,47 +384,46 @@ model. For example, we can set the maximum difference in model
 <code class="sourceCode R"><span><span class="va">out1_df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_set.html">model_set</a></span><span class="op">(</span><span class="va">fit1</span>,</span>
 <span>                      df_change_add <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>                      df_change_drop <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p>This is the printout. By default, when there are more than 10 models,
-only the top 10 models on BPP will be printed:</p>
+<p>This is the printout. By default, when there are more than 20 models,
+only the top 20 models on BPP will be printed:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out1_df2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; model_set(sem_out = fit1, df_change_add = 2, df_change_drop = 2)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of model(s) fitted           : 18</span></span>
-<span><span class="co">#&gt; Number of model(s) converged        : 18</span></span>
-<span><span class="co">#&gt; Number of model(s) passed post.check: 18</span></span>
+<span><span class="co">#&gt; Number of model(s) fitted           : 14</span></span>
+<span><span class="co">#&gt; Number of model(s) converged        : 14</span></span>
+<span><span class="co">#&gt; Number of model(s) passed post.check: 14</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; The models (sorted by BPP):</span></span>
 <span><span class="co">#&gt;                  model_df df_diff Prior     BIC   BPP Cumulative</span></span>
-<span><span class="co">#&gt; original                2       0 0.056 464.320 0.214      0.214</span></span>
-<span><span class="co">#&gt; drop: y~x               3      -1 0.056 464.340 0.212      0.426</span></span>
-<span><span class="co">#&gt; add: m1~~y              1       1 0.056 465.900 0.097      0.523</span></span>
-<span><span class="co">#&gt; add: y~m1               1       1 0.056 465.900 0.097      0.620</span></span>
-<span><span class="co">#&gt; drop: m2~m1             3      -1 0.056 465.953 0.095      0.714</span></span>
-<span><span class="co">#&gt; drop: m2~m1;y~x         4      -2 0.056 465.973 0.094      0.808</span></span>
-<span><span class="co">#&gt; add: m1~y               1       1 0.056 466.142 0.086      0.894</span></span>
-<span><span class="co">#&gt; add: m2~x               1       1 0.056 468.575 0.025      0.920</span></span>
-<span><span class="co">#&gt; drop: m1~x              3      -1 0.056 469.403 0.017      0.936</span></span>
-<span><span class="co">#&gt; drop: m1~x;y~x          4      -2 0.056 469.423 0.017      0.953</span></span>
-<span><span class="co">#&gt; add: m1~~y;m2~x         0       2 0.056 470.154 0.012      0.965</span></span>
-<span><span class="co">#&gt; add: m1~y;m2~x          0       2 0.056 470.154 0.012      0.976</span></span>
-<span><span class="co">#&gt; add: m2~x;y~m1          0       2 0.056 470.154 0.012      0.988</span></span>
-<span><span class="co">#&gt; drop: m1~x;m2~m1        4      -2 0.056 471.036 0.007      0.995</span></span>
-<span><span class="co">#&gt; drop: y~m2              3      -1 0.056 473.291 0.002      0.998</span></span>
-<span><span class="co">#&gt; drop: y~m2;y~x          4      -2 0.056 474.819 0.001      0.999</span></span>
-<span><span class="co">#&gt; drop: m2~m1;y~m2        4      -2 0.056 474.924 0.001      1.000</span></span>
-<span><span class="co">#&gt; drop: m1~x;y~m2         4      -2 0.056 478.374 0.000      1.000</span></span>
+<span><span class="co">#&gt; original                2       0 0.071 464.320 0.269      0.269</span></span>
+<span><span class="co">#&gt; drop: y~x               3      -1 0.071 464.340 0.267      0.536</span></span>
+<span><span class="co">#&gt; add: y~m1               1       1 0.071 465.900 0.122      0.659</span></span>
+<span><span class="co">#&gt; drop: m2~m1             3      -1 0.071 465.953 0.119      0.778</span></span>
+<span><span class="co">#&gt; drop: m2~m1;y~x         4      -2 0.071 465.973 0.118      0.896</span></span>
+<span><span class="co">#&gt; add: m2~x               1       1 0.071 468.575 0.032      0.928</span></span>
+<span><span class="co">#&gt; drop: m1~x              3      -1 0.071 469.403 0.021      0.949</span></span>
+<span><span class="co">#&gt; drop: m1~x;y~x          4      -2 0.071 469.423 0.021      0.970</span></span>
+<span><span class="co">#&gt; add: m2~x;y~m1          0       2 0.071 470.154 0.015      0.985</span></span>
+<span><span class="co">#&gt; drop: m1~x;m2~m1        4      -2 0.071 471.036 0.009      0.994</span></span>
+<span><span class="co">#&gt; drop: y~m2              3      -1 0.071 473.291 0.003      0.997</span></span>
+<span><span class="co">#&gt; drop: y~m2;y~x          4      -2 0.071 474.819 0.001      0.998</span></span>
+<span><span class="co">#&gt; drop: m2~m1;y~m2        4      -2 0.071 474.924 0.001      1.000</span></span>
+<span><span class="co">#&gt; drop: m1~x;y~m2         4      -2 0.071 478.374 0.000      1.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
 <span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
 <span><span class="co">#&gt; - model_df: Model degrees of freedom.</span></span>
 <span><span class="co">#&gt; - df_diff: Difference in df compared to the original/target model.</span></span>
-<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
+<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span>
+<span><span class="co">#&gt; - Since Version 0.1.3.5, the default values of exclude_feedback and</span></span>
+<span><span class="co">#&gt;   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce</span></span>
+<span><span class="co">#&gt;   results from previous versions.</span></span></code></pre></div>
 <p>The number of models examined, including the original model, is
-18.</p>
+14.</p>
 <p>This is the output of <code><a href="../reference/model_graph.html">model_graph()</a></code>:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">graph1_df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_graph.html">model_graph</a></span><span class="op">(</span><span class="va">out1_df2</span>,</span>
@@ -437,46 +440,47 @@ used to reduce the size of the labels.</p>
 that must be excluded from the list to be added
 (<code>must_not_add</code>), or must not be dropped
 (<code>must_not_drop</code>).</p>
-<p>For example, it may not make sense To add the error covariance
-between <code>m1</code> and <code>y</code> (<code>m1~~y</code>). We can
-exclude it when calling <code><a href="../reference/model_set.html">model_set()</a></code></p>
+<p>For example, suppose it is well established that <code>m1~x</code>
+exists and should not be dropped, we can exclude it when calling
+<code><a href="../reference/model_set.html">model_set()</a></code></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out1_no_cov</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_set.html">model_set</a></span><span class="op">(</span><span class="va">fit1</span>,</span>
-<span>                         must_not_add <span class="op">=</span> <span class="st">"m1~~y"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">out1_no_m1_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_set.html">model_set</a></span><span class="op">(</span><span class="va">fit1</span>,</span>
+<span>                          must_not_drop <span class="op">=</span> <span class="st">"m1~x"</span><span class="op">)</span></span></code></pre></div>
 <p>This is the output:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out1_no_cov</span></span>
+<code class="sourceCode R"><span><span class="va">out1_no_m1_x</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; model_set(sem_out = fit1, must_not_add = "m1~~y")</span></span>
+<span><span class="co">#&gt; model_set(sem_out = fit1, must_not_drop = "m1~x")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of model(s) fitted           : 8</span></span>
-<span><span class="co">#&gt; Number of model(s) converged        : 8</span></span>
-<span><span class="co">#&gt; Number of model(s) passed post.check: 8</span></span>
+<span><span class="co">#&gt; Number of model(s) fitted           : 6</span></span>
+<span><span class="co">#&gt; Number of model(s) converged        : 6</span></span>
+<span><span class="co">#&gt; Number of model(s) passed post.check: 6</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; The models (sorted by BPP):</span></span>
 <span><span class="co">#&gt;             model_df df_diff Prior     BIC   BPP Cumulative</span></span>
-<span><span class="co">#&gt; original           2       0 0.125 464.320 0.286      0.286</span></span>
-<span><span class="co">#&gt; drop: y~x          3      -1 0.125 464.340 0.283      0.569</span></span>
-<span><span class="co">#&gt; add: y~m1          1       1 0.125 465.900 0.130      0.699</span></span>
-<span><span class="co">#&gt; drop: m2~m1        3      -1 0.125 465.953 0.126      0.825</span></span>
-<span><span class="co">#&gt; add: m1~y          1       1 0.125 466.142 0.115      0.940</span></span>
-<span><span class="co">#&gt; add: m2~x          1       1 0.125 468.575 0.034      0.974</span></span>
-<span><span class="co">#&gt; drop: m1~x         3      -1 0.125 469.403 0.023      0.997</span></span>
-<span><span class="co">#&gt; drop: y~m2         3      -1 0.125 473.291 0.003      1.000</span></span>
+<span><span class="co">#&gt; original           2       0 0.167 464.320 0.331      0.331</span></span>
+<span><span class="co">#&gt; drop: y~x          3      -1 0.167 464.340 0.328      0.660</span></span>
+<span><span class="co">#&gt; add: y~m1          1       1 0.167 465.900 0.150      0.810</span></span>
+<span><span class="co">#&gt; drop: m2~m1        3      -1 0.167 465.953 0.147      0.957</span></span>
+<span><span class="co">#&gt; add: m2~x          1       1 0.167 468.575 0.040      0.996</span></span>
+<span><span class="co">#&gt; drop: y~m2         3      -1 0.167 473.291 0.004      1.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
 <span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
 <span><span class="co">#&gt; - model_df: Model degrees of freedom.</span></span>
 <span><span class="co">#&gt; - df_diff: Difference in df compared to the original/target model.</span></span>
-<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
-<p>The number of models reduced to 8.</p>
+<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span>
+<span><span class="co">#&gt; - Since Version 0.1.3.5, the default values of exclude_feedback and</span></span>
+<span><span class="co">#&gt;   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce</span></span>
+<span><span class="co">#&gt;   results from previous versions.</span></span></code></pre></div>
+<p>The number of models reduced to 14.</p>
 <p>This is the plot:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">graph1_no_cov</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_graph.html">model_graph</a></span><span class="op">(</span><span class="va">out1_no_cov</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">graph1_no_cov</span><span class="op">)</span></span></code></pre></div>
-<p><img src="graph1_no_cov-1.png"></p>
+<code class="sourceCode R"><span><span class="va">out1_no_m1_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_graph.html">model_graph</a></span><span class="op">(</span><span class="va">out1_no_m1_x</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">out1_no_m1_x</span><span class="op">)</span></span></code></pre></div>
+<p><img src="out1_no_m1_x-1.png"></p>
 </div>
 <div class="section level3">
 <h3 id="models-with-constraints">Models With Constraints<a class="anchor" aria-label="anchor" href="#models-with-constraints"></a>
@@ -504,28 +508,29 @@ the original <code>lavaan</code> output as the input:</p>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; model_set(model_set_out = out1, prior_sem_out = 0.5)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of model(s) fitted           : 9</span></span>
-<span><span class="co">#&gt; Number of model(s) converged        : 9</span></span>
-<span><span class="co">#&gt; Number of model(s) passed post.check: 9</span></span>
+<span><span class="co">#&gt; Number of model(s) fitted           : 7</span></span>
+<span><span class="co">#&gt; Number of model(s) converged        : 7</span></span>
+<span><span class="co">#&gt; Number of model(s) passed post.check: 7</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; The models (sorted by BPP):</span></span>
 <span><span class="co">#&gt;             model_df df_diff Prior     BIC   BPP Cumulative</span></span>
-<span><span class="co">#&gt; original           2       0 0.500 464.320 0.730      0.730</span></span>
-<span><span class="co">#&gt; drop: y~x          3      -1 0.062 464.340 0.090      0.821</span></span>
-<span><span class="co">#&gt; add: m1~~y         1       1 0.062 465.900 0.041      0.862</span></span>
-<span><span class="co">#&gt; add: y~m1          1       1 0.062 465.900 0.041      0.904</span></span>
-<span><span class="co">#&gt; drop: m2~m1        3      -1 0.062 465.953 0.040      0.944</span></span>
-<span><span class="co">#&gt; add: m1~y          1       1 0.062 466.142 0.037      0.981</span></span>
-<span><span class="co">#&gt; add: m2~x          1       1 0.062 468.575 0.011      0.992</span></span>
-<span><span class="co">#&gt; drop: m1~x         3      -1 0.062 469.403 0.007      0.999</span></span>
-<span><span class="co">#&gt; drop: y~m2         3      -1 0.062 473.291 0.001      1.000</span></span>
+<span><span class="co">#&gt; original           2       0 0.500 464.320 0.741      0.741</span></span>
+<span><span class="co">#&gt; drop: y~x          3      -1 0.083 464.340 0.122      0.863</span></span>
+<span><span class="co">#&gt; add: y~m1          1       1 0.083 465.900 0.056      0.920</span></span>
+<span><span class="co">#&gt; drop: m2~m1        3      -1 0.083 465.953 0.055      0.974</span></span>
+<span><span class="co">#&gt; add: m2~x          1       1 0.083 468.575 0.015      0.989</span></span>
+<span><span class="co">#&gt; drop: m1~x         3      -1 0.083 469.403 0.010      0.999</span></span>
+<span><span class="co">#&gt; drop: y~m2         3      -1 0.083 473.291 0.001      1.000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - BIC: Bayesian Information Criterion.</span></span>
 <span><span class="co">#&gt; - BPP: BIC posterior probability.</span></span>
 <span><span class="co">#&gt; - model_df: Model degrees of freedom.</span></span>
 <span><span class="co">#&gt; - df_diff: Difference in df compared to the original/target model.</span></span>
-<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span></code></pre></div>
+<span><span class="co">#&gt; - Cumulative: Cumulative BIC posterior probability.</span></span>
+<span><span class="co">#&gt; - Since Version 0.1.3.5, the default values of exclude_feedback and</span></span>
+<span><span class="co">#&gt;   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce</span></span>
+<span><span class="co">#&gt;   results from previous versions.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="many-neighboring-models">Many Neighboring Models<a class="anchor" aria-label="anchor" href="#many-neighboring-models"></a>
