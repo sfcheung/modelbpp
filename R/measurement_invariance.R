@@ -133,9 +133,10 @@ measurement_invariance_models <- function(cfa_out,
     if (length(opt$group.partial) != 0) {
         stop("Cannot be used models with 'group.partial' set.")
       }
+    cfa_out@call$model <- eval(cfa_out@call$model,
+                               envir = parent.frame())
     if (metric) {
         fit_metric <- lavaan::update(cfa_out,
-                                     model = pt,
                                      group.equal = "loadings")
         fit_pi_metric <- partial_invariance(fit_metric,
                                             pars = "loadings",
@@ -149,7 +150,6 @@ measurement_invariance_models <- function(cfa_out,
       }
     if (scalar) {
         fit_scalar <- lavaan::update(cfa_out,
-                                     model = pt,
                                      group.equal = c("loadings", "intercepts"))
         fit_pi_scalar <- partial_invariance(fit_scalar,
                                             pars = "intercepts",
@@ -202,10 +202,9 @@ partial_invariance <- function(cfa_out,
                     intercepts = c("loadings", "intercepts"))
     pt <- lavaan::parameterTable(cfa_out)
     fit_i <- function(x) {
-            sem_out_update <- eval(lavaan::update(cfa_out,
-                                             model = pt,
+            sem_out_update <- lavaan::update(cfa_out,
                                              group.equal = gp_eq,
-                                             group.partial = x))
+                                             group.partial = x)
             sem_out_update
           }
     if (progress) {
