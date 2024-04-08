@@ -46,6 +46,7 @@ reference:
   - is_partable
   - same_variables
   - to_partables
+  - measurement_invariance_models
 - title: Methods
 - contents:
   - print.partables

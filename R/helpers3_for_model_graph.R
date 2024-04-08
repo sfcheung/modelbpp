@@ -84,7 +84,8 @@ models_network <- function(object) {
 
 models_network2 <- function(object,
                             one_df_only = TRUE,
-                            progress = FALSE) {
+                            progress = FALSE,
+                            mark_equivalent = FALSE) {
     if (inherits(object, "model_set")) {
         models <- object$fit
       } else {
@@ -156,6 +157,9 @@ models_network2 <- function(object,
                 net_out[j, i] <- df_j - df_i
               }
             # TODO: Decide what to do with equivalent models
+            if (net_chk == "equivalent" && mark_equivalent) {
+                net_out[i, j] <- net_out[j, i] <- NA
+              }
           }
       }
     if (progress) {
@@ -550,4 +554,30 @@ v_labels <- function(x) {
     out0 <- gsub(": ", ":\n", x, fixed = TRUE)
     out0 <- gsub(";", "\n", out0, fixed = TRUE)
     out0
+  }
+
+#' @title Identify Clusters of Equivalent Models
+#'
+#' @noRd
+
+equivalent_clusters <- function(fits,
+                                name_cluster = TRUE) {
+    net_eq <- models_network2(fits,
+                              mark_equivalent = TRUE)
+    if (!any(is.na(net_eq))) {
+        return(NULL)
+      }
+    net_eq[!is.na(net_eq)] <- 0
+    net_eq[is.na(net_eq)] <- 1
+    p_eq <- igraph::graph_from_adjacency_matrix(net_eq,
+                                                mode = "undirected")
+    p_eq_group <- igraph::max_cliques(p_eq)
+    i <- sapply(p_eq_group, length)
+    p_eq_group <- p_eq_group[i > 1]
+    p_eq_group_names <- lapply(p_eq_group, function(x) x$name)
+    if (name_cluster) {
+        tmp <- sapply(p_eq_group_names, function(x) x[1])
+        names(p_eq_group_names) <- tmp
+      }
+    p_eq_group_names
   }

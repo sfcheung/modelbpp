@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.6
+# modelbpp 0.1.3.11
 
 ## New Features
 
@@ -19,6 +19,34 @@
   of models with small BPPs.
   (0.1.3.5)
 
+- Added the argument `drop_equivalent_models`,
+  to `model_set()`. If `TRUE`, the
+  default, the models fitted will be
+  checked for equivalence. If two or
+  more more models are equivalent, only
+  one of them will be retained.
+  The groups of equivalent models identified,
+  and the models dropped, will be
+  printed by the print method. (0.1.3.9)
+
+- Added `measurement_invariance_models()`,
+  for generating metric and scalar
+  invariance models and their partial
+  invariance versions. (0.1.3.10 - 0.1.3.11)
+
+## Miscellaneous
+
+- Because it is very likely that users
+  would like to see come fit measures
+  along with BPPs, the default of
+  `more_fit_measures` of the print
+  method of `model_set`-class object
+  changed to `c("cfi", "rmseas")`.
+  (0.1.3.7)
+
+- Revised `fit_many()` to support
+  multigroup models. (0.1.3.8)
+
 ## Bug Fixes
 
 - The `must_not_add` argument should
@@ -34,9 +62,9 @@
   Short names should now be properly
   constructed. (0.1.3.3)
 
-- Fixed a bug in `print.model_set()`
+- Fixed some bugs in `print.model_set()`
   about the printing of additional fit
-  measures. (0.1.3.6)
+  measures. (0.1.3.6, 0.1.3.7)
 
 # modelbpp 0.1.3
 
