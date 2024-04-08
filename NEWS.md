@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.9
+# modelbpp 0.1.3.11
 
 ## New Features
 
@@ -32,7 +32,7 @@
 - Added `measurement_invariance_models()`,
   for generating metric and scalar
   invariance models and their partial
-  invariance versions. (0.1.3.10)
+  invariance versions. (0.1.3.10 - 0.1.3.11)
 
 ## Miscellaneous
 
