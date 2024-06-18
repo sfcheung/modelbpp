@@ -564,9 +564,12 @@ v_labels <- function(x) {
 #' @noRd
 
 equivalent_clusters <- function(fits,
-                                name_cluster = TRUE) {
+                                name_cluster = TRUE,
+                                progress = FALSE) {
     net_eq <- models_network2(fits,
-                              mark_equivalent = TRUE)
+                              mark_equivalent = TRUE,
+                              progress = progress,
+                              one_df_only = TRUE)
     if (!any(is.na(net_eq))) {
         return(NULL)
       }

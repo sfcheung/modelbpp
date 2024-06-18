@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.12
+# modelbpp 0.1.3.13
 
 ## New Features
 
@@ -46,6 +46,10 @@
 
 - Revised `fit_many()` to support
   multigroup models. (0.1.3.8)
+
+- A progress bar can be displayed when
+  `model_set()` is identifying nested
+  models. (0.1.3.13)
 
 ## Bug Fixes
 
