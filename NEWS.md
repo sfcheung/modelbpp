@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.11
+# modelbpp 0.1.3.12
 
 ## New Features
 
@@ -65,6 +65,9 @@
 - Fixed some bugs in `print.model_set()`
   about the printing of additional fit
   measures. (0.1.3.6, 0.1.3.7)
+
+- Fixed a bug in checking whether two
+  models are equivalent. (0.1.3.12)
 
 # modelbpp 0.1.3
 
