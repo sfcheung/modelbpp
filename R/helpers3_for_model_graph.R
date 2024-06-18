@@ -194,6 +194,11 @@ x_net_y <- function(x,
     if (is.null(y_df)) {
         y_df <- lavaan::fitMeasures(y, fit.measures = "df")
       }
+    if ((x_df == y_df) &&
+        (abs(lavaan::fitMeasures(x, fit.measures = "chisq") -
+             lavaan::fitMeasures(y, fit.measures = "chisq")) < crit)) {
+        return("equivalent")
+      }
     # Reorder the models f1 >= f2 on df
     if (x_df < y_df) {
         f1 <- y
@@ -276,9 +281,9 @@ x_net_y <- function(x,
     f2_1_chisq <- unname(lavaan::fitMeasures(f2_1, fit.measures = "chisq"))
     chisq_eq <- f2_1_chisq < crit
     if (chisq_eq) {
-        if (x_df == y_df) {
-            out <- "equivalent"
-          }
+        # if (x_df == y_df) {
+        #     out <- "equivalent"
+        #   }
       } else {
         out <- "not_nested"
       }
