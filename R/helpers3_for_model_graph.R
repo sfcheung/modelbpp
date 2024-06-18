@@ -180,7 +180,7 @@ models_network2 <- function(object,
 x_net_y <- function(x,
                     y,
                     x_df = NULL,
-                    y_df= NULL,
+                    y_df = NULL,
                     crit = 1e-4,
                     check_x_y = TRUE) {
     # Based on semTools:::x.within.y().
@@ -193,6 +193,11 @@ x_net_y <- function(x,
       }
     if (is.null(y_df)) {
         y_df <- lavaan::fitMeasures(y, fit.measures = "df")
+      }
+    if ((x_df == y_df) &&
+        (abs(lavaan::fitMeasures(x, fit.measures = "chisq") -
+             lavaan::fitMeasures(y, fit.measures = "chisq")) < crit)) {
+        return("equivalent")
       }
     # Reorder the models f1 >= f2 on df
     if (x_df < y_df) {
@@ -276,9 +281,7 @@ x_net_y <- function(x,
     f2_1_chisq <- unname(lavaan::fitMeasures(f2_1, fit.measures = "chisq"))
     chisq_eq <- f2_1_chisq < crit
     if (chisq_eq) {
-        if (x_df == y_df) {
-            out <- "equivalent"
-          }
+        # Equivalence should not be determined this way
       } else {
         out <- "not_nested"
       }
@@ -561,9 +564,12 @@ v_labels <- function(x) {
 #' @noRd
 
 equivalent_clusters <- function(fits,
-                                name_cluster = TRUE) {
+                                name_cluster = TRUE,
+                                progress = FALSE) {
     net_eq <- models_network2(fits,
-                              mark_equivalent = TRUE)
+                              mark_equivalent = TRUE,
+                              progress = progress,
+                              one_df_only = TRUE)
     if (!any(is.na(net_eq))) {
         return(NULL)
       }

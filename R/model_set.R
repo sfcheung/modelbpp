@@ -468,7 +468,9 @@ model_set <- function(sem_out,
   #     warning("Cannot check for equivalent models if fixed.x = TRUE.")
   #   }
   if (!is.null(out$fit) && drop_equivalent_models && isFALSE(any_fixedx)) {
-      mod_eq <- tryCatch(equivalent_clusters(out$fit),
+      mod_eq <- tryCatch(equivalent_clusters(out$fit,
+                                             progress = progress,
+                                             name_cluster = TRUE),
                          error = function(e) e)
       if (inherits(mod_eq, "error")) {
           if (grepl("fixed.x = TRUE", mod_eq$message, fixed = TRUE)) {
