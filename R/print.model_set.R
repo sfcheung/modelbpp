@@ -251,9 +251,9 @@ print.model_set <- function(x,
                       formatC(x$bpp[target_name], digits = bpp_digits, format = "f")))
             colnames(tmp) <- paste0("Target Model: ",
                                     target_name)
-            rownames(tmp) <- c("Desired minimum BIC posterior probability:",
+            rownames(tmp) <- c("Desired minimum BPP:",
                                "Required minimum prior probability:",
-                               "Current BIC posterior probability:")
+                               "Current BPP:")
             print(tmp)
           }
       } else {
