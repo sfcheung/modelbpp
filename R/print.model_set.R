@@ -67,6 +67,11 @@
 #' the graph from `model_graph()`
 #' if short names are used in the graph.
 #'
+#' @param cumulative_bpp If `TRUE` and
+#' the models are sorted by BPPs,
+#' cumulative BPPs will be printed.
+#' Default is `FALSE`.
+#'
 #' @param ...  Optional arguments.
 #' Ignored.
 #'
@@ -105,6 +110,7 @@ print.model_set <- function(x,
                             more_fit_measures = c("cfi", "rmsea"),
                             fit_measures_digits = 3,
                             short_names = FALSE,
+                            cumulative_bpp = FALSE,
                             ...) {
     fit_n <- length(x$models)
     fit_names <- names(x$models)
@@ -177,11 +183,13 @@ print.model_set <- function(x,
         i <- order(out_table$BPP,
                    decreasing = TRUE)
         out_table <- out_table[i, ]
-        tmp <- round(cumsum(out_table$BPP), bpp_digits)
-        tmp <- formatC(tmp,
-                       digits = bpp_digits,
-                       format = "f")
-        out_table["Cumulative"] <- tmp
+        if (cumulative_bpp) {
+            tmp <- round(cumsum(out_table$BPP), bpp_digits)
+            tmp <- formatC(tmp,
+                          digits = bpp_digits,
+                          format = "f")
+            out_table["Cumulative"] <- tmp
+          }
       }
     out_table_print <- out_table
     out_table_print$Prior <- round(out_table_print$Prior,
@@ -251,9 +259,9 @@ print.model_set <- function(x,
                       formatC(x$bpp[target_name], digits = bpp_digits, format = "f")))
             colnames(tmp) <- paste0("Target Model: ",
                                     target_name)
-            rownames(tmp) <- c("Desired minimum BIC posterior probability:",
+            rownames(tmp) <- c("Desired minimum BPP:",
                                "Required minimum prior probability:",
-                               "Current BIC posterior probability:")
+                               "Current BPP:")
             print(tmp)
           }
       } else {
@@ -311,8 +319,12 @@ print.model_set <- function(x,
     cat("- BPP: BIC posterior probability.\n")
     cat("- model_df: Model degrees of freedom.\n")
     cat("- df_diff: Difference in df compared to the original/target model.\n")
-    if (sort_models && ("Cumulative" %in% colnames(x_tmp))) {
-        cat("- Cumulative: Cumulative BIC posterior probability.\n")
+    if (sort_models) {
+        if (("Cumulative" %in% colnames(x_tmp))) {
+            cat("- Cumulative: Cumulative BIC posterior probability.\n")
+          } else {
+            cat("- To show cumulative BPPs, call print() with 'cumulative_bpp = TRUE'.\n")
+          }
       }
     if (gt_max_models) {
         tmp <- paste(fit_n,
