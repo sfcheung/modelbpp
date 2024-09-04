@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.14
+# modelbpp 0.1.3.15
 
 ## New Features
 
@@ -55,6 +55,11 @@
   to `BPP` in some sections of the
   printout of `print.model_set()`.
   (0.1.3.14)
+
+- Cumulative BPPs no longer displayed
+  by default in `print.model_set()`.
+  Print them by setting `cumulative_bpp`
+  to `TRUE`. (0.1.3.15)
 
 ## Bug Fixes
 
