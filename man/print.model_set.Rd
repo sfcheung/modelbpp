@@ -15,6 +15,7 @@
   more_fit_measures = c("cfi", "rmsea"),
   fit_measures_digits = 3,
   short_names = FALSE,
+  cumulative_bpp = FALSE,
   ...
 )
 }
@@ -74,6 +75,11 @@ Default is \code{FALSE}. Short names
 can be used when interpreting
 the graph from \code{model_graph()}
 if short names are used in the graph.}
+
+\item{cumulative_bpp}{If \code{TRUE} and
+the models are sorted by BPPs,
+cumulative BPPs will be printed.
+Default is \code{FALSE}.}
 
 \item{...}{Optional arguments.
 Ignored.}

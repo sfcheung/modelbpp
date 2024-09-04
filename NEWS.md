@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.13
+# modelbpp 0.1.3.15
 
 ## New Features
 
@@ -50,6 +50,16 @@
 - A progress bar can be displayed when
   `model_set()` is identifying nested
   models. (0.1.3.13)
+
+- Shortened `BIC Posterior Probability`
+  to `BPP` in some sections of the
+  printout of `print.model_set()`.
+  (0.1.3.14)
+
+- Cumulative BPPs no longer displayed
+  by default in `print.model_set()`.
+  Print them by setting `cumulative_bpp`
+  to `TRUE`. (0.1.3.15)
 
 ## Bug Fixes
 
