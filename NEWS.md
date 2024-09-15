@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.15
+# modelbpp 0.1.3.16
 
 ## New Features
 
@@ -60,6 +60,12 @@
   by default in `print.model_set()`.
   Print them by setting `cumulative_bpp`
   to `TRUE`. (0.1.3.15)
+
+- Update an internal function to handle
+  nonconvergence in checking nested
+  relation. Only affect the graphs and
+  only happen in some rare cases.
+  (0.1.3.16)
 
 ## Bug Fixes
 

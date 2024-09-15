@@ -151,6 +151,7 @@ models_network2 <- function(object,
                                y = models[[j]],
                                x_df = df_i,
                                y_df = df_j)
+            if (is.na(net_chk)) next
             if (net_chk == "x_within_y") {
                 net_out[i, j] <- df_i - df_j
               } else if (net_chk == "y_within_x") {
@@ -274,8 +275,13 @@ x_net_y <- function(x,
                            sample.nobs = f1_nobs,
                            sample.th = implied_threshold,
                            WLS.V = f1_WLS.V,
-                           NACOV = f1_NACOV)
+                           NACOV = f1_NACOV,
+                           warn = FALSE)
     if (!lavaan::lavInspect(f2_1, "converged")) {
+        # If estimation failed to converged,
+        # then do not assume a nested relation.
+        # Should not be a major problem because this only
+        # affect the graph.
         return(NA)
       }
     f2_1_chisq <- unname(lavaan::fitMeasures(f2_1, fit.measures = "chisq"))
