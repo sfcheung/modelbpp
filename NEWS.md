@@ -1,4 +1,4 @@
-# modelbpp 0.1.3.16
+# modelbpp 0.1.4
 
 ## New Features
 
@@ -41,7 +41,7 @@
   along with BPPs, the default of
   `more_fit_measures` of the print
   method of `model_set`-class object
-  changed to `c("cfi", "rmseas")`.
+  changed to `c("cfi", "rmsea")`.
   (0.1.3.7)
 
 - Revised `fit_many()` to support
