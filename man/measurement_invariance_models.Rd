@@ -103,12 +103,12 @@ generate the models.
 \examples{
 
 library(lavaan)
-data(HolzingerSwineford1939)
-# For illustration, only two factors are used
+# For illustration, only one factor is used,
+# with one item from another factor added
+# just to make the model not saturated.
 HSmod <-
 "
-spatial =~ x1 + x2 + x3
-verbal =~ x4 + x5 + x6
+spatial =~ x1 + x2 + x3 + x4
 "
 fit_config <- cfa(model = HSmod,
                   data = HolzingerSwineford1939,
