@@ -95,7 +95,8 @@
 #' arrow has a nested relation based on
 #' the NET method by Bentler and Satorra
 #' (2010). An internal function inspired
-#' by [semTools::net()] is used to
+#' by the `net` function from the
+#' `semTools` package is used to
 #' implement the NET method.
 #'
 #' ## The Size of a Node
@@ -246,7 +247,8 @@
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #' The internal function for nesting
-#' inspired by [semTools::net()],
+#' inspired by the `net` function
+#' from the `semTools` package,
 #' which was developed by
 #' Terrence D. Jorgensen.
 #'
