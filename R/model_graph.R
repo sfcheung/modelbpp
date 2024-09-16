@@ -407,7 +407,8 @@ model_graph <- function(object,
 #' [model_graph()].
 #'
 #' For now, it simply passes the object
-#' to [plot.igraph()]. This function
+#' to `plot`-method of an `igraph` object.
+#' This function
 #' is created for possible customization
 #' of the plot in the future.
 #'
@@ -418,7 +419,8 @@ model_graph <- function(object,
 #' function.)
 #'
 #' @param ... Additional arguments,
-#' passed to [plot.igraph()].
+#' passed to the `plot`-method of
+#' an `igraph` object.
 #'
 #' @seealso [model_graph()]
 #'
