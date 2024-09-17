@@ -14,7 +14,8 @@ of arguments of the \code{plot} generic
 function.)}
 
 \item{...}{Additional arguments,
-passed to \code{\link[=plot.igraph]{plot.igraph()}}.}
+passed to the \code{plot}-method of
+an \code{igraph} object.}
 }
 \value{
 \code{NULL}. Called for its
@@ -31,7 +32,8 @@ the output of
 \code{\link[=model_graph]{model_graph()}}.
 
 For now, it simply passes the object
-to \code{\link[=plot.igraph]{plot.igraph()}}. This function
+to \code{plot}-method of an \code{igraph} object.
+This function
 is created for possible customization
 of the plot in the future.
 }
