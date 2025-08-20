@@ -1,7 +1,7 @@
 ---
 title: "Get Started"
 author: "Shu Fai Cheung"
-date: "`r Sys.Date()`"
+date: "2025-08-20"
 output:
   rmarkdown::html_vignette:
     number_sections: true
@@ -13,16 +13,7 @@ bibliography: references.bib
 csl: apa.csl
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.width  =  6,
-  fig.height =  6,
-  fig.align = "center",
-  fig.path = ""
-)
-```
+
 
 # Introduction
 
@@ -72,9 +63,17 @@ This is a sample dataset,
 `dat_serial_4_weak`,
 with four variables:
 
-```{r}
+
+``` r
 library(modelbpp)
 head(dat_serial_4_weak)
+#>             x         m1         m2          y
+#> 1  0.09107195  1.2632493  0.7823926  0.3252093
+#> 2 -1.96063838 -0.7745526  0.2002867 -0.6379673
+#> 3  0.20184014  0.2238152  0.2374072  0.4205998
+#> 4 -2.25521708  0.1185732 -0.1727878  0.9320889
+#> 5 -0.15321350  0.1509888  1.1251386  0.6892537
+#> 6 -2.00640303 -0.1595208 -0.1553136 -0.2364792
 ```
 
 ## Step 1: Fit the Original Model
@@ -83,7 +82,8 @@ Fit this original model, a serial
 mediation model, with one direct path,
 from `x` to `y`:
 
-```{r}
+
+``` r
 library(lavaan)
 mod1 <-
 "
@@ -96,20 +96,84 @@ fit1 <- sem(mod1, dat_serial_4_weak)
 
 This the summary:
 
-```{r}
+
+``` r
 summary(fit1,
         fit.measures = TRUE)
+#> lavaan 0.6-19 ended normally after 1 iteration
+#> 
+#>   Estimator                                         ML
+#>   Optimization method                           NLMINB
+#>   Number of model parameters                         7
+#> 
+#>   Number of observations                           100
+#> 
+#> Model Test User Model:
+#>                                                       
+#>   Test statistic                                 3.376
+#>   Degrees of freedom                                 2
+#>   P-value (Chi-square)                           0.185
+#> 
+#> Model Test Baseline Model:
+#> 
+#>   Test statistic                                39.011
+#>   Degrees of freedom                                 6
+#>   P-value                                        0.000
+#> 
+#> User Model versus Baseline Model:
+#> 
+#>   Comparative Fit Index (CFI)                    0.958
+#>   Tucker-Lewis Index (TLI)                       0.875
+#> 
+#> Loglikelihood and Information Criteria:
+#> 
+#>   Loglikelihood user model (H0)               -216.042
+#>   Loglikelihood unrestricted model (H1)       -214.354
+#>                                                       
+#>   Akaike (AIC)                                 446.084
+#>   Bayesian (BIC)                               464.320
+#>   Sample-size adjusted Bayesian (SABIC)        442.212
+#> 
+#> Root Mean Square Error of Approximation:
+#> 
+#>   RMSEA                                          0.083
+#>   90 Percent confidence interval - lower         0.000
+#>   90 Percent confidence interval - upper         0.232
+#>   P-value H_0: RMSEA <= 0.050                    0.261
+#>   P-value H_0: RMSEA >= 0.080                    0.628
+#> 
+#> Standardized Root Mean Square Residual:
+#> 
+#>   SRMR                                           0.050
+#> 
+#> Parameter Estimates:
+#> 
+#>   Standard errors                             Standard
+#>   Information                                 Expected
+#>   Information saturated (h1) model          Structured
+#> 
+#> Regressions:
+#>                    Estimate  Std.Err  z-value  P(>|z|)
+#>   m1 ~                                                
+#>     x                 0.187    0.059    3.189    0.001
+#>   m2 ~                                                
+#>     m1                0.231    0.091    2.537    0.011
+#>   y ~                                                 
+#>     m2                0.341    0.089    3.835    0.000
+#>     x                 0.113    0.052    2.188    0.029
+#> 
+#> Variances:
+#>                    Estimate  Std.Err  z-value  P(>|z|)
+#>    .m1                0.278    0.039    7.071    0.000
+#>    .m2                0.254    0.036    7.071    0.000
+#>    .y                 0.213    0.030    7.071    0.000
 ```
 
-```{r echo = FALSE}
-tmp <- fitMeasures(fit1)
-fit1_cfi <- unname(tmp["cfi"])
-fit1_rmsea <- unname(tmp["rmsea"])
-```
+
 
 The fit is acceptable, though the RMSEA
-is marginal (CFI = `r formatC(fit1_cfi, 3, format = "f")`,
-RMSEA = `r formatC(fit1_rmsea, 3, format = "f")`).
+is marginal (CFI = 0.958,
+RMSEA = 0.083).
 
 ## Step 2: Call `model_set()`
 
@@ -119,7 +183,8 @@ from the target model by one on model
 degrees of freedom, fit them, and compute
 the BPPs:
 
-```{r results = FALSE}
+
+``` r
 out1 <- model_set(fit1)
 ```
 
@@ -128,17 +193,44 @@ out1 <- model_set(fit1)
 To examine the results, just print
 the output:
 
-```{r}
+
+``` r
 out1
+#> 
+#> Call:
+#> model_set(sem_out = fit1)
+#> 
+#> Number of model(s) fitted           : 7
+#> Number of model(s) converged        : 7
+#> Number of model(s) passed post.check: 7
+#> 
+#> The models (sorted by BPP):
+#>             model_df df_diff Prior     BIC   BPP   cfi rmsea  srmr
+#> original           2       0 0.143 464.320 0.323 0.958 0.083 0.050
+#> drop: y~x          3      -1 0.143 464.340 0.320 0.848 0.129 0.095
+#> add: y~m1          1       1 0.143 465.900 0.147 1.000 0.000 0.018
+#> drop: m2~m1        3      -1 0.143 465.953 0.143 0.800 0.148 0.116
+#> add: m2~x          1       1 0.143 468.575 0.038 0.939 0.142 0.046
+#> drop: m1~x         3      -1 0.143 469.403 0.025 0.695 0.183 0.124
+#> drop: y~m2         3      -1 0.143 473.291 0.004 0.577 0.216 0.133
+#> 
+#> Note:
+#> - BIC: Bayesian Information Criterion.
+#> - BPP: BIC posterior probability.
+#> - model_df: Model degrees of freedom.
+#> - df_diff: Difference in df compared to the original/target model.
+#> - To show cumulative BPPs, call print() with 'cumulative_bpp = TRUE'.
+#> - At least one model has fixed.x = TRUE. The models are not checked for
+#>   equivalence.
+#> - Since Version 0.1.3.5, the default values of exclude_feedback and
+#>   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce
+#>   results from previous versions.
 ```
 
-```{r echo = FALSE}
-out1_bpp <- out1$bpp
-out1_bpp_2 <- sort(out1_bpp, decreasing = TRUE)[2]
-```
+
 
 The total number of models examined,
-including the original model, is `r  length(out1$models)`.
+including the original model, is 7.
 
 (Note: The total number of models
 was 9 in previous version. Please
@@ -152,7 +244,7 @@ probable model based on BPP. However,
 the model with the direct path
 dropped, `drop: y~x`, only
 has slightly lower BPP
-(`r formatC(out1_bpp_2, 3, format = "f")`)
+(0.320)
 
 This suggests that, with equal prior
 probabilities [@wu_simple_2020], the
@@ -164,12 +256,16 @@ Alternatively, we can use `model_graph()`
 to visualize the BPPs and model relations
 graphically:
 
-```{r graph1, fig.height = 8, fig.width = 8, eval = FALSE}
+
+``` r
 graph1 <- model_graph(out1)
 plot(graph1)
 ```
 
-![](graph1-1.png)
+<div class="figure" style="text-align: center">
+<img src="graph1-1.png" alt="plot of chunk graph1"  />
+<p class="caption">plot of chunk graph1</p>
+</div>
 
 Each node (circle) represents one model.
 The larger the BPP, the larger the node.
@@ -212,7 +308,8 @@ This can be done by setting `prior_sem_out`
 to the desired prior probability when calling
 `model_set()`:
 
-```{r results = FALSE}
+
+``` r
 out1_prior <- model_set(fit1,
                         prior_sem_out = .50)
 ```
@@ -226,8 +323,38 @@ or .0625.
 
 This is the printout:
 
-```{r}
+
+``` r
 out1_prior
+#> 
+#> Call:
+#> model_set(sem_out = fit1, prior_sem_out = 0.5)
+#> 
+#> Number of model(s) fitted           : 7
+#> Number of model(s) converged        : 7
+#> Number of model(s) passed post.check: 7
+#> 
+#> The models (sorted by BPP):
+#>             model_df df_diff Prior     BIC   BPP   cfi rmsea  srmr
+#> original           2       0 0.500 464.320 0.741 0.958 0.083 0.050
+#> drop: y~x          3      -1 0.083 464.340 0.122 0.848 0.129 0.095
+#> add: y~m1          1       1 0.083 465.900 0.056 1.000 0.000 0.018
+#> drop: m2~m1        3      -1 0.083 465.953 0.055 0.800 0.148 0.116
+#> add: m2~x          1       1 0.083 468.575 0.015 0.939 0.142 0.046
+#> drop: m1~x         3      -1 0.083 469.403 0.010 0.695 0.183 0.124
+#> drop: y~m2         3      -1 0.083 473.291 0.001 0.577 0.216 0.133
+#> 
+#> Note:
+#> - BIC: Bayesian Information Criterion.
+#> - BPP: BIC posterior probability.
+#> - model_df: Model degrees of freedom.
+#> - df_diff: Difference in df compared to the original/target model.
+#> - To show cumulative BPPs, call print() with 'cumulative_bpp = TRUE'.
+#> - At least one model has fixed.x = TRUE. The models are not checked for
+#>   equivalence.
+#> - Since Version 0.1.3.5, the default values of exclude_feedback and
+#>   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce
+#>   results from previous versions.
 ```
 
 If the prior of the target is set to .50,
@@ -237,12 +364,16 @@ model is strongly supported by the data.
 
 This is the output of `model_graph()`:
 
-```{r out1_prior, fig.height = 8, fig.width = 8, eval = FALSE}
+
+``` r
 graph1_prior <- model_graph(out1_prior)
 plot(graph1_prior)
 ```
 
-![](out1_prior-1.png)
+<div class="figure" style="text-align: center">
+<img src="out1_prior-1.png" alt="plot of chunk out1_prior"  />
+<p class="caption">plot of chunk out1_prior</p>
+</div>
 
 # Advanced Options
 
@@ -256,7 +387,8 @@ in model *df* to 2, to include models
 having two more or two less *df* than
 the original model:
 
-```{r results = FALSE}
+
+``` r
 out1_df2 <- model_set(fit1,
                       df_change_add = 2,
                       df_change_drop = 2)
@@ -266,22 +398,63 @@ This is the printout. By default, when there
 are more than 20 models, only the top 20
 models on BPP will be printed:
 
-```{r}
+
+``` r
 out1_df2
+#> 
+#> Call:
+#> model_set(sem_out = fit1, df_change_add = 2, df_change_drop = 2)
+#> 
+#> Number of model(s) fitted           : 14
+#> Number of model(s) converged        : 14
+#> Number of model(s) passed post.check: 14
+#> 
+#> The models (sorted by BPP):
+#>                  model_df df_diff Prior     BIC   BPP   cfi rmsea  srmr
+#> original                2       0 0.071 464.320 0.269 0.958 0.083 0.050
+#> drop: y~x               3      -1 0.071 464.340 0.267 0.848 0.129 0.095
+#> add: y~m1               1       1 0.071 465.900 0.122 1.000 0.000 0.018
+#> drop: m2~m1             3      -1 0.071 465.953 0.119 0.800 0.148 0.116
+#> drop: m2~m1;y~x         4      -2 0.071 465.973 0.118 0.690 0.160 0.149
+#> add: m2~x               1       1 0.071 468.575 0.032 0.939 0.142 0.046
+#> drop: m1~x              3      -1 0.071 469.403 0.021 0.695 0.183 0.124
+#> drop: m1~x;y~x          4      -2 0.071 469.423 0.021 0.585 0.185 0.144
+#> add: m2~x;y~m1          0       2 0.071 470.154 0.015 1.000 0.000 0.000
+#> drop: m1~x;m2~m1        4      -2 0.071 471.036 0.009 0.536 0.196 0.160
+#> drop: y~m2              3      -1 0.071 473.291 0.003 0.577 0.216 0.133
+#> drop: y~m2;y~x          4      -2 0.071 474.819 0.001 0.422 0.218 0.170
+#> drop: m2~m1;y~m2        4      -2 0.071 474.924 0.001 0.419 0.219 0.163
+#> drop: m1~x;y~m2         4      -2 0.071 478.374 0.000 0.314 0.238 0.183
+#> 
+#> Note:
+#> - BIC: Bayesian Information Criterion.
+#> - BPP: BIC posterior probability.
+#> - model_df: Model degrees of freedom.
+#> - df_diff: Difference in df compared to the original/target model.
+#> - To show cumulative BPPs, call print() with 'cumulative_bpp = TRUE'.
+#> - At least one model has fixed.x = TRUE. The models are not checked for
+#>   equivalence.
+#> - Since Version 0.1.3.5, the default values of exclude_feedback and
+#>   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce
+#>   results from previous versions.
 ```
 
 The number of models examined, including
-the original model, is `r  length(out1_df2$models)`.
+the original model, is 14.
 
 This is the output of `model_graph()`:
 
-```{r graph1_df2, fig.height = 8, fig.width = 8, eval = FALSE}
+
+``` r
 graph1_df2 <- model_graph(out1_df2,
                           node_label_size = .75)
 plot(graph1_df2)
 ```
 
-![](graph1_df2-1.png)
+<div class="figure" style="text-align: center">
+<img src="graph1_df2-1.png" alt="plot of chunk graph1_df2"  />
+<p class="caption">plot of chunk graph1_df2</p>
+</div>
 
 Note: Due to the number of nodes,
 `node_label_size` is used to reduce
@@ -299,27 +472,61 @@ established that `m1~x` exists and should
 not be dropped, we can exclude it
 when calling `model_set()`
 
-```{r results = FALSE}
+
+``` r
 out1_no_m1_x <- model_set(fit1,
                           must_not_drop = "m1~x")
 ```
 
 This is the output:
 
-```{r}
+
+``` r
 out1_no_m1_x
+#> 
+#> Call:
+#> model_set(sem_out = fit1, must_not_drop = "m1~x")
+#> 
+#> Number of model(s) fitted           : 6
+#> Number of model(s) converged        : 6
+#> Number of model(s) passed post.check: 6
+#> 
+#> The models (sorted by BPP):
+#>             model_df df_diff Prior     BIC   BPP   cfi rmsea  srmr
+#> original           2       0 0.167 464.320 0.331 0.958 0.083 0.050
+#> drop: y~x          3      -1 0.167 464.340 0.328 0.848 0.129 0.095
+#> add: y~m1          1       1 0.167 465.900 0.150 1.000 0.000 0.018
+#> drop: m2~m1        3      -1 0.167 465.953 0.147 0.800 0.148 0.116
+#> add: m2~x          1       1 0.167 468.575 0.040 0.939 0.142 0.046
+#> drop: y~m2         3      -1 0.167 473.291 0.004 0.577 0.216 0.133
+#> 
+#> Note:
+#> - BIC: Bayesian Information Criterion.
+#> - BPP: BIC posterior probability.
+#> - model_df: Model degrees of freedom.
+#> - df_diff: Difference in df compared to the original/target model.
+#> - To show cumulative BPPs, call print() with 'cumulative_bpp = TRUE'.
+#> - At least one model has fixed.x = TRUE. The models are not checked for
+#>   equivalence.
+#> - Since Version 0.1.3.5, the default values of exclude_feedback and
+#>   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce
+#>   results from previous versions.
 ```
 
-The number of models reduced to `r  length(out1_df2$models)`.
+The number of models reduced to 14.
 
 This is the plot:
 
-```{r out1_no_m1_x, ig.height = 8, fig.width = 8, eval = FALSE}
+
+``` r
 out1_no_m1_x <- model_graph(out1_no_m1_x)
 plot(out1_no_m1_x)
 ```
 
-![](out1_no_m1_x-1.png)
+<div class="figure" style="text-align: center">
+<img src="out1_no_m1_x-1.png" alt="plot of chunk out1_no_m1_x"  />
+<p class="caption">plot of chunk out1_no_m1_x</p>
+</div>
 
 ## Models With Constraints
 
@@ -339,7 +546,8 @@ refitting the models, by using
 the output of `model_set()` as the
 input, using the `model_set_out` argument:
 
-```{r results = FALSE}
+
+``` r
 out1_new_prior <- model_set(model_set_out = out1,
                             prior_sem_out = .50)
 ```
@@ -348,8 +556,38 @@ The results are identical to calling
 `model_set()` with the original `lavaan`
 output as the input:
 
-```{r}
+
+``` r
 out1_new_prior
+#> 
+#> Call:
+#> model_set(model_set_out = out1, prior_sem_out = 0.5)
+#> 
+#> Number of model(s) fitted           : 7
+#> Number of model(s) converged        : 7
+#> Number of model(s) passed post.check: 7
+#> 
+#> The models (sorted by BPP):
+#>             model_df df_diff Prior     BIC   BPP   cfi rmsea  srmr
+#> original           2       0 0.500 464.320 0.741 0.958 0.083 0.050
+#> drop: y~x          3      -1 0.083 464.340 0.122 0.848 0.129 0.095
+#> add: y~m1          1       1 0.083 465.900 0.056 1.000 0.000 0.018
+#> drop: m2~m1        3      -1 0.083 465.953 0.055 0.800 0.148 0.116
+#> add: m2~x          1       1 0.083 468.575 0.015 0.939 0.142 0.046
+#> drop: m1~x         3      -1 0.083 469.403 0.010 0.695 0.183 0.124
+#> drop: y~m2         3      -1 0.083 473.291 0.001 0.577 0.216 0.133
+#> 
+#> Note:
+#> - BIC: Bayesian Information Criterion.
+#> - BPP: BIC posterior probability.
+#> - model_df: Model degrees of freedom.
+#> - df_diff: Difference in df compared to the original/target model.
+#> - To show cumulative BPPs, call print() with 'cumulative_bpp = TRUE'.
+#> - At least one model has fixed.x = TRUE. The models are not checked for
+#>   equivalence.
+#> - Since Version 0.1.3.5, the default values of exclude_feedback and
+#>   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce
+#>   results from previous versions.
 ```
 
 ## Many Neighboring Models

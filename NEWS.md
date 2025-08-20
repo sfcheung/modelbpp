@@ -1,4 +1,4 @@
-# modelbpp 0.1.5.1
+# modelbpp 0.1.5.2
 
 ## Miscellaneous
 
@@ -7,6 +7,9 @@
   method of `model_set`-class object
   was changed to `c("cfi", "rmsea", "srmr)`.
   (0.1.5.1)
+
+- Changed the vignettes to precomputed
+  Rmarkdown files. (0.1.5.2)
 
 # modelbpp 0.1.5
 
