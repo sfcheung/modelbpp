@@ -1,3 +1,13 @@
+# modelbpp 0.1.5.1
+
+## Miscellaneous
+
+- The default of
+  `more_fit_measures` of the print
+  method of `model_set`-class object
+  was changed to `c("cfi", "rmsea", "srmr)`.
+  (0.1.5.1)
+
 # modelbpp 0.1.5
 
 ## New Features
