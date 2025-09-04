@@ -1,4 +1,4 @@
-#' @title Two or More Hypothesized Model
+#' @title Two or More Hypothesized Models
 #'
 #' @description Combine the 'model_set()'
 #' results of two or more hypothesis
