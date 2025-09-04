@@ -1,11 +1,11 @@
-# modelbpp 0.1.5.3
+# modelbpp 0.1.5.4
 
 ## New Features
 
 - Added `model_set_combined()` for
   computing BPPs for models from two or
   more calls to `model_set()`.
-  (0.1.5.3)
+  (0.1.5.3, 0.1.5.4)
 
 ## Miscellaneous
 
