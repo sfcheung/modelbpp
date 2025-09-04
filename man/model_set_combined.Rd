@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_set_combined.R
 \name{model_set_combined}
 \alias{model_set_combined}
-\title{Two or More Hypothesized Model}
+\title{Two or More Hypothesized Models}
 \usage{
 model_set_combined(model_set_outputs, ...)
 }
