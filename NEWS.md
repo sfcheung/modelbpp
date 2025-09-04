@@ -1,4 +1,24 @@
-# modelbpp 0.1.3.11
+# modelbpp 0.1.5.4
+
+## New Features
+
+- Added `model_set_combined()` for
+  computing BPPs for models from two or
+  more calls to `model_set()`.
+  (0.1.5.3, 0.1.5.4)
+
+## Miscellaneous
+
+- The default of
+  `more_fit_measures` of the print
+  method of `model_set`-class object
+  was changed to `c("cfi", "rmsea", "srmr)`.
+  (0.1.5.1)
+
+- Changed the vignettes to precomputed
+  Rmarkdown files. (0.1.5.2)
+
+# modelbpp 0.1.5
 
 ## New Features
 
@@ -41,11 +61,31 @@
   along with BPPs, the default of
   `more_fit_measures` of the print
   method of `model_set`-class object
-  changed to `c("cfi", "rmseas")`.
+  changed to `c("cfi", "rmsea")`.
   (0.1.3.7)
 
 - Revised `fit_many()` to support
   multigroup models. (0.1.3.8)
+
+- A progress bar can be displayed when
+  `model_set()` is identifying nested
+  models. (0.1.3.13)
+
+- Shortened `BIC Posterior Probability`
+  to `BPP` in some sections of the
+  printout of `print.model_set()`.
+  (0.1.3.14)
+
+- Cumulative BPPs no longer displayed
+  by default in `print.model_set()`.
+  Print them by setting `cumulative_bpp`
+  to `TRUE`. (0.1.3.15)
+
+- Update an internal function to handle
+  nonconvergence in checking nested
+  relation. Only affect the graphs and
+  only happen in some rare cases.
+  (0.1.3.16)
 
 ## Bug Fixes
 
@@ -65,6 +105,9 @@
 - Fixed some bugs in `print.model_set()`
   about the printing of additional fit
   measures. (0.1.3.6, 0.1.3.7)
+
+- Fixed a bug in checking whether two
+  models are equivalent. (0.1.3.12)
 
 # modelbpp 0.1.3
 
