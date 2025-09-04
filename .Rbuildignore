@@ -7,3 +7,4 @@
 ^data-raw
 ^\.lintr$
 ^\\vignettes\\ExportedItems.bib$
+^rebuild_vignettes.R$
