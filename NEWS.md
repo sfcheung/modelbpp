@@ -1,4 +1,4 @@
-# modelbpp 0.1.5.4
+# modelbpp 0.1.6
 
 ## New Features
 

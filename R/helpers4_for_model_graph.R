@@ -100,7 +100,7 @@ delete_redundant_direct <- function(x,
 #' @title Delete All Redundant Direct Paths
 #'
 #' @description
-#' Call [delete_redundant_direct()] to delete
+#' Call `delete_redundant_direct()` to delete
 #' the redundant direct path, if any.
 #'
 #' @return
