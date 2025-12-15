@@ -1,0 +1,45 @@
+suppressMessages(library(lavaan))
+
+mod <-
+"
+fx =~ x1 + x2 + x3
+fm1 =~ x4 + x5 + x6
+fm2 =~ x10 + x11 + x12
+fy =~ x7 + x8 + x9
+fm1 ~ fx
+fm2 ~ fm1
+fy ~ fm2
+"
+
+fit <- sem(mod,
+           dat_sem,
+           warn = FALSE)
+
+pt <- parameterTable(fit)
+lvnames <- lavNames(fit, "lv")
+indnames <- lavNames(fit, "ov.ind")
+all_loadings <- expand.grid(lvnames, indnames)
+all_loadings <- apply(all_loadings,
+                      MARGIN = 1,
+                      paste0,
+                      collapse = "=~")
+mod_loadings <- paste0(pt[pt$op == "=~", "lhs"],
+                       "=~",
+                       pt[pt$op == "=~", "rhs"])
+all_loadings <- setdiff(all_loadings,
+                        mod_loadings)
+all_must_not_add <- c(all_loadings,
+                      c("fy1~fy2", "fy2~fy1",
+                        "fx1~~fy2", "fx1~~fy3",
+                        "fy2~~fx1", "fy3~~fx1"))
+all_must_not_drop <- c(mod_loadings)
+
+pts <- suppressWarnings(model_set(fit,
+                 must_not_add = all_must_not_add,
+                 must_not_drop = all_must_not_drop,
+                 fit_models = FALSE,
+                 compute_bpp = FALSE,
+                 progress = FALSE))
+pts <- pts$models
+
+expect_true(!any(grepl("~~", names(pts))))

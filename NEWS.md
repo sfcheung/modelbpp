@@ -1,4 +1,8 @@
-# modelbpp 0.1.6.1
+# modelbpp 0.1.6.2
+
+## Miscellaneous
+
+- A a few more tests (0.1.6.2)
 
 ## Bug Fixes
 
