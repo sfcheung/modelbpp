@@ -37,7 +37,7 @@ add_list_duplicate_cov <- function(x) {
     x0 <- lapply(x, function(y) {
                         if (y[2] == "~~") {
                             out <- y[3:1]
-                            names(out) <- names(y)[3:1]
+                            names(out) <- names(y)[1:3]
                             return(out)
                           }
                         NULL

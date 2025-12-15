@@ -1,3 +1,13 @@
+# modelbpp 0.1.6.1
+
+## Bug Fixes
+
+- Fixed a bug in the internal function
+  `add_list_duplicate_cov()`, which
+  makes `must_not_add` failed to exclude
+  some covariances. It should work now.
+  (0.1.6.1)
+
 # modelbpp 0.1.6
 
 ## New Features
