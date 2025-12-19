@@ -309,3 +309,5 @@ all_nonxy_loadings(fit)
 lav_cross_set(fit, type = "pure_x")
 lav_cross_set(fit, type = "pure_y")
 lav_cross_set(fit, type = "user", user_lav = c("fx1", "fy1", "fy3"))
+
+lav_loadings(fit, lav = c("fx1", "fy3", "fy1"))
