@@ -69,13 +69,57 @@ lav_pure_y_loadings <- function(sem_out) {
                lav = y)
 }
 
-lav_x_cross_set <- function(
-  sem_out
+lav_cross_set <- function(
+  sem_out,
+  type = c("pure_x", "pure_y", "user"),
+  user_lav = character(0)
 ) {
-  x_inds <- lav_pure_x_indicators(sem_out)
-  x <- lav_pure_x(sem_out)
+  # Find loadings between
+  #   pure x latent variables and current x indicators
+  #   pure y latent variables and current y indicators
+  # which are
+  #   not yet in the model.
+  # That is:
+  # Find all possible new cross loadings among
+  # pure x/y latent factors
+  type <- match.arg(type)
+  x_inds <- switch(
+              type,
+              pure_x = lav_pure_x_indicators(sem_out),
+              pure_y = lav_pure_y_indicators(sem_out),
+              user = lav_indicators(sem_out, user_lav)
+            )
+  x <- switch(
+          type,
+          pure_x = lav_pure_x(sem_out),
+          pure_y = lav_pure_y(sem_out),
+          user = user_lav
+        )
   out0 <- all_possible_loadings(sem_out)
-  out1 <- out0[out0$lhs %in% x, ]
+  a1 <- out0[(out0$lhs %in% x) &
+             (out0$rhs %in% x_inds), ]
+  # TODO:
+  # - Support multigroup model
+  a2 <- switch(
+          type,
+          pure_x = lav_pure_x_loadings(sem_out)[, c("lhs", "op", "rhs")],
+          pure_y = lav_pure_y_loadings(sem_out)[, c("lhs", "op", "rhs")],
+          user = lav_loadings(sem_out, lav = user_lav)
+        )
+  a1$id <- seq_len(nrow(a1))
+  tmp <- merge(
+        x = a2,
+        y = a1,
+        all.y = FALSE
+      )
+  # Loadings not yet in the model
+  a3 <- a1[!(a1$id %in% tmp$id), ]
+  a3$id <- NULL
+  rownames(a3) <- NULL
+  if (nrow(a3) > 0) {
+    a3 <- a3[order(a3$lhs, a3$rhs), ]
+  }
+  a3
 }
 
 xy_lav <- function(sem_out) {
@@ -261,3 +305,7 @@ expect_false(lav_y_on_x("fx2", "fx1", out1))
 # TOOD:
 # - Need to exclude `fx1 =~ x10`.
 all_nonxy_loadings(fit)
+
+lav_cross_set(fit, type = "pure_x")
+lav_cross_set(fit, type = "pure_y")
+lav_cross_set(fit, type = "user", user_lav = c("fx1", "fy1", "fy3"))
