@@ -1,5 +1,83 @@
 suppressMessages(library(lavaan))
 
+lav_pure_x <- function(sem_out) {
+  # Find the names of pure-x latent variables
+  a <- lavaan::lavNames(
+          sem_out,
+          type = "lv.x"
+        )
+  a
+}
+
+lav_pure_y <- function(sem_out) {
+  # Find the names of pure-y latent variables
+  a <- lavaan::lavNames(
+          sem_out,
+          type = "lv.y"
+        )
+  a
+}
+
+lav_indicators <- function(
+  sem_out,
+  lav
+) {
+  # Find the indicators of lav,
+  # a vector of names of latent variables
+  pt <- lavaan::parameterTable(sem_out)
+  i1 <- pt$lhs %in% lav
+  i2 <- pt$op == "=~"
+  pt$rhs[i1 & i2]
+}
+
+lav_pure_x_indicators <- function(sem_out) {
+  # Find the indicators of
+  # all pure-x latent variables
+  a <- lav_pure_x(sem_out)
+  lav_indicators(sem_out,
+                 lav = a)
+}
+
+lav_pure_y_indicators <- function(sem_out) {
+  # Find the indicators of
+  # all pure-y latent variables
+  a <- lav_pure_y(sem_out)
+  lav_indicators(sem_out,
+                 lav = a)
+}
+
+lav_loadings <- function(
+  sem_out,
+  lav
+) {
+  pt <- lavaan::parameterTable(sem_out)
+  i1 <- (pt$lhs %in% lav) &
+        (pt$op == "=~")
+  pt_lav <- pt[i1, c("lhs", "op", "rhs", "block", "group")]
+  pt_lav
+}
+
+lav_pure_x_loadings <- function(sem_out) {
+  x <- lav_pure_x(sem_out)
+  lav_loadings(sem_out,
+               lav = x)
+}
+
+lav_pure_y_loadings <- function(sem_out) {
+  y <- lav_pure_y(sem_out)
+  lav_loadings(sem_out,
+               lav = y)
+}
+
+lav_x_cross_set <- function(
+  sem_out
+) {
+  x_inds <- lav_pure_x_indicators(sem_out)
+  x <- lav_pure_x(sem_out)
+  out0 <- all_possible_loadings(sem_out)
+  out1 <- out0[out0$lhs %in% x, ]
+}
+
 xy_lav <- function(sem_out) {
   # Find latent variables with an x-y relation,
   # either directly or indirectly
