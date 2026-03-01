@@ -10,6 +10,7 @@ speed =~ x7 + x8 + x9
 "
 fit <- cfa(mod, HolzingerSwineford1939[HolzingerSwineford1939$school == "Pasteur", ])
 suppressWarnings(out_nc <- model_set(fit,
+                    loadings_to_exclude = "none",
                     parallel = FALSE,
                     progress = FALSE))
 expect_true(all(is.na(out_nc$bpp)))

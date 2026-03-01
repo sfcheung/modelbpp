@@ -38,6 +38,9 @@
 #' also be visualized using
 #' [model_graph()].
 #'
+#' @inheritParams get_add
+#' @inheritParams get_drop
+#'
 #' @param sem_out It can be the output
 #' from an
 #' SEM function. Currently it supports
@@ -79,25 +82,13 @@
 #' is `NULL`, and all models will have
 #' equal prior probabilities.
 #'
-#' @param must_add A character vector
-#' of parameters, named in
-#' [lavaan::lavaan()] style (e.g.,
-#' `"y ~ x"`), that must be added.
-#' Default is `NULL``.
+# @param must_add
 #'
-#' @param must_not_add A character
-#' vector of parameters, named in
-#' [lavaan::lavaan()] style (e.g.,
-#' `"x1 ~~ x1"`), that must not be
-#' added. Default is `NULL`.
+# @param must_not_add
 #'
-#' @param remove_constraints Whether
-#' equality constraints will be
-#' removed. Default is ``TRUE`.
+# @param remove_constraints
 #'
-#' @param exclude_error_cov Exclude
-#' error covariances of indicators.
-#' Default is `TRUE`.
+# @param exclude_error_cov
 #'
 #' @param exclude_feedback Exclude
 #' paths that will result in a feedback
@@ -129,17 +120,27 @@
 #' based on previous version, set this
 #' argument to `FALSE`.
 #'
-#' @param must_drop A character vector
-#' of parameters, named in
-#' `lavaan::lavaan()` style (e.g.,
-#' `"y ~ x"`), that must be included.
-#' Default is `NULL`.
+# @param must_drop
 #'
-#' @param must_not_drop A character
-#' vector of parameters, named in
-#' [lavaan::lavaan()] style (e.g.,
-#' `"x1 ~~ x1"`), that must not be
-#' included. Default is `NULL`.
+# @param must_not_drop
+#'
+#' @param loadings_to_exclude_from_drop
+#' Whether factor loadings
+#' will be excluded when deciding
+#' parameters to drop. If `"single"`,
+#' then only "single" loadings (an indicator
+#' loads on only one latent factor)
+#' will be excluded (they will not be
+#' dropped). If `"all"`, then
+#' all factor loadings will be excluded
+#' (no factor loadings will be dropped).
+#' If `"none"`, then no loadings will
+#' be excluded, and all free loadings
+#' will be considered to be dropped. Be careful when using
+#' `"none"` because the models may not
+#' make sense. The settings in `must_drop`
+#' and `must_not_drop` will override this
+#' argument.
 #'
 #' @param df_change_add How many degrees
 #' of freedom (*df*) away in the list.
@@ -157,9 +158,7 @@
 #' requirements set by other arguments.
 #' Default is 1.
 #'
-#' @param remove_duplicated If `TRUE`,
-#' the default, duplicated models are
-#' removed.
+# @param remove_duplicated
 #'
 #' @param fit_models If `TRUE`,
 #' the
@@ -329,10 +328,13 @@ model_set <- function(sem_out,
                       must_not_add = NULL,
                       must_drop = NULL,
                       must_not_drop = NULL,
+                      loadings_to_exclude_from_drop = c("single", "none", "all"),
                       remove_constraints = TRUE,
                       exclude_error_cov = TRUE,
                       exclude_feedback = TRUE,
                       exclude_xy_cov = TRUE,
+                      cross_add = c("pure_x", "pure_y"),
+                      cross_sets = NULL,
                       df_change_add = 1,
                       df_change_drop = 1,
                       remove_duplicated = TRUE,
@@ -396,6 +398,8 @@ model_set <- function(sem_out,
           mod_to_add <- get_add(sem_out,
                                 must_add = must_add,
                                 must_not_add = must_not_add,
+                                cross_add = cross_add,
+                                cross_sets = cross_sets,
                                 remove_constraints = remove_constraints,
                                 exclude_error_cov = exclude_error_cov,
                                 exclude_feedback = exclude_feedback,
@@ -406,6 +410,7 @@ model_set <- function(sem_out,
           mod_to_drop <- get_drop(sem_out,
                                   must_drop = must_drop,
                                   must_not_drop = must_not_drop,
+                                  loadings_to_exclude = loadings_to_exclude_from_drop,
                                   df_change = df_change_drop,
                                   remove_duplicated = FALSE,
                                   progress = progress)
