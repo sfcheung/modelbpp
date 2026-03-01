@@ -320,3 +320,89 @@ df_to_lor <- function(object) {
                     USE.NAMES = FALSE)
     out
   }
+
+#' @noRd
+# Identify cross loadings
+cross_loadings <- function(pt,
+                           free_only = TRUE,
+                           return_id = FALSE) {
+  # TODO:
+  # - Handle multigroup models
+  i1 <- pt$op == "=~"
+  i2 <- duplicated(pt$rhs)
+  i3 <- i1 & i2
+  i4 <- pt$rhs[i3]
+  i5 <- (pt$op == "=~") & (pt$rhs %in% i4)
+  if (free_only) {
+    i6 <- pt$free > 0
+  } else {
+    i6 <- rep(TRUE, nrow(pt))
+  }
+  i5 <- i5 & i6
+  if (return_id) {
+    return(i5)
+  } else {
+    return(pt[i5, ])
+  }
+}
+
+#' @noRd
+# Identify all loadings
+all_loadings <- function(pt,
+                         free_only = TRUE,
+                         return_id = FALSE) {
+  # TODO:
+  # - Handle multigroup models
+  i1 <- pt$op == "=~"
+  if (free_only) {
+    i6 <- pt$free > 0
+  } else {
+    i6 <- rep(TRUE, nrow(pt))
+  }
+  i1 <- i1 & i6
+  if (return_id) {
+    return(i1)
+  } else {
+    return(pt[i1, ])
+  }
+}
+
+#' @noRd
+# Identify single-factor loadings
+pt_remove_all_single_loadings <- function(
+  pt,
+  return_id = FALSE
+) {
+  # TODO:
+  # - Handle multigroup models
+  # No need to handle fixed parameters.
+  # get_drop() will do this.
+  i1 <- pt$op == "=~"
+  i2 <- duplicated(pt$rhs)
+  i3 <- i1 & i2
+  i4 <- pt$rhs[i3]
+  i5 <- (pt$op == "=~") & (!(pt$rhs %in% i4))
+  if (return_id) {
+    return(!i5)
+  } else {
+    return(pt[!i5, ])
+  }
+}
+
+#' @noRd
+# Identify all factor loadings
+pt_remove_all_loadings <- function(
+  pt,
+  return_id = FALSE
+) {
+  # TODO:
+  # - Handle multigroup models
+  # No need to handle fixed parameters.
+  # get_drop() will do this.
+  i1 <- pt$op == "=~"
+  if (return_id) {
+    return(!i1)
+  } else {
+    return(pt[!i1, ])
+  }
+}

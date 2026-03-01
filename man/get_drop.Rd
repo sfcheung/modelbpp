@@ -8,6 +8,7 @@ get_drop(
   sem_out,
   must_drop = NULL,
   must_not_drop = NULL,
+  loadings_to_exclude = c("single", "none", "all"),
   df_change = 1,
   model_id = NA,
   keep_correct_df_change = TRUE,
@@ -33,6 +34,19 @@ vector of parameters, named in
 \code{\link[lavaan:lavaan]{lavaan::lavaan()}} style (e.g.,
 \code{"x1 ~~ x1"}), that must not be
 included. Default is \code{NULL}.}
+
+\item{loadings_to_exclude}{Whether factor loadings
+will be excluded. If \code{"single"},
+then only "single" loadings (an indicator
+loads on only one latent factor)
+will be excluded. If \code{"all"}, then
+all factor loadings will be excluded.
+If \code{"none"}, then no loadings will
+be excluded. Be careful when using
+\code{"none"} because the models may not
+make sense. The settings in \code{must_drop}
+and \code{must_not_drop} will override this
+argument.}
 
 \item{df_change}{How many degrees
 of freedom away in the list. All
