@@ -43,6 +43,19 @@
 #' `"x1 ~~ x1"`), that must not be
 #' included. Default is `NULL`.
 #'
+#' @param loadings_to_exclude Whether factor loadings
+#' will be excluded. If `"single"`,
+#' then only "single" loadings (an indicator
+#' loads on only one latent factor)
+#' will be excluded. If `"all"`, then
+#' all factor loadings will be excluded.
+#' If `"none"`, then no loadings will
+#' be excluded. Be careful when using
+#' `"none"` because the models may not
+#' make sense. The settings in `must_drop`
+#' and `must_not_drop` will override this
+#' argument.
+#'
 #' @param df_change How many degrees
 #' of freedom away in the list. All
 #' models with *df* change less than
@@ -101,6 +114,7 @@
 get_drop <- function(sem_out,
                      must_drop = NULL,
                      must_not_drop = NULL,
+                     loadings_to_exclude = c("single", "none", "all"),
                      df_change = 1,
                      model_id = NA,
                      keep_correct_df_change = TRUE,
@@ -111,31 +125,51 @@ get_drop <- function(sem_out,
     if (!inherits(sem_out, "lavaan")) {
         stop("sem_out is not a lavaan-class object.")
       }
+    loadings_to_exclude <- match.arg(loadings_to_exclude)
     pt <- lavaan::parameterTable(sem_out)
-    # Remove all user-defined parameters unless constrained
+    # ==== Remove all user-defined parameters unless constrained ====
     pt <- pt_remove_user_defined(pt, remove_constrained = FALSE)
-    # Exclude all parameters already constrained to be equal
+    # ==== Exclude all parameters already constrained to be equal ====
     id_exclude_eq <- pt_remove_constrained_equal(pt, return_id = TRUE)
-    # Exclude the variances of exogenous variables
+    # ==== Exclude the variances of exogenous variables ====
     id_exclude_exo_var <- pt_remove_exo_var(pt, return_id = TRUE)
-    # Exclude error variances of endogenous variables
+    # ==== Exclude error variances of endogenous variables ====
     id_exclude_end_var <- pt_remove_end_var(pt, return_id = TRUE)
-    # Determine the candidate lists
+    # ==== Handle loadings ====
+    # FALSE: To exclude from the list tot drop
+    # TRUE: To include in the list to drop
+    if (loadings_to_exclude == "single") {
+      id_exclude_loadings <- pt_remove_all_single_loadings(
+                        pt,
+                        return_id = TRUE)
+    }
+    if (loadings_to_exclude == "all") {
+      id_exclude_loadings <- pt_remove_all_loadings(
+                        pt,
+                        return_id = TRUE)
+    }
+    if (loadings_to_exclude == "none") {
+      id_exclude_loadings <- rep(TRUE, nrow(pt))
+    }
+    # ==== Determine the candidate lists ====
     id_to_drop <- pt$free > 0
     id_to_drop <- id_to_drop & id_exclude_eq
     id_to_drop <- id_to_drop & id_exclude_exo_var
     id_to_drop <- id_to_drop & id_exclude_end_var
-    # User specified parameters
+    id_to_drop <- id_to_drop & id_exclude_loadings
+    # ==== must_drop: User specified parameters ====
     if (!is.null(must_drop)) {
         id_must_drop <- syntax_to_id(must_drop, ptable = pt)
         id_to_drop[id_must_drop] <- TRUE
       }
+    # ==== must_not_drop: User specified parameters ====
     if (!is.null(must_not_drop)) {
         id_must_not_drop <- syntax_to_id(must_not_drop, ptable = pt)
         id_to_drop[id_must_not_drop] <- FALSE
       }
+    # ==== any(id_to_drop) ====
     if (any(id_to_drop)) {
-        # Determine the sets of changes
+        # ==== Determine the sets of changes ====
         sets_to_gen <- lapply(seq_len(df_change),
                     function(x) {
                               utils::combn(which(id_to_drop), x, simplify = FALSE)
@@ -161,7 +195,7 @@ get_drop <- function(sem_out,
         out <- list()
       }
 
-    # Keep tables with expected df only?
+    # ==== Keep tables with expected df only? ====
     if (keep_correct_df_change) {
         chk1 <- sapply(out, attr, which = "df_actual")
         chk2 <- sapply(out, attr, which = "df_expected")

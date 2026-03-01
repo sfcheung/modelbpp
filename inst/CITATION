@@ -1,0 +1,18 @@
+citHeader("To cite the 'modelbpp' package in publications use:")
+
+bibentry(
+  bibtype = "Article",
+	title = "How plausible is my model? {Assessing} model plausibility of structural equation models using {Bayesian} posterior probabilities ({BPP})",
+  volume = "58",
+	url = "https://doi.org/10.3758/s13428-025-02921-x",
+	doi = "10.3758/s13428-025-02921-x",
+	language = "en",
+  journal = "Behavior Research Methods",
+	author = c(as.person("I. J. A. Pesigan"),
+             as.person("S. F. Cheung"),
+             as.person("H. Wu"),
+             as.person("F. Chang"),
+             as.person("S. O. Leung")),
+	year = "2026",
+  pages = "73"
+)

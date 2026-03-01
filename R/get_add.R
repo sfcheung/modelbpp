@@ -83,6 +83,36 @@
 #' because it will be changed to `TRUE`
 #' in a future major version.
 #'
+#' @param cross_add A character vector
+#' of whether and how cross-loadings
+#' (an indicator loads on two or more
+#' latent factors) will be added. If
+#' `NULL`, no cross-loadings will be
+#' added. If `"lav_x"` is in the vector,
+#' then cross-loadings among "pure-x"
+#' latent factors, latent
+#' factors that do not regress on
+#' any other variables, will be considered.
+#' If `"lav_y"` is in the vector, then
+#' cross-loadings among "pure-y" latent
+#' factors, latent factors that regress
+#' on at least one variables but they
+#' themselves do not predict any other
+#' variables, will be considered.
+#' If `"user"` is in the vector, then
+#' cross-loadings among latent factors listed
+#' in `cross_sets` will be considered.
+#'
+#' @param cross_sets A character vector
+#' of latent variables for which cross-loadings
+#' will be considered. Ignored if
+#' `"user"` is not in `cross_add`.
+#' Note that cross-loadings involving latent
+#' variables which are mediators will
+#' not be considered. To add them,
+#' they must be specified explicitly
+#' in `must_add`.
+#'
 #' @param df_change How many degrees
 #' of freedom (*df*) away in the list.
 #' All models with *df* change less than
@@ -143,43 +173,115 @@ get_add <- function(sem_out,
                      exclude_error_cov = TRUE,
                      exclude_feedback = FALSE,
                      exclude_xy_cov = FALSE,
+                     cross_add = c("pure_x", "pure_y"),
+                     cross_sets = NULL,
                      df_change = 1,
                      model_id = NA,
                      keep_correct_df_change = TRUE,
                      remove_duplicated = TRUE,
                      progress = FALSE
                     ) {
+    if (!is.null(cross_add)) {
+      cross_add <- match.arg(cross_add,
+                             c("pure_x", "pure_y", "user"),
+                             several.ok = TRUE)
+    }
     if (missing(sem_out)) stop("sem_out is not supplied.")
     if (!inherits(sem_out, "lavaan")) {
         stop("sem_out is not a lavaan-class object.")
       }
     pt <- lavaan::parameterTable(sem_out)
 
-    # Remove all user-defined parameters
+    # ==== Remove all user-defined parameters ====
     pt <- pt[pt$op != ":=", ]
 
-    # Get the MI table
+    # ==== Get the MI table ====
     # Suppress the warning about equality constraints.
     mt <- suppressWarnings(lavaan::modificationIndices(sem_out,
                     standardized = FALSE,
                     power = FALSE))
 
-    # Remove those already in the parameter tables
+    # ==== Remove those already in the parameter tables ====
     mt1 <- mt_exclude_existing_pars(mt = mt, pt = pt)
 
-    # Remove those convert an IV to a DV
+    # ==== Remove those convert an IV to a DV ====
     mt1 <- mt_exclude_reversed(mt = mt1, pt = pt)
 
-    # Identify parameters to be added
+    # ==== Identify parameters to be added ====
     mt1_op2 <- lor_to_list(mt1)
 
-    # Add must_add
+    # ==== Cross-loadings ====
+
+    # Default to remove cross-loadings,
+    # and add them back only if explicitly specified
+    loadings <- sapply(
+                    mt1_op2,
+                    function(x) x["op"] == "=~"
+                  )
+    if (any(loadings)) {
+      mt1_op2_no_loadings <- mt1_op2[!loadings]
+      mt2_op2_loadings <- mt1_op2[loadings]
+      ix <- list()
+      iy <- list()
+      iuser <- list()
+      if (!is.null(cross_add) || isTRUE(length(cross_add) > 0)) {
+        if ("pure_x" %in% cross_add) {
+          # ==== Extract pure_x cross loadings ====
+          tmp <- lav_cross_set(
+                  sem_out,
+                  type = "pure_x"
+                )
+          tmp <- lor_to_list(tmp)
+          ix <- intersect(
+                    tmp,
+                    mt2_op2_loadings
+                  )
+        }
+        if ("pure_y" %in% cross_add) {
+          # ==== Extract pure_y cross loadings ====
+          tmp <- lav_cross_set(
+                  sem_out,
+                  type = "pure_y"
+                )
+          tmp <- lor_to_list(tmp)
+          iy <- intersect(
+                    tmp,
+                    mt2_op2_loadings
+                  )
+        }
+        if ("user" %in% cross_add) {
+          if (is.null(cross_sets)) {
+            stop("cross_sets must be specified if 'user' is in cross_add")
+          }
+          # ==== Extract user cross loadings ====
+          tmp <- lav_cross_set(
+                  sem_out,
+                  type = "user",
+                  user_lav = cross_sets
+                )
+          tmp <- lor_to_list(tmp)
+          iuser <- intersect(
+                    tmp,
+                    mt2_op2_loadings
+                  )
+        }
+      }
+      # Add cross-loadings, if any
+      mt1_op2 <- c(
+                    mt1_op2_no_loadings,
+                    ix,
+                    iy,
+                    iuser
+                  )
+    }
+
+    # ==== Add must_add ====
     if (!is.null(must_add)) {
         mt1_must_add <- syntax_to_add_list(must_add)
         mt1_op2 <- union(mt1_op2, mt1_must_add)
       }
 
-    # Remove feedback and xy_cov
+    # ==== Remove feedback and xy_cov ====
     if (exclude_feedback || exclude_xy_cov) {
         tmp <- feedback_and_xy_cov(sem_out)
         if (length(tmp) != 0) {
@@ -201,28 +303,29 @@ get_add <- function(sem_out,
         }
       }
 
-    # Remove must_not_add
+    # ==== Remove must_not_add ====
     if (!is.null(must_not_add)) {
         mt1_must_not_add <- syntax_to_add_list(must_not_add)
         mt1_must_not_add1 <- add_list_duplicate_cov(mt1_must_not_add)
         mt1_op2 <- setdiff(mt1_op2, mt1_must_not_add1)
       }
-    # Remove duplicated covariances
+    # ==== Remove duplicated covariances ====
     mt1_op2 <- add_list_clean_duplicated_cov(mt1_op2)
 
-    # Remove error covariances between indicators
+    # ==== Remove error covariances between indicators ====
     if (exclude_error_cov) {
         mt1_op2 <- mt_remove_error_cov(mt_list = mt1_op2,
                                        sem_out = sem_out)
       }
 
-    # Identify parameters constrained to be equal by labels
+    # ==== Identify parameters constrained to be equal by labels ====
     i_eq <- pt$op == "=="
     row_eq <- which(i_eq)
     row_eq_op2 <- lor_to_list(pt[row_eq, ])
 
+    # ==== Fix the modifications  ====
     if (length(c(mt1_op2, row_eq_op2)) != 0) {
-        # Determine the sets of changes
+        # ==== Determine the sets of changes ====
         sets_to_gen2 <- lapply(seq_len(df_change),
                     function(x) {
                         utils::combn(c(mt1_op2, row_eq_op2), x, simplify = FALSE)
@@ -230,28 +333,39 @@ get_add <- function(sem_out,
                   )
         sets_to_gen2 <- unlist(sets_to_gen2, recursive = FALSE)
 
-        # Clean up inadmissible modification
+        # ==== Clean up inadmissible modification ====
         sets_to_gen2_ok <- sets_remove_inadmissible(sets_to_gen2)
 
-        # Generate parameter tables
+        # ==== Generate parameter tables ====
         if (progress) {
             cat("\nGenerate", length(sets_to_gen2_ok), "less restrictive model(s):\n")
             op_old <- pbapply::pboptions(type = "timer")
-            out <- pbapply::pblapply(sets_to_gen2_ok,
-                                     gen_pt_add,
-                                     pt = pt,
-                                     sem_out = sem_out,
-                                     from = model_id)
+            out <- suppressWarnings(
+                      pbapply::pblapply(
+                          sets_to_gen2_ok,
+                          gen_pt_add,
+                          pt = pt,
+                          sem_out = sem_out,
+                          from = model_id
+                        )
+                      )
             pbapply::pboptions(op_old)
           } else {
-            out <- lapply(sets_to_gen2_ok, gen_pt_add, pt = pt, sem_out = sem_out,
-                          from = model_id)
+            out <- suppressWarnings(
+                      lapply(
+                        sets_to_gen2_ok,
+                        gen_pt_add,
+                        pt = pt,
+                        sem_out = sem_out,
+                        from = model_id
+                      )
+                    )
           }
       } else {
         out <- list()
       }
 
-    # Keep tables with expected df only?
+    # ==== Keep tables with expected df only? ====
     if (keep_correct_df_change) {
         chk1 <- sapply(out, attr, which = "df_actual")
         chk2 <- sapply(out, attr, which = "df_expected")

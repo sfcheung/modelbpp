@@ -1,7 +1,7 @@
 ---
 title: "Get Started"
 author: "Shu Fai Cheung"
-date: "2025-08-20"
+date: "2026-03-01"
 output:
   rmarkdown::html_vignette:
     number_sections: true
@@ -100,7 +100,7 @@ This the summary:
 ``` r
 summary(fit1,
         fit.measures = TRUE)
-#> lavaan 0.6-19 ended normally after 1 iteration
+#> lavaan 0.6-21 ended normally after 1 iteration
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB

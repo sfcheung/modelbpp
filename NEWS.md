@@ -1,3 +1,53 @@
+# modelbpp 0.2.0
+
+## New Features
+
+- **Breaking Changes**: Added the arguments
+  `cross_add` and
+  `cross_sets` to `model_set()` and
+  `get_add()` to better handle factor
+  loadings. Some factor loadings are no longer
+  added by default, such as an indicator
+  loading on two latent factors and
+  one of the factors regresses on
+  another. These cross-loadings are not
+  meaningful in some models and may lead
+  to nonconvergence.
+  To reproduce results in previous
+  versions of `modelbpp`, users may need
+  to manually add these loadings using
+  `cross_add` and `cross_sets`. (0.1.6.3)
+
+- **Breaking Changes**: Added the argument
+  `loadings_to_exclude_from_drop`
+  to `model_set()` (and `loadings_to_exclude`
+  to `get_add()`) to better handle factor
+  loadings. Some factor loadings will no longer
+  be considered to be dropped by default,
+  such as an indicator
+  that loads on only one latent factor.
+  Cross-loadings will still be considered.
+  To reproduce results in previous
+  versions of `modelbpp`, users may need
+  to set `loadings_to_exclude_from_drop`
+  to `"none"`. (0.1.6.3)
+
+## Miscellaneous
+
+- Added a few more tests (0.1.6.2)
+
+- Updated `gen_models()` with the new
+  arguments added to `model_set()`.
+  (0.1.6.4)
+
+## Bug Fixes
+
+- Fixed a bug in the internal function
+  `add_list_duplicate_cov()`, which
+  makes `must_not_add` failed to exclude
+  some covariances. It should work now.
+  (0.1.6.1)
+
 # modelbpp 0.1.6
 
 ## New Features

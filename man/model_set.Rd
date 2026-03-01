@@ -15,10 +15,13 @@ model_set(
   must_not_add = NULL,
   must_drop = NULL,
   must_not_drop = NULL,
+  loadings_to_exclude_from_drop = c("single", "none", "all"),
   remove_constraints = TRUE,
   exclude_error_cov = TRUE,
   exclude_feedback = TRUE,
   exclude_xy_cov = TRUE,
+  cross_add = c("pure_x", "pure_y"),
+  cross_sets = NULL,
   df_change_add = 1,
   df_change_drop = 1,
   remove_duplicated = TRUE,
@@ -40,8 +43,13 @@ gen_models(
   must_not_add = NULL,
   must_drop = NULL,
   must_not_drop = NULL,
+  loadings_to_exclude_from_drop = c("single", "none", "all"),
   remove_constraints = TRUE,
   exclude_error_cov = TRUE,
+  exclude_feedback = TRUE,
+  exclude_xy_cov = TRUE,
+  cross_add = c("pure_x", "pure_y"),
+  cross_sets = NULL,
   df_change_add = 1,
   df_change_drop = 1,
   remove_duplicated = TRUE,
@@ -95,7 +103,7 @@ equal prior probabilities.}
 of parameters, named in
 \code{\link[lavaan:lavaan]{lavaan::lavaan()}} style (e.g.,
 \code{"y ~ x"}), that must be added.
-Default is `NULL``.}
+Default is \code{NULL}.}
 
 \item{must_not_add}{A character
 vector of parameters, named in
@@ -115,9 +123,26 @@ vector of parameters, named in
 \code{"x1 ~~ x1"}), that must not be
 included. Default is \code{NULL}.}
 
+\item{loadings_to_exclude_from_drop}{Whether factor loadings
+will be excluded when deciding
+parameters to drop. If \code{"single"},
+then only "single" loadings (an indicator
+loads on only one latent factor)
+will be excluded (they will not be
+dropped). If \code{"all"}, then
+all factor loadings will be excluded
+(no factor loadings will be dropped).
+If \code{"none"}, then no loadings will
+be excluded, and all free loadings
+will be considered to be dropped. Be careful when using
+\code{"none"} because the models may not
+make sense. The settings in \code{must_drop}
+and \code{must_not_drop} will override this
+argument.}
+
 \item{remove_constraints}{Whether
 equality constraints will be
-removed. Default is ``TRUE`.}
+removed. Default is \code{TRUE}.}
 
 \item{exclude_error_cov}{Exclude
 error covariances of indicators.
@@ -152,6 +177,36 @@ these covariances rarely are
 interpretable. To reproduce results
 based on previous version, set this
 argument to \code{FALSE}.}
+
+\item{cross_add}{A character vector
+of whether and how cross-loadings
+(an indicator loads on two or more
+latent factors) will be added. If
+\code{NULL}, no cross-loadings will be
+added. If \code{"lav_x"} is in the vector,
+then cross-loadings among "pure-x"
+latent factors, latent
+factors that do not regress on
+any other variables, will be considered.
+If \code{"lav_y"} is in the vector, then
+cross-loadings among "pure-y" latent
+factors, latent factors that regress
+on at least one variables but they
+themselves do not predict any other
+variables, will be considered.
+If \code{"user"} is in the vector, then
+cross-loadings among latent factors listed
+in \code{cross_sets} will be considered.}
+
+\item{cross_sets}{A character vector
+of latent variables for which cross-loadings
+will be considered. Ignored if
+\code{"user"} is not in \code{cross_add}.
+Note that cross-loadings involving latent
+variables which are mediators will
+not be considered. To add them,
+they must be specified explicitly
+in \code{must_add}.}
 
 \item{df_change_add}{How many degrees
 of freedom (\emph{df}) away in the list.

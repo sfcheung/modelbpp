@@ -12,6 +12,7 @@ speed =~ x7 + x8 + x9
 "
 fit <- cfa(mod, HolzingerSwineford1939[HolzingerSwineford1939$school == "Grant-White", ])
 suppressWarnings(out_pc <- model_set(fit,
+                                     loadings_to_exclude = "none",
                                      parallel = FALSE,
                                      progress = FALSE))
 expect_stdout(print(out_pc),
