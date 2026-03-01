@@ -351,9 +351,10 @@ print.model_set <- function(x,
         tmp <- "At least one model has fixed.x = TRUE. The models are not checked for equivalence."
         catwrap(tmp, initial = "- ", exdent = 2)
       }
-    tmp <- paste0("Since Version 0.1.3.5, the default values of ",
-                  "exclude_feedback and exclude_xy_cov changed to TRUE. ",
-                  "Set them to FALSE to reproduce results from previous versions.")
+    tmp <- paste0("Since Version 0.1.6.3, the default ways to ",
+                  "handle factor loadings have changed. ",
+                  "Check the NEWS by news(package = 'modelbpp') to ",
+                  "see how to reproduce results from previous versions.")
     catwrap(tmp, initial = "- ", exdent = 2)
 
     invisible(x)
