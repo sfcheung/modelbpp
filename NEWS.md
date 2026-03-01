@@ -1,4 +1,4 @@
-# modelbpp 0.1.6.3
+# modelbpp 0.1.6.4
 
 ## New Features
 
@@ -35,6 +35,10 @@
 ## Miscellaneous
 
 - Added a few more tests (0.1.6.2)
+
+- Updated `gen_models()` with the new
+  arguments added to `model_set()`.
+  (0.1.6.4)
 
 ## Bug Fixes
 
