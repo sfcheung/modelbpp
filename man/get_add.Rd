@@ -12,6 +12,8 @@ get_add(
   exclude_error_cov = TRUE,
   exclude_feedback = FALSE,
   exclude_xy_cov = FALSE,
+  cross_add = c("pure_x", "pure_y"),
+  cross_sets = NULL,
   df_change = 1,
   model_id = NA,
   keep_correct_df_change = TRUE,
@@ -72,6 +74,36 @@ to maintain backward compatibility.
 Do not rely on the default value
 because it will be changed to \code{TRUE}
 in a future major version.}
+
+\item{cross_add}{A character vector
+of whether and how cross-loadings
+(an indicator loads on two or more
+latent factors) will be added. If
+\code{NULL}, no cross-loadings will be
+added. If \code{"lav_x"} is in the vector,
+then cross-loadings among "pure-x"
+latent factors, latent
+factors that do not regress on
+any other variables, will be considered.
+If \code{"lav_y"} is in the vector, then
+cross-loadings among "pure-y" latent
+factors, latent factors that regress
+on at least one variables but they
+themselves do not predict any other
+variables, will be considered.
+If \code{"user"} is in the vector, then
+cross-loadings among latent factors listed
+in \code{cross_sets} will be considered.}
+
+\item{cross_sets}{A character vector
+of latent variables for which cross-loadings
+will be considered. Ignored if
+\code{"user"} is not in \code{cross_add}.
+Note that cross-loadings involving latent
+variables which are mediators will
+not be considered. To add them,
+they must be specified explicitly
+in \code{must_add}.}
 
 \item{df_change}{How many degrees
 of freedom (\emph{df}) away in the list.
