@@ -15,7 +15,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/sfcheung/modelbpp/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/sfcheung/modelbpp/blob/v0.2.0/inst/CITATION)
 
 Pesigan IJA, Cheung SF, Wu H, Chang F, Leung SO (2026). “How plausible
 is my model? Assessing model plausibility of structural equation models
