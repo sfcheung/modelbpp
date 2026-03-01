@@ -11,7 +11,7 @@ dropped (fixed to zero)."><meta property="og:image" content="https://sfcheung.gi
 
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,7 @@ dropped (fixed to zero).</p>
 <span>  <span class="va">sem_out</span>,</span>
 <span>  must_drop <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  must_not_drop <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  loadings_to_exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"single"</span>, <span class="st">"none"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
 <span>  df_change <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  model_id <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  keep_correct_df_change <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -88,6 +89,21 @@ vector of parameters, named in
 <code><a href="https://rdrr.io/pkg/lavaan/man/lavaan.html" class="external-link">lavaan::lavaan()</a></code> style (e.g.,
 <code>"x1 ~~ x1"</code>), that must not be
 included. Default is <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-loadings-to-exclude">loadings_to_exclude<a class="anchor" aria-label="anchor" href="#arg-loadings-to-exclude"></a></dt>
+<dd><p>Whether factor loadings
+will be excluded. If <code>"single"</code>,
+then only "single" loadings (an indicator
+loads on only one latent factor)
+will be excluded. If <code>"all"</code>, then
+all factor loadings will be excluded.
+If <code>"none"</code>, then no loadings will
+be excluded. Be careful when using
+<code>"none"</code> because the models may not
+make sense. The settings in <code>must_drop</code>
+and <code>must_not_drop</code> will override this
+argument.</p></dd>
 
 
 <dt id="arg-df-change">df_change<a class="anchor" aria-label="anchor" href="#arg-df-change"></a></dt>
@@ -270,7 +286,7 @@ for advanced users.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

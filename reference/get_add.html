@@ -11,7 +11,7 @@ parameter freed."><meta property="og:image" content="https://sfcheung.github.io/
 
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,6 +58,8 @@ parameter freed.</p>
 <span>  exclude_error_cov <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  exclude_feedback <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  exclude_xy_cov <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cross_add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pure_x"</span>, <span class="st">"pure_y"</span><span class="op">)</span>,</span>
+<span>  cross_sets <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  df_change <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  model_id <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  keep_correct_df_change <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -135,6 +137,40 @@ to maintain backward compatibility.
 Do not rely on the default value
 because it will be changed to <code>TRUE</code>
 in a future major version.</p></dd>
+
+
+<dt id="arg-cross-add">cross_add<a class="anchor" aria-label="anchor" href="#arg-cross-add"></a></dt>
+<dd><p>A character vector
+of whether and how cross-loadings
+(an indicator loads on two or more
+latent factors) will be added. If
+<code>NULL</code>, no cross-loadings will be
+added. If <code>"lav_x"</code> is in the vector,
+then cross-loadings among "pure-x"
+latent factors, latent
+factors that do not regress on
+any other variables, will be considered.
+If <code>"lav_y"</code> is in the vector, then
+cross-loadings among "pure-y" latent
+factors, latent factors that regress
+on at least one variables but they
+themselves do not predict any other
+variables, will be considered.
+If <code>"user"</code> is in the vector, then
+cross-loadings among latent factors listed
+in <code>cross_sets</code> will be considered.</p></dd>
+
+
+<dt id="arg-cross-sets">cross_sets<a class="anchor" aria-label="anchor" href="#arg-cross-sets"></a></dt>
+<dd><p>A character vector
+of latent variables for which cross-loadings
+will be considered. Ignored if
+<code>"user"</code> is not in <code>cross_add</code>.
+Note that cross-loadings involving latent
+variables which are mediators will
+not be considered. To add them,
+they must be specified explicitly
+in <code>must_add</code>.</p></dd>
 
 
 <dt id="arg-df-change">df_change<a class="anchor" aria-label="anchor" href="#arg-df-change"></a></dt>
@@ -279,7 +315,7 @@ for advanced users.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
