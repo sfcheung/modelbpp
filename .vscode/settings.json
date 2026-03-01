@@ -6,4 +6,17 @@
     "modelbpp",
     "Muthén"
   ]
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#907E4F",
+    "titleBar.inactiveBackground": "#686356",
+    "editor.background": "#3c3006",
+    "sideBar.background": "#3c3006",
+    "activityBar.background": "#2d2306",
+    "statusBar.background": "#2d2306",
+    // "editor.snippetTabstopHighlightBackground": "#2d2306",
+    // "editor.snippetTabstopHighlightBorder": "#2d2306",
+    // "editor.snippetFinalTabstopHighlightBackground": "#2d2306",
+    // "editor.snippetFinalTabstopHighlightBorder": "#2d2306"
+
+  }
 }
