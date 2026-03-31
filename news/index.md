@@ -1,19 +1,28 @@
 # Changelog
 
-## modelbpp 0.2.0.2
+## modelbpp 0.2.0.4
 
 ### Miscellaneous
 
-- Add the argument `exclude_x_changed_to_y` to
+- Added the argument `exclude_x_changed_to_y` to
   [`model_set()`](https://sfcheung.github.io/modelbpp/reference/model_set.md)
   and friends, as well as
   [`get_add()`](https://sfcheung.github.io/modelbpp/reference/get_add.md).
   Though this is rarely desirable, setting this argument to `FALSE`
   allow changes that make a “pure” x-variable a y-variable. (0.2.0.1)
 
-- Add `drop_equivalent_models` to
+- Added `drop_equivalent_models` to
   [`gen_models()`](https://sfcheung.github.io/modelbpp/reference/model_set.md).
   (0.2.0.2)
+
+- Updated
+  [`print.model_set()`](https://sfcheung.github.io/modelbpp/reference/print.model_set.md)
+  to handle `sem_out` and `function` that are not names. (0.2.0.4)
+
+### Bug Fixes
+
+- [`gen_models()`](https://sfcheung.github.io/modelbpp/reference/model_set.md)
+  now correctly handles `cross_add = NULL`. (0.2.0.3)
 
 ## modelbpp 0.2.0
 
