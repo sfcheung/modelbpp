@@ -587,6 +587,7 @@ gen_models <- function(sem_out,
                        df_change_add = 1,
                        df_change_drop = 1,
                        remove_duplicated = TRUE,
+                       drop_equivalent_models = TRUE,
                        progress = TRUE,
                        output = c("partables", "model_set")) {
     output <- match.arg(output)
@@ -608,6 +609,7 @@ gen_models <- function(sem_out,
                      df_change_add = df_change_add,
                      df_change_drop = df_change_drop,
                      remove_duplicated = remove_duplicated,
+                     drop_equivalent_models = drop_equivalent_models,
                      progress = progress,
                      fit_models = FALSE,
                      compute_bpp = FALSE)
