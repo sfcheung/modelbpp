@@ -236,6 +236,14 @@ print.model_set <- function(x,
       }
     cat("\n")
     cat("Call:\n")
+    # Handle elements that may not be names
+    if (!is.name(model_set_call[[1]])) {
+      model_set_call[[1]] <- quote(modelbpp::model_set)
+    }
+    if (!is.name(model_set_call$sem_out) &&
+        !is.null(model_set_call$sem_out)) {
+      model_set_call$sem_out <- "<hidden>"
+    }
     print(model_set_call)
     cat("\n")
     if (models_fitted) {

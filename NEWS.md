@@ -1,8 +1,8 @@
-# modelbpp 0.2.0.3
+# modelbpp 0.2.0.4
 
 ## Miscellaneous
 
-- Add the argument
+- Added the argument
  `exclude_x_changed_to_y` to `model_set()`
  and friends, as well as
  `get_add()`. Though this is rarely
@@ -11,8 +11,12 @@
  "pure" x-variable a y-variable.
  (0.2.0.1)
 
-- Add `drop_equivalent_models` to
+- Added `drop_equivalent_models` to
   `gen_models()`. (0.2.0.2)
+
+- Updated `print.model_set()` to handle
+  `sem_out` and `function` that are not
+  names. (0.2.0.4)
 
 ## Bug Fixes
 
