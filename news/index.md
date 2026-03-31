@@ -1,6 +1,6 @@
 # Changelog
 
-## modelbpp 0.2.0.1
+## modelbpp 0.2.0.2
 
 ### Miscellaneous
 
@@ -10,6 +10,10 @@
   [`get_add()`](https://sfcheung.github.io/modelbpp/reference/get_add.md).
   Though this is rarely desirable, setting this argument to `FALSE`
   allow changes that make a “pure” x-variable a y-variable. (0.2.0.1)
+
+- Add `drop_equivalent_models` to
+  [`gen_models()`](https://sfcheung.github.io/modelbpp/reference/model_set.md).
+  (0.2.0.2)
 
 ## modelbpp 0.2.0
 
