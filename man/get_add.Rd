@@ -12,6 +12,7 @@ get_add(
   exclude_error_cov = TRUE,
   exclude_feedback = FALSE,
   exclude_xy_cov = FALSE,
+  exclude_x_changed_to_y = TRUE,
   cross_add = c("pure_x", "pure_y"),
   cross_sets = NULL,
   df_change = 1,
@@ -74,6 +75,12 @@ to maintain backward compatibility.
 Do not rely on the default value
 because it will be changed to \code{TRUE}
 in a future major version.}
+
+\item{exclude_x_changed_to_y}{Exclude
+changes that make a "pure" \code{x}
+variable to a \code{y} variable. For example,
+adding the path \code{x2 ~ x1} to
+the model \code{y ~ x1 + x2}.}
 
 \item{cross_add}{A character vector
 of whether and how cross-loadings
