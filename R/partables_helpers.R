@@ -105,8 +105,8 @@ identical_partables <- function(object1,
       }
     if (!is.null(tmp1$ustart) &&
         !is.null(tmp2$ustart)) {
-        tmp1u <- tmp1[which(tmp1$ustart > 0), ]
-        tmp2u <- tmp2[which(tmp2$ustart > 0), ]
+        tmp1u <- tmp1[which((tmp1$ustart > 0) & (tmp1$free == 0)), ]
+        tmp2u <- tmp2[which((tmp2$ustart > 0) & (tmp2$free == 0)), ]
         if (!identical(tmp1u$start,
                        tmp2u$start)) {
             return(FALSE)
