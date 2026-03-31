@@ -1,4 +1,4 @@
-# modelbpp 0.2.0.2
+# modelbpp 0.2.0.3
 
 ## Miscellaneous
 
@@ -13,6 +13,11 @@
 
 - Add `drop_equivalent_models` to
   `gen_models()`. (0.2.0.2)
+
+## Bug Fixes
+
+- `gen_models()` now correctly handles
+  `cross_add = NULL`. (0.2.0.3)
 
 # modelbpp 0.2.0
 
