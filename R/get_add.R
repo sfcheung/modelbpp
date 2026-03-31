@@ -207,9 +207,8 @@ get_add <- function(sem_out,
     mt <- suppressWarnings(lavaan::modificationIndices(sem_out,
                     standardized = FALSE,
                     power = FALSE))
-
     # ==== Remove those already in the parameter tables ====
-    mt1 <- mt_exclude_existing_pars(mt = mt, pt = pt)
+    mt1 <- mt_exclude_existing_pars(mt = mt, pt = pt, skip_fixed_zero = TRUE)
 
     # ==== Remove those convert an IV to a DV ====
     if (exclude_x_changed_to_y) {
@@ -331,7 +330,7 @@ get_add <- function(sem_out,
     i_eq <- pt$op == "=="
     row_eq <- which(i_eq)
     row_eq_op2 <- lor_to_list(pt[row_eq, ])
-
+browser()
     # ==== Fix the modifications  ====
     if (length(c(mt1_op2, row_eq_op2)) != 0) {
         # ==== Determine the sets of changes ====

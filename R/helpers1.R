@@ -128,7 +128,7 @@ release_constr <- function(constr, pt) {
 
 #' @noRd
 
-mt_exclude_existing_pars <- function(mt, pt) {
+mt_exclude_existing_pars <- function(mt, pt, skip_fixed_zero = TRUE) {
     if (nrow(mt) == 0) {
         return(mt)
       }
@@ -145,7 +145,26 @@ mt_exclude_existing_pars <- function(mt, pt) {
                         x = mt$rhs,
                         y = mt$lhs,
                         USE.NAMES = FALSE)
-    mt_exclude_in_pt2 <- mt_in_pt1 | mt_in_pt2
+    mt_exclude_in_pt2 <- (mt_in_pt1 | mt_in_pt2)
+    if (skip_fixed_zero) {
+      mt_in_pt3 <- mapply(function(lhs, op, rhs) {
+                              i <- (pt$lhs == lhs) &
+                                   (pt$op == op) &
+                                   (pt$rhs == rhs)
+                              if (any(i)) {
+                                out <- (pt[i, "free"] == 0) &
+                                       (pt[i, "ustart"] == 0)
+                                return(out)
+                              } else {
+                                return(FALSE)
+                              }
+                            },
+                          lhs = mt$lhs,
+                          op = mt$op,
+                          rhs = mt$rhs,
+                          USE.NAMES = FALSE)
+      mt_exclude_in_pt2 <- mt_exclude_in_pt2 & !mt_in_pt3
+    }
     out <- mt[!mt_exclude_in_pt2, ]
     return(out)
   }
