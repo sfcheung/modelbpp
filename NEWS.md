@@ -1,4 +1,4 @@
-# modelbpp 0.2.0.1
+# modelbpp 0.2.0.2
 
 ## Miscellaneous
 
@@ -10,6 +10,9 @@
  `FALSE` allow changes that make a
  "pure" x-variable a y-variable.
  (0.2.0.1)
+
+- Add `drop_equivalent_models` to
+  `gen_models()`. (0.2.0.2)
 
 # modelbpp 0.2.0
 
