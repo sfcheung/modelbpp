@@ -1,3 +1,16 @@
+# modelbpp 0.2.0.1
+
+## Miscellaneous
+
+- Add the argument
+ `exclude_x_changed_to_y` to `model_set()`
+ and friends, as well as
+ `get_add()`. Though this is rarely
+ desirable, setting this argument to
+ `FALSE` allow changes that make a
+ "pure" x-variable a y-variable.
+ (0.2.0.1)
+
 # modelbpp 0.2.0
 
 ## New Features
