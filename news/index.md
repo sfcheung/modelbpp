@@ -1,6 +1,6 @@
 # Changelog
 
-## modelbpp 0.2.0.4
+## modelbpp 0.2.0.5
 
 ### Miscellaneous
 
@@ -23,6 +23,9 @@
 
 - [`gen_models()`](https://sfcheung.github.io/modelbpp/reference/model_set.md)
   now correctly handles `cross_add = NULL`. (0.2.0.3)
+
+- [`identical_partables()`](https://sfcheung.github.io/modelbpp/reference/partables_helpers.md)
+  now correctly ignores `ustart` for free parameters. (0.2.0.5)
 
 ## modelbpp 0.2.0
 
