@@ -592,7 +592,9 @@ gen_models <- function(sem_out,
                        output = c("partables", "model_set")) {
     output <- match.arg(output)
     loadings_to_exclude_from_drop <- match.arg(loadings_to_exclude_from_drop)
-    cross_add <- match.arg(cross_add)
+    if (!is.null(cross_add)) {
+      cross_add <- match.arg(cross_add)
+    }
     out <- model_set(sem_out = sem_out,
                      must_add = must_add,
                      must_not_add = must_not_add,
