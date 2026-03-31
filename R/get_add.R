@@ -83,6 +83,12 @@
 #' because it will be changed to `TRUE`
 #' in a future major version.
 #'
+#' @param exclude_x_changed_to_y Exclude
+#' changes that make a "pure" `x`
+#' variable to a `y` variable. For example,
+#' adding the path `x2 ~ x1` to
+#' the model `y ~ x1 + x2`.
+#'
 #' @param cross_add A character vector
 #' of whether and how cross-loadings
 #' (an indicator loads on two or more
@@ -173,6 +179,7 @@ get_add <- function(sem_out,
                      exclude_error_cov = TRUE,
                      exclude_feedback = FALSE,
                      exclude_xy_cov = FALSE,
+                     exclude_x_changed_to_y = TRUE,
                      cross_add = c("pure_x", "pure_y"),
                      cross_sets = NULL,
                      df_change = 1,
@@ -205,7 +212,9 @@ get_add <- function(sem_out,
     mt1 <- mt_exclude_existing_pars(mt = mt, pt = pt)
 
     # ==== Remove those convert an IV to a DV ====
-    mt1 <- mt_exclude_reversed(mt = mt1, pt = pt)
+    if (exclude_x_changed_to_y) {
+      mt1 <- mt_exclude_reversed(mt = mt1, pt = pt)
+    }
 
     # ==== Identify parameters to be added ====
     mt1_op2 <- lor_to_list(mt1)
