@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,11 +34,18 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/sfcheung/modelbpp/blob/v0.2.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/sfcheung/modelbpp/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0" id="modelbpp-020">modelbpp 0.2.0<a class="anchor" aria-label="anchor" href="#modelbpp-020"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.0.1" id="modelbpp-0201">modelbpp 0.2.0.1<a class="anchor" aria-label="anchor" href="#modelbpp-0201"></a></h2>
+<div class="section level3">
+<h3 id="miscellaneous-0-2-0-1">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-2-0-1"></a></h3>
+<ul><li>Add the argument <code>exclude_x_changed_to_y</code> to <code><a href="../reference/model_set.html">model_set()</a></code> and friends, as well as <code><a href="../reference/get_add.html">get_add()</a></code>. Though this is rarely desirable, setting this argument to <code>FALSE</code> allow changes that make a “pure” x-variable a y-variable. (0.2.0.1)</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="modelbpp-020">modelbpp 0.2.0<a class="anchor" aria-label="anchor" href="#modelbpp-020"></a></h2><p class="text-muted">CRAN release: 2026-03-01</p>
 <div class="section level3">
 <h3 id="new-features-0-2-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h3>
 <ul><li><p><strong>Breaking Changes</strong>: Added the arguments <code>cross_add</code> and <code>cross_sets</code> to <code><a href="../reference/model_set.html">model_set()</a></code> and <code><a href="../reference/get_add.html">get_add()</a></code> to better handle factor loadings. Some factor loadings are no longer added by default, such as an indicator loading on two latent factors and one of the factors regresses on another. These cross-loadings are not meaningful in some models and may lead to nonconvergence. To reproduce results in previous versions of <code>modelbpp</code>, users may need to manually add these loadings using <code>cross_add</code> and <code>cross_sets</code>. (0.1.6.3)</p></li>
@@ -55,7 +62,7 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.6" id="modelbpp-016">modelbpp 0.1.6<a class="anchor" aria-label="anchor" href="#modelbpp-016"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.6" id="modelbpp-016">modelbpp 0.1.6<a class="anchor" aria-label="anchor" href="#modelbpp-016"></a></h2><p class="text-muted">CRAN release: 2025-09-24</p>
 <div class="section level3">
 <h3 id="new-features-0-1-6">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-1-6"></a></h3>
 <ul><li>Added <code><a href="../reference/model_set_combined.html">model_set_combined()</a></code> for computing BPPs for models from two or more calls to <code><a href="../reference/model_set.html">model_set()</a></code>. (0.1.5.3, 0.1.5.4)</li>
@@ -67,7 +74,7 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.5" id="modelbpp-015">modelbpp 0.1.5<a class="anchor" aria-label="anchor" href="#modelbpp-015"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.5" id="modelbpp-015">modelbpp 0.1.5<a class="anchor" aria-label="anchor" href="#modelbpp-015"></a></h2><p class="text-muted">CRAN release: 2024-09-16</p>
 <div class="section level3">
 <h3 id="new-features-0-1-5">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-1-5"></a></h3>
 <ul><li><p>Added the argument <code>exclude_xy_cov</code> and <code>exclude_feedback</code> to <code><a href="../reference/get_add.html">get_add()</a></code> and <code><a href="../reference/model_set.html">model_set()</a></code>, for excluding paths that create feedback loops, and covariances involving a predictor and an outcome variable (including those linked by indirect paths). Default values has been changed to <code>TRUE</code> since 0.1.3.5. To reproduce results from previous version, set them to <code>FALSE</code>. (0.1.3.2, 0.1.3.5)</p></li>
@@ -94,7 +101,7 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.3" id="modelbpp-013">modelbpp 0.1.3<a class="anchor" aria-label="anchor" href="#modelbpp-013"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.3" id="modelbpp-013">modelbpp 0.1.3<a class="anchor" aria-label="anchor" href="#modelbpp-013"></a></h2><p class="text-muted">CRAN release: 2024-02-20</p>
 <div class="section level3">
 <h3 id="new-features-0-1-3">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-1-3"></a></h3>
 <div class="section level4">
@@ -148,7 +155,7 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.2" id="modelbpp-012">modelbpp 0.1.2<a class="anchor" aria-label="anchor" href="#modelbpp-012"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.2" id="modelbpp-012">modelbpp 0.1.2<a class="anchor" aria-label="anchor" href="#modelbpp-012"></a></h2><p class="text-muted">CRAN release: 2023-09-21</p>
 <ul><li>First version submitted to CRAN.</li>
 <li>Fixed a few typos in Get Started. (0.1.0.9001)</li>
 <li>Used a bibliography file in vignettes. (0.1.0.9002)</li>

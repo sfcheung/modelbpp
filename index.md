@@ -1,6 +1,6 @@
 # modelbpp: Model BIC Posterior Probability
 
-(Version 0.2.0 updated on 2026-03-01, [release
+(Version 0.2.0.1 updated on 2026-03-31, [release
 history](https://sfcheung.github.io/modelbpp/news/index.html))
 
 This package is for assessing model uncertainty in structural equation

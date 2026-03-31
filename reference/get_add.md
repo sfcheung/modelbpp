@@ -13,6 +13,7 @@ get_add(
   exclude_error_cov = TRUE,
   exclude_feedback = FALSE,
   exclude_xy_cov = FALSE,
+  exclude_x_changed_to_y = TRUE,
   cross_add = c("pure_x", "pure_y"),
   cross_sets = NULL,
   df_change = 1,
@@ -69,6 +70,11 @@ get_add(
   `TRUE`. Default is `FALSE` for now, to maintain backward
   compatibility. Do not rely on the default value because it will be
   changed to `TRUE` in a future major version.
+
+- exclude_x_changed_to_y:
+
+  Exclude changes that make a "pure" `x` variable to a `y` variable. For
+  example, adding the path `x2 ~ x1` to the model `y ~ x1 + x2`.
 
 - cross_add:
 

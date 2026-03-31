@@ -1,6 +1,19 @@
 # Changelog
 
+## modelbpp 0.2.0.1
+
+### Miscellaneous
+
+- Add the argument `exclude_x_changed_to_y` to
+  [`model_set()`](https://sfcheung.github.io/modelbpp/reference/model_set.md)
+  and friends, as well as
+  [`get_add()`](https://sfcheung.github.io/modelbpp/reference/get_add.md).
+  Though this is rarely desirable, setting this argument to `FALSE`
+  allow changes that make a “pure” x-variable a y-variable. (0.2.0.1)
+
 ## modelbpp 0.2.0
+
+CRAN release: 2026-03-01
 
 ### New Features
 
@@ -47,6 +60,8 @@
 
 ## modelbpp 0.1.6
 
+CRAN release: 2025-09-24
+
 ### New Features
 
 - Added
@@ -64,6 +79,8 @@
 - Changed the vignettes to precomputed Rmarkdown files. (0.1.5.2)
 
 ## modelbpp 0.1.5
+
+CRAN release: 2024-09-16
 
 ### New Features
 
@@ -141,6 +158,8 @@
 - Fixed a bug in checking whether two models are equivalent. (0.1.3.12)
 
 ## modelbpp 0.1.3
+
+CRAN release: 2024-02-20
 
 ### New Features
 
@@ -253,6 +272,8 @@
 - Fixed a bug in normalizing the width of arrows. (0.1.2.21)
 
 ## modelbpp 0.1.2
+
+CRAN release: 2023-09-21
 
 - First version submitted to CRAN.
 - Fixed a few typos in Get Started. (0.1.0.9001)
