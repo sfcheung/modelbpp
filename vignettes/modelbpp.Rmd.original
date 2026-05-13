@@ -47,6 +47,16 @@ to:
   data, compared to all other models
   under consideration.
 
+An
+introduction to the package can be found in the following
+article:
+
+- Pesigan, I. J. A., Cheung, S. F., Wu, H., Chang, F., & Leung, S. O. (2026).
+  How plausible is my model? Assessing model plausibility of
+  structural equation models using Bayesian posterior probabilities (BPP).
+  *Behavior Research Methods, 58*(3), Article 73.
+  https://doi.org/10.3758/s13428-025-02921-x
+
 # Workflow
 
 1. Fit an SEM model, the
