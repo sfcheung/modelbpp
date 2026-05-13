@@ -1,6 +1,8 @@
 # Changelog
 
-## modelbpp 0.2.0.5
+## modelbpp 0.3.0
+
+CRAN release: 2026-05-12
 
 ### Miscellaneous
 

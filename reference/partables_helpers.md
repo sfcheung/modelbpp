@@ -79,6 +79,7 @@ parameter table of `lavaan`.
 ## Examples
 
 ``` r
+
 library(lavaan)
 mod1 <-
 "

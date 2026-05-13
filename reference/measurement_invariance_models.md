@@ -97,6 +97,7 @@ Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 ## Examples
 
 ``` r
+
 library(lavaan)
 # For illustration, only one factor is used,
 # with one item from another factor added

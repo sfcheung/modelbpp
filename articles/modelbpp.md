@@ -16,6 +16,14 @@ and other functions from the package
 - Use BPP to assess to what extent each model is supported by the data,
   compared to all other models under consideration.
 
+An introduction to the package can be found in the following article:
+
+- Pesigan, I. J. A., Cheung, S. F., Wu, H., Chang, F., & Leung, S. O.
+  (2026). How plausible is my model? Assessing model plausibility of
+  structural equation models using Bayesian posterior probabilities
+  (BPP). *Behavior Research Methods, 58*(3), Article 73.
+  <https://doi.org/10.3758/s13428-025-02921-x>
+
 ## Workflow
 
 1.  Fit an SEM model, the original model, as usual in `lavaan`.
@@ -43,6 +51,7 @@ and other functions from the package
 This is a sample dataset, `dat_serial_4_weak`, with four variables:
 
 ``` r
+
 library(modelbpp)
 head(dat_serial_4_weak)
 #>             x         m1         m2          y
@@ -60,7 +69,10 @@ Fit this original model, a serial mediation model, with one direct path,
 from `x` to `y`:
 
 ``` r
+
 library(lavaan)
+#> This is lavaan 0.6-21
+#> lavaan is FREE software! Please report any bugs.
 mod1 <-
 "
 m1 ~ x
@@ -73,6 +85,7 @@ fit1 <- sem(mod1, dat_serial_4_weak)
 This the summary:
 
 ``` r
+
 summary(fit1,
         fit.measures = TRUE)
 #> lavaan 0.6-21 ended normally after 1 iteration
@@ -155,6 +168,7 @@ to find the neighboring models differ from the target model by one on
 model degrees of freedom, fit them, and compute the BPPs:
 
 ``` r
+
 out1 <- model_set(fit1)
 ```
 
@@ -163,6 +177,7 @@ out1 <- model_set(fit1)
 To examine the results, just print the output:
 
 ``` r
+
 out1
 #> 
 #> Call:
@@ -190,9 +205,9 @@ out1
 #> - To show cumulative BPPs, call print() with 'cumulative_bpp = TRUE'.
 #> - At least one model has fixed.x = TRUE. The models are not checked for
 #>   equivalence.
-#> - Since Version 0.1.3.5, the default values of exclude_feedback and
-#>   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce
-#>   results from previous versions.
+#> - Since Version 0.1.6.3, the default ways to handle factor loadings
+#>   have changed. Check the NEWS by news(package = 'modelbpp') to see how
+#>   to reproduce results from previous versions.
 ```
 
 The total number of models examined, including the original model, is 7.
@@ -214,6 +229,7 @@ Alternatively, we can use
 to visualize the BPPs and model relations graphically:
 
 ``` r
+
 graph1 <- model_graph(out1)
 plot(graph1)
 ```
@@ -253,6 +269,7 @@ probability when calling
 [`model_set()`](https://sfcheung.github.io/modelbpp/reference/model_set.md):
 
 ``` r
+
 out1_prior <- model_set(fit1,
                         prior_sem_out = .50)
 ```
@@ -264,6 +281,7 @@ probability of the other eight model is (1 - .50) / 8 or .0625.
 This is the printout:
 
 ``` r
+
 out1_prior
 #> 
 #> Call:
@@ -291,9 +309,9 @@ out1_prior
 #> - To show cumulative BPPs, call print() with 'cumulative_bpp = TRUE'.
 #> - At least one model has fixed.x = TRUE. The models are not checked for
 #>   equivalence.
-#> - Since Version 0.1.3.5, the default values of exclude_feedback and
-#>   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce
-#>   results from previous versions.
+#> - Since Version 0.1.6.3, the default ways to handle factor loadings
+#>   have changed. Check the NEWS by news(package = 'modelbpp') to see how
+#>   to reproduce results from previous versions.
 ```
 
 If the prior of the target is set to .50, then, taking into account both
@@ -304,6 +322,7 @@ This is the output of
 [`model_graph()`](https://sfcheung.github.io/modelbpp/reference/model_graph.md):
 
 ``` r
+
 graph1_prior <- model_graph(out1_prior)
 plot(graph1_prior)
 ```
@@ -322,6 +341,7 @@ model. For example, we can set the maximum difference in model *df* to
 model:
 
 ``` r
+
 out1_df2 <- model_set(fit1,
                       df_change_add = 2,
                       df_change_drop = 2)
@@ -331,6 +351,7 @@ This is the printout. By default, when there are more than 20 models,
 only the top 20 models on BPP will be printed:
 
 ``` r
+
 out1_df2
 #> 
 #> Call:
@@ -365,9 +386,9 @@ out1_df2
 #> - To show cumulative BPPs, call print() with 'cumulative_bpp = TRUE'.
 #> - At least one model has fixed.x = TRUE. The models are not checked for
 #>   equivalence.
-#> - Since Version 0.1.3.5, the default values of exclude_feedback and
-#>   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce
-#>   results from previous versions.
+#> - Since Version 0.1.6.3, the default ways to handle factor loadings
+#>   have changed. Check the NEWS by news(package = 'modelbpp') to see how
+#>   to reproduce results from previous versions.
 ```
 
 The number of models examined, including the original model, is 14.
@@ -376,6 +397,7 @@ This is the output of
 [`model_graph()`](https://sfcheung.github.io/modelbpp/reference/model_graph.md):
 
 ``` r
+
 graph1_df2 <- model_graph(out1_df2,
                           node_label_size = .75)
 plot(graph1_df2)
@@ -400,6 +422,7 @@ should not be dropped, we can exclude it when calling
 [`model_set()`](https://sfcheung.github.io/modelbpp/reference/model_set.md)
 
 ``` r
+
 out1_no_m1_x <- model_set(fit1,
                           must_not_drop = "m1~x")
 ```
@@ -407,6 +430,7 @@ out1_no_m1_x <- model_set(fit1,
 This is the output:
 
 ``` r
+
 out1_no_m1_x
 #> 
 #> Call:
@@ -433,9 +457,9 @@ out1_no_m1_x
 #> - To show cumulative BPPs, call print() with 'cumulative_bpp = TRUE'.
 #> - At least one model has fixed.x = TRUE. The models are not checked for
 #>   equivalence.
-#> - Since Version 0.1.3.5, the default values of exclude_feedback and
-#>   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce
-#>   results from previous versions.
+#> - Since Version 0.1.6.3, the default ways to handle factor loadings
+#>   have changed. Check the NEWS by news(package = 'modelbpp') to see how
+#>   to reproduce results from previous versions.
 ```
 
 The number of models reduced to 14.
@@ -443,6 +467,7 @@ The number of models reduced to 14.
 This is the plot:
 
 ``` r
+
 out1_no_m1_x <- model_graph(out1_no_m1_x)
 plot(out1_no_m1_x)
 ```
@@ -466,6 +491,7 @@ model without refitting the models, by using the output of
 as the input, using the `model_set_out` argument:
 
 ``` r
+
 out1_new_prior <- model_set(model_set_out = out1,
                             prior_sem_out = .50)
 ```
@@ -475,6 +501,7 @@ The results are identical to calling
 with the original `lavaan` output as the input:
 
 ``` r
+
 out1_new_prior
 #> 
 #> Call:
@@ -502,9 +529,9 @@ out1_new_prior
 #> - To show cumulative BPPs, call print() with 'cumulative_bpp = TRUE'.
 #> - At least one model has fixed.x = TRUE. The models are not checked for
 #>   equivalence.
-#> - Since Version 0.1.3.5, the default values of exclude_feedback and
-#>   exclude_xy_cov changed to TRUE. Set them to FALSE to reproduce
-#>   results from previous versions.
+#> - Since Version 0.1.6.3, the default ways to handle factor loadings
+#>   have changed. Check the NEWS by news(package = 'modelbpp') to see how
+#>   to reproduce results from previous versions.
 ```
 
 ### Many Neighboring Models

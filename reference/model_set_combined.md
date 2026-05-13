@@ -47,6 +47,7 @@ Equivalent models will be removed in the process.
 ## Examples
 
 ``` r
+
 library(lavaan)
 
 mod1 <-

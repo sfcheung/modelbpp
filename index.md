@@ -1,6 +1,6 @@
 # modelbpp: Model BIC Posterior Probability
 
-(Version 0.2.0.5 updated on 2026-03-31, [release
+(Version 0.3.0 updated on 2026-05-12, [release
 history](https://sfcheung.github.io/modelbpp/news/index.html))
 
 This package is for assessing model uncertainty in structural equation
@@ -32,6 +32,7 @@ The stable CRAN version can be installed by
 [`install.packages()`](https://rdrr.io/r/utils/install.packages.html):
 
 ``` r
+
 install.packages("modelbpp")
 ```
 
@@ -39,6 +40,7 @@ The latest developmental-but-stable version of this package can be
 installed by `remotes::install_github`:
 
 ``` r
+
 remotes::install_github("sfcheung/modelbpp")
 ```
 

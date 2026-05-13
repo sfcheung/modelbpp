@@ -250,6 +250,7 @@ package, which was developed by Terrence D. Jorgensen.
 ## Examples
 
 ``` r
+
 library(lavaan)
 
 mod <-

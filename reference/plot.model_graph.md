@@ -44,6 +44,7 @@ in the future.
 ## Examples
 
 ``` r
+
 library(lavaan)
 
 dat <- dat_path_model
