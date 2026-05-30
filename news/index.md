@@ -1,5 +1,15 @@
 # Changelog
 
+## modelbpp 0.3.0.1
+
+### Miscellaneous
+
+- In
+  [`get_add()`](https://sfcheung.github.io/modelbpp/reference/get_add.md)
+  and
+  [`get_drop()`](https://sfcheung.github.io/modelbpp/reference/get_drop.md),
+  the representation will switch to `RAM` if `LISREL` fails. (0.3.0.1)
+
 ## modelbpp 0.3.0
 
 CRAN release: 2026-05-12
