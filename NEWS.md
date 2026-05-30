@@ -1,3 +1,12 @@
+# modelbpp 0.3.0.1
+
+## Miscellaneous
+
+- In `get_add()` and `get_drop()`, the
+  representation will switch to `RAM`
+  if `LISREL` fails.
+  (0.3.0.1)
+
 # modelbpp 0.3.0
 
 ## Miscellaneous
