@@ -231,17 +231,31 @@ gen_pt_drop <- function(x, pt, to, source_df = NA, sem_out) {
     p_to_drop_out <- lapply(x, function(x) {
         c(lhs = pt[x, "lhs"], op = pt[x, "op"], rhs = pt[x, "rhs"])
       })
-    suppressWarnings(sem_out_update <- lavaan::update(sem_out,
-                                     pt,
-                                     do.fit = TRUE,
-                                     optim.force.converged = TRUE,
-                                     warn = FALSE,
-                                     se = "none",
-                                     baseline = FALSE,
-                                     check.start = FALSE,
-                                     check.post = FALSE,
-                                     check.vcov = FALSE,
-                                     control = list(max.iter = 1)))
+    suppressWarnings(sem_out_update <- auto_ram(
+      FUN = lavaan::update,
+      object = sem_out,
+      model = pt,
+      do.fit = TRUE,
+      optim.force.converged = TRUE,
+      warn = FALSE,
+      se = "none",
+      baseline = FALSE,
+      check.start = FALSE,
+      check.post = FALSE,
+      check.vcov = FALSE,
+      control = list(max.iter = 1))
+    )
+    # suppressWarnings(sem_out_update <- lavaan::update(sem_out,
+    #                                  pt,
+    #                                  do.fit = TRUE,
+    #                                  optim.force.converged = TRUE,
+    #                                  warn = FALSE,
+    #                                  se = "none",
+    #                                  baseline = FALSE,
+    #                                  check.start = FALSE,
+    #                                  check.post = FALSE,
+    #                                  check.vcov = FALSE,
+    #                                  control = list(max.iter = 1)))
     pt_update <- lavaan::parameterTable(sem_out_update)
     attr(pt_update, "parameters_dropped") <- p_to_drop
     attr(pt_update, "parameters_dropped_list") <- p_to_drop_out
