@@ -429,12 +429,21 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
     if (length(x_free) > 0) {
         x_free_str <- par_names(pars_list = x_free)
         p_to_add <- sapply(x_free, paste0, collapse = "")
-        sem_out_update <- lavaan::update(sem_out,
-                                         pt,
-                                         add = x_free_str,
-                                         do.fit = TRUE,
-                                         optim.force.converged = TRUE,
-                                         control = list(max.iter = 1))
+        sem_out_update <- auto_ram(
+          FUN = lavaan::update,
+          object = sem_out,
+          model = pt,
+          add = x_free_str,
+          do.fit = TRUE,
+          optim.force.converged = TRUE,
+          control = list(max.iter = 1)
+        )
+        # sem_out_update <- lavaan::update(sem_out,
+        #                                  pt,
+        #                                  add = x_free_str,
+        #                                  do.fit = TRUE,
+        #                                  optim.force.converged = TRUE,
+        #                                  control = list(max.iter = 1))
         pt_update <- lavaan::parameterTable(sem_out_update)
         pt_update$se <- NA
         pt_update_df <- unname(lavaan::fitMeasures(sem_out_update,
@@ -442,11 +451,19 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
       } else {
         x_free_str <- NULL
         p_to_add <- NULL
-        sem_out_update <- lavaan::update(sem_out,
-                                         pt,
-                                         do.fit = TRUE,
-                                         optim.force.converged = TRUE,
-                                         control = list(max.iter = 1))
+        sem_out_update <- auto_ram(
+          FUN = lavaan::update,
+          object = sem_out,
+          model = pt,
+          do.fit = TRUE,
+          optim.force.converged = TRUE,
+          control = list(max.iter = 1)
+        )
+        # sem_out_update <- lavaan::update(sem_out,
+        #                                  pt,
+        #                                  do.fit = TRUE,
+        #                                  optim.force.converged = TRUE,
+        #                                  control = list(max.iter = 1))
         pt_update <- lavaan::parameterTable(sem_out_update)
         pt_update$se <- NA
         pt_update_df <- unname(lavaan::fitMeasures(sem_out_update,
