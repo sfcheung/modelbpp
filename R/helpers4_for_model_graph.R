@@ -10,6 +10,7 @@ layer_by_df <- function(g,
       if (!all(model_set_out$converged)) {
           stop("Not all models converged.")
         } else {
+          # Can use "fitMeasures" because sem_out is always a fitted object
           model_dfs <- sapply(model_set_out$fit,
                               lavaan::fitMeasures,
                               fit.measures = "df")
