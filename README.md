@@ -11,7 +11,7 @@
 
 # modelbpp: Model BIC Posterior Probability <img src="man/figures/logo.png" align="right" />
 
-(Version 0.3.0.2 updated on 2026-05-30, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
+(Version 0.3.0.3 updated on 2026-06-03, [release history](https://sfcheung.github.io/modelbpp/news/index.html))
 
 This package is for assessing model uncertainty in structural
 equation modeling (SEM) by the BIC posterior

@@ -232,7 +232,7 @@ gen_pt_drop <- function(x, pt, to, source_df = NA, sem_out) {
     p_to_drop_out <- lapply(x, function(x) {
         c(lhs = pt[x, "lhs"], op = pt[x, "op"], rhs = pt[x, "rhs"])
       })
-    do_fit <- getOption("modelbpp.do_fit", TRUE)
+    do_fit <- getOption("modelbpp.do_fit", FALSE)
     suppressWarnings(sem_out_update <- auto_ram(
       FUN = lavaan::update,
       object = sem_out,
@@ -245,6 +245,11 @@ gen_pt_drop <- function(x, pt, to, source_df = NA, sem_out) {
       check.start = FALSE,
       check.post = FALSE,
       check.vcov = FALSE,
+      h1 = FALSE,
+      implied = FALSE,
+      check.sigma.pd = FALSE,
+      check.gradient = FALSE,
+      samplestats = do_fit,
       control = list(max.iter = 1))
     )
     pt_update <- lavaan::parameterTable(sem_out_update)

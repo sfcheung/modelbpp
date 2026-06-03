@@ -426,7 +426,7 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
         x_constr_out <- NULL
       }
     # Add free parameters
-    do_fit <- getOption("modelbpp.do_fit", TRUE)
+    do_fit <- getOption("modelbpp.do_fit", FALSE)
     if (length(x_free) > 0) {
         x_free_str <- par_names(pars_list = x_free)
         p_to_add <- sapply(x_free, paste0, collapse = "")
@@ -436,6 +436,15 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
           model = pt,
           add = x_free_str,
           do.fit = do_fit,
+          baseline = FALSE,
+          h1 = FALSE,
+          implied = FALSE,
+          check.vcov = FALSE,
+          check.start = FALSE,
+          check.sigma.pd = FALSE,
+          check.gradient = FALSE,
+          check.post = FALSE,
+          samplestats = do_fit,
           optim.force.converged = TRUE,
           control = list(max.iter = 1)
         )
@@ -455,6 +464,15 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
           object = sem_out,
           model = pt,
           do.fit = do_fit,
+          baseline = FALSE,
+          h1 = FALSE,
+          implied = FALSE,
+          check.vcov = FALSE,
+          check.start = FALSE,
+          check.sigma.pd = FALSE,
+          check.gradient = FALSE,
+          check.post = FALSE,
+          samplestats = do_fit,
           optim.force.converged = TRUE,
           control = list(max.iter = 1)
         )
