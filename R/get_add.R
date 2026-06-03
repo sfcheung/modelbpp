@@ -437,6 +437,14 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
           add = x_free_str,
           do.fit = do_fit,
           baseline = FALSE,
+          h1 = FALSE,
+          implied = FALSE,
+          check.vcov = FALSE,
+          check.start = FALSE,
+          check.sigma.pd = FALSE,
+          check.gradient = FALSE,
+          check.post = FALSE,
+          samplestats = do_fit,
           optim.force.converged = TRUE,
           control = list(max.iter = 1)
         )
@@ -457,6 +465,14 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
           model = pt,
           do.fit = do_fit,
           baseline = FALSE,
+          h1 = FALSE,
+          implied = FALSE,
+          check.vcov = FALSE,
+          check.start = FALSE,
+          check.sigma.pd = FALSE,
+          check.gradient = FALSE,
+          check.post = FALSE,
+          samplestats = do_fit,
           optim.force.converged = TRUE,
           control = list(max.iter = 1)
         )
