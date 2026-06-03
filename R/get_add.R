@@ -426,6 +426,7 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
         x_constr_out <- NULL
       }
     # Add free parameters
+    do_fit <- getOption("modelbpp.do_fit", TRUE)
     if (length(x_free) > 0) {
         x_free_str <- par_names(pars_list = x_free)
         p_to_add <- sapply(x_free, paste0, collapse = "")
@@ -434,20 +435,18 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
           object = sem_out,
           model = pt,
           add = x_free_str,
-          do.fit = TRUE,
+          do.fit = do_fit,
           optim.force.converged = TRUE,
           control = list(max.iter = 1)
         )
-        # sem_out_update <- lavaan::update(sem_out,
-        #                                  pt,
-        #                                  add = x_free_str,
-        #                                  do.fit = TRUE,
-        #                                  optim.force.converged = TRUE,
-        #                                  control = list(max.iter = 1))
         pt_update <- lavaan::parameterTable(sem_out_update)
         pt_update$se <- NA
-        pt_update_df <- unname(lavaan::fitMeasures(sem_out_update,
-                                                   fit.measures = "df"))
+        if (do_fit) {
+          pt_update_df <- unname(lavaan::fitMeasures(sem_out_update,
+                                                     fit.measures = "df"))
+        } else {
+          pt_update_df <- lavaan_df(sem_out_update)
+        }
       } else {
         x_free_str <- NULL
         p_to_add <- NULL
@@ -455,19 +454,18 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
           FUN = lavaan::update,
           object = sem_out,
           model = pt,
-          do.fit = TRUE,
+          do.fit = do_fit,
           optim.force.converged = TRUE,
           control = list(max.iter = 1)
         )
-        # sem_out_update <- lavaan::update(sem_out,
-        #                                  pt,
-        #                                  do.fit = TRUE,
-        #                                  optim.force.converged = TRUE,
-        #                                  control = list(max.iter = 1))
         pt_update <- lavaan::parameterTable(sem_out_update)
         pt_update$se <- NA
-        pt_update_df <- unname(lavaan::fitMeasures(sem_out_update,
-                                                   fit.measures = "df"))
+        if (do_fit) {
+          pt_update_df <- unname(lavaan::fitMeasures(sem_out_update,
+                                                     fit.measures = "df"))
+        } else {
+          pt_update_df <- lavaan_df(sem_out_update)
+        }
       }
     attr(pt_update, "parameters_added") <- p_to_add
     attr(pt_update, "parameters_added_str") <- x_free_str
@@ -477,8 +475,32 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
     attr(pt_update, "constraints_released") <- x_constr_pars
     attr(pt_update, "constraints_released_list") <- x_constr_out
     attr(pt_update, "from") <- from
+    # Can use "fitMeasures" because sem_out is always a fitted object
     attr(pt_update, "df_expected") <- unname(lavaan::fitMeasures(sem_out, "df")) -
                                       length(x)
     attr(pt_update, "df_actual") <- pt_update_df
     pt_update
   }
+
+#' @noRd
+lavaan_df <- function(
+  object
+) {
+  # Adapted from lavaan:::lav_model_test()
+  pt <- lavaan::parameterTable(object)
+  df <- lavaan::lav_partable_df(pt)
+  slotModel <- object@Model
+  if (!slotModel@cin.simple.only &&
+      (nrow(slotModel@con.jac) > 0L)) {
+    ceq_idx <- attr(slotModel@con.jac, "ceq.idx")
+    if (length(ceq_idx) > 0L) {
+      neq <- qr(slotModel@con.jac[ceq_idx, , drop = FALSE])$rank
+      df <- df + neq
+    }
+  } else if (slotModel@ceq.simple.only) {
+    ndat <- lavaan::lav_partable_ndat(pt)
+    npar <- sum(pt$free > 0)
+    df <- ndat - npar
+  }
+  df
+}
