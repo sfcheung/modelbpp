@@ -436,6 +436,7 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
           model = pt,
           add = x_free_str,
           do.fit = do_fit,
+          baseline = FALSE,
           optim.force.converged = TRUE,
           control = list(max.iter = 1)
         )
@@ -455,6 +456,7 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
           object = sem_out,
           model = pt,
           do.fit = do_fit,
+          baseline = FALSE,
           optim.force.converged = TRUE,
           control = list(max.iter = 1)
         )
