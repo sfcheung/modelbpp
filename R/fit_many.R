@@ -350,6 +350,7 @@ fit_many <- function(model_list,
                     MoreArgs = list(fit_i = fit_i),
                     SIMPLIFY = TRUE)
   if (is.null(original)) {
+      # Can use "fitMeasures" because sem_out is always a fitted object
       sem_out_df <- as.numeric(lavaan::fitMeasures(sem_out, "df"))
       # change_list <- sapply(fit_list,
       #     function(x) sem_out_df - as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
@@ -389,6 +390,7 @@ lavaan_to_sem_outs <- function(x,
       } else {
         if (original %in% names(x)) {
             i_original <- match(original, names(x))
+            # Can use "fitMeasures" because sem_out is always a fitted object
             change_list <- sapply(x,
                 function(x) as.numeric(lavaan::fitMeasures(x, fit.measures = "df")))
             df_original <- change_list[i_original]
@@ -415,6 +417,7 @@ lavaan_to_sem_outs <- function(x,
 fit_many_get_df <- function(fit,
                             model,
                             fit_i) {
+    # Can try "fitMeasures" because sem_out is always a fitted object
     out <- tryCatch(lavaan::fitMeasures(fit, fit.measures = "df"),
                     error = function(e) e)
     if (!inherits(out, "error")) {
@@ -426,6 +429,11 @@ fit_many_get_df <- function(fit,
                                                    warn = FALSE)))
     out <- tryCatch(lavaan::fitMeasures(fit1, fit.measures = "df"),
                     error = function(e) e)
+    if (!inherits(out, "error")) {
+        return(as.numeric(out))
+      }
+    # Last resort
+    out <- lavaan_df(lavaan::parameterTable(fit))
     if (!inherits(out, "error")) {
         return(as.numeric(out))
       }

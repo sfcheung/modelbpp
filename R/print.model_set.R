@@ -140,6 +140,7 @@ print.model_set <- function(x,
         if (!is.null(x$model_df)) {
             model_df_tmp <- x$model_df
           } else {
+            # Can use "fitMeasures" because sem_out is always a fitted object
             model_df_tmp <- sapply(x$fit, lavaan::fitMeasures,
                                   fit.measures = "df")
           }
