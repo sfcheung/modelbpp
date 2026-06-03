@@ -102,6 +102,7 @@ models_network2 <- function(object,
     if (!all(converged)) {
         stop("One or more models did not converge.")
       }
+    # Can use "fitMeasures" because sem_out is always a fitted object
     if (inherits(object, "model_set")) {
         if (!is.null(object$model_df)) {
             model_dfs <- object$model_df
@@ -189,6 +190,7 @@ x_net_y <- function(x,
         chk <- check_x_net_y(x, y,
                              ignore_fixed_x = FALSE)
       }
+    # Can use "fitMeasures" because sem_out is always a fitted object
     if (is.null(x_df)) {
         x_df <- lavaan::fitMeasures(x, fit.measures = "df")
       }
