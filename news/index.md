@@ -1,6 +1,6 @@
 # Changelog
 
-## modelbpp 0.3.0.1
+## modelbpp 0.3.0.2
 
 ### Miscellaneous
 
@@ -9,6 +9,13 @@
   and
   [`get_drop()`](https://sfcheung.github.io/modelbpp/reference/get_drop.md),
   the representation will switch to `RAM` if `LISREL` fails. (0.3.0.1)
+
+- If the option `modelbpp.do_fit` is set to `FALSE`, a parameter table
+  will not be fitted to get the model *df*, leading to faster search. If
+  this options is set to `TRUE` or is not set, then the parameter table
+  will be fitted as in 0.3.0.2 or older version. (0.3.0.2)
+
+- Depends on R 4.1.0 or later now. (0.3.0.2)
 
 ## modelbpp 0.3.0
 
