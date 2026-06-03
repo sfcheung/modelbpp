@@ -426,7 +426,6 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
         x_constr_out <- NULL
       }
     # Add free parameters
-    do_fit <- getOption("modelbpp.do_fit", TRUE)
     if (length(x_free) > 0) {
         x_free_str <- par_names(pars_list = x_free)
         p_to_add <- sapply(x_free, paste0, collapse = "")
