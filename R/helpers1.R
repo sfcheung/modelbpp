@@ -406,3 +406,70 @@ pt_remove_all_loadings <- function(
     return(pt[!i1, ])
   }
 }
+
+#' @noRd
+pt_add_only <- function(
+  pt,
+  add,
+  ngroups
+) {
+  # Adapted from lavaan::lav_object_extended()
+  # Use it to avoid using lavaan::update()
+  # Customized for get_add()
+
+  add_org <- lavaan::lavaanify(
+                add,
+                ngroups = ngroups
+              )
+  add_1 <- add_org[, c("lhs", "op", "rhs", "user",
+                        "label")]
+  # Add block, group, level
+  k <- nrow(add_1)
+  if (!is.null(add_org$block)) {
+    add_1$block <- add_org$block
+  } else {
+    add_1$block <- rep(1, k)
+  }
+  if (!is.null(add_org$group)) {
+    add_1$group <- add_org$group
+  } else {
+    add_1$group <- rep(1, k)
+  }
+  if (!is.null(add_org$level)) {
+    add_1$level <- add_org$level
+  } else {
+    add_1$level <- rep(1, k)
+  }
+
+  # Only keep user parameters
+  free_idx <- which(add_1$user > 0)
+  add_1 <- add_1[free_idx, , drop = FALSE]
+
+  # Complete the table
+  k <- nrow(add_1)
+  add_1$free <- rep(1, k)
+  add_1$start <- rep(0, k)
+  add_1$user <- rep(1, k)
+
+  pt_added <- lavaan::lav_partable_merge(
+    pt,
+    add_1,
+    remove.duplicated = TRUE,
+    warn = FALSE
+  )
+
+  # Fix free
+  free_idx <- which(pt_added$free > 0)
+  pt_added$free[free_idx] <- seq_along(free_idx)
+
+  # Match original pt
+  pt_cols <- match(colnames(pt),
+                   colnames(pt_added))
+  pt_added <- pt_added[, pt_cols[!is.na(pt_cols)]]
+  class(pt_added) <- c("lavaan.data.frame",
+                       class(pt))
+
+  pt_added
+}
+
+}

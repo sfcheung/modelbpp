@@ -426,36 +426,58 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
         x_constr_out <- NULL
       }
     # Add free parameters
+
     do_fit <- getOption("modelbpp.do_fit", FALSE)
+
+    use_pt_add_only <- getOption("modelbpp.use_pt_add_only", FALSE)
+    # Allow pt_add_only only if the model has no constraints
+    slotModel <- sem_out@Model
+    if ((!slotModel@cin.simple.only &&
+         (nrow(slotModel@con.jac) > 0L)) ||
+        slotModel@ceq.simple.only) {
+      use_pt_add_only <- FALSE
+    }
     if (length(x_free) > 0) {
         x_free_str <- par_names(pars_list = x_free)
         p_to_add <- sapply(x_free, paste0, collapse = "")
-        sem_out_update <- auto_ram(
-          FUN = lavaan::update,
-          object = sem_out,
-          model = pt,
-          add = x_free_str,
-          do.fit = do_fit,
-          baseline = FALSE,
-          h1 = FALSE,
-          implied = FALSE,
-          check.vcov = FALSE,
-          check.start = FALSE,
-          check.sigma.pd = FALSE,
-          check.gradient = FALSE,
-          check.post = FALSE,
-          samplestats = do_fit,
-          optim.force.converged = TRUE,
-          control = list(max.iter = 1)
-        )
-        pt_update <- lavaan::parameterTable(sem_out_update)
-        pt_update$se <- NA
-        if (do_fit) {
-          pt_update_df <- unname(lavaan::fitMeasures(sem_out_update,
-                                                     fit.measures = "df"))
+        if (use_pt_add_only) {
+          # Valid only if no constraint
+          ngroups <- lavaan::lavTech(sem_out, "ngroups")
+          pt_update <- pt_add_only(
+            pt = pt,
+            add = x_free_str,
+            ngroups = ngroups
+          )
+          pt_update_df <- lavaan::lav_partable_df(pt_update)
         } else {
-          pt_update_df <- lavaan_df(sem_out_update)
+          sem_out_update <- auto_ram(
+            FUN = lavaan::update,
+            object = sem_out,
+            model = pt,
+            add = x_free_str,
+            do.fit = do_fit,
+            baseline = FALSE,
+            h1 = FALSE,
+            implied = FALSE,
+            check.vcov = FALSE,
+            check.start = FALSE,
+            check.sigma.pd = FALSE,
+            check.gradient = FALSE,
+            check.post = FALSE,
+            samplestats = do_fit,
+            optim.force.converged = TRUE,
+            control = list(max.iter = 1)
+          )
+          pt_update <- parameterTable_simple(sem_out_update)
+          if (do_fit &&
+              !use_pt_add_only) {
+            pt_update_df <- unname(lavaan::fitMeasures(sem_out_update,
+                                                      fit.measures = "df"))
+          } else {
+            pt_update_df <- lavaan_df(sem_out_update)
+          }
         }
+        pt_update$se <- NA
       } else {
         x_free_str <- NULL
         p_to_add <- NULL
