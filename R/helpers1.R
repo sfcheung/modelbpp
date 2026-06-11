@@ -447,7 +447,7 @@ pt_add_only <- function(
 
   # Complete the table
   k <- nrow(add_1)
-  add_1$free <- rep(1, k)
+  add_1$free <- rep(1L, k)
   add_1$start <- rep(0, k)
   add_1$user <- rep(1, k)
 
