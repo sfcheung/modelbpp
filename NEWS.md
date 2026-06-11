@@ -1,4 +1,4 @@
-# modelbpp 0.3.0.3
+# modelbpp 0.3.0.4
 
 ## Miscellaneous
 
@@ -22,6 +22,19 @@
 
 - Depends on R 4.1.0 or later now.
   (0.3.0.2)
+
+- Slightly improved the speed by using
+  an internal variant of `lavaan::parameterTable()`.
+  (0.3.0.4)
+
+- Added the option to use an internal
+  function instead of `lavaan::update()`.
+  Disabled by default. Enable it by
+  setting the option `modelbpp.use_pt_add_only`
+  to `TRUE`. Only applicable for models
+  without constraints.
+  (0.3.0.4)
+
 
 # modelbpp 0.3.0
 
