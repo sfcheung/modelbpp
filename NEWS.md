@@ -1,4 +1,4 @@
-# modelbpp 0.3.0.4
+# modelbpp 0.3.0.5
 
 ## Miscellaneous
 
@@ -33,7 +33,7 @@
   setting the option `modelbpp.use_pt_add_only`
   to `TRUE`. Only applicable for models
   without constraints.
-  (0.3.0.4)
+  (0.3.0.4, 0.3.0.5)
 
 
 # modelbpp 0.3.0
