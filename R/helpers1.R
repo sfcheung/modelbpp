@@ -472,4 +472,17 @@ pt_add_only <- function(
   pt_added
 }
 
+#' @noRd
+parameterTable_simple <- function(
+  object
+) {
+  # A simplified version of lavaan::parameterTable()
+  # There is no need to check object because
+  # all models are supposed to be generated internally
+  out <- as.data.frame(
+            object@ParTable,
+            stringsAsFactors = FALSE
+          )
+  class(out) <- c("lavaan.data.frame", class(out))
+  out
 }

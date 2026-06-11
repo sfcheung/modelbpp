@@ -197,7 +197,7 @@ get_add <- function(sem_out,
     if (!inherits(sem_out, "lavaan")) {
         stop("sem_out is not a lavaan-class object.")
       }
-    pt <- lavaan::parameterTable(sem_out)
+    pt <- parameterTable_simple(sem_out)
 
     # ==== Remove all user-defined parameters ====
     pt <- pt[pt$op != ":=", ]
@@ -498,7 +498,7 @@ gen_pt_add <- function(x, pt, sem_out, from = NA) {
           optim.force.converged = TRUE,
           control = list(max.iter = 1)
         )
-        pt_update <- lavaan::parameterTable(sem_out_update)
+        pt_update <- parameterTable_simple(sem_out_update)
         pt_update$se <- NA
         if (do_fit) {
           pt_update_df <- unname(lavaan::fitMeasures(sem_out_update,
@@ -527,7 +527,7 @@ lavaan_df <- function(
   object
 ) {
   # Adapted from lavaan:::lav_model_test()
-  pt <- lavaan::parameterTable(object)
+  pt <- parameterTable_simple(object)
   df <- lavaan::lav_partable_df(pt)
   slotModel <- object@Model
   if (!slotModel@cin.simple.only &&
