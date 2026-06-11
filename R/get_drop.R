@@ -126,7 +126,7 @@ get_drop <- function(sem_out,
         stop("sem_out is not a lavaan-class object.")
       }
     loadings_to_exclude <- match.arg(loadings_to_exclude)
-    pt <- lavaan::parameterTable(sem_out)
+    pt <- parameterTable_simple(sem_out)
     # ==== Remove all user-defined parameters unless constrained ====
     pt <- pt_remove_user_defined(pt, remove_constrained = FALSE)
     # ==== Exclude all parameters already constrained to be equal ====
@@ -252,7 +252,7 @@ gen_pt_drop <- function(x, pt, to, source_df = NA, sem_out) {
       samplestats = do_fit,
       control = list(max.iter = 1))
     )
-    pt_update <- lavaan::parameterTable(sem_out_update)
+    pt_update <- parameterTable_simple(sem_out_update)
     if (do_fit) {
       pt_update_df <- unname(lavaan::fitMeasures(sem_out_update,
                                                  fit.measures = "df"))
