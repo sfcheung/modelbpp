@@ -1,6 +1,6 @@
 # Changelog
 
-## modelbpp 0.3.0.4
+## modelbpp 0.3.0.5
 
 ### Miscellaneous
 
@@ -27,7 +27,7 @@
 - Added the option to use an internal function instead of
   `lavaan::update()`. Disabled by default. Enable it by setting the
   option `modelbpp.use_pt_add_only` to `TRUE`. Only applicable for
-  models without constraints. (0.3.0.4)
+  models without constraints. (0.3.0.4, 0.3.0.5)
 
 ## modelbpp 0.3.0
 
