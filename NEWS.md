@@ -1,4 +1,4 @@
-# modelbpp 0.3.0.6
+# modelbpp 0.4.0
 
 ## Miscellaneous
 
