@@ -1,4 +1,4 @@
-# modelbpp 0.3.0.5
+# modelbpp 0.4.0
 
 ## Miscellaneous
 
@@ -35,6 +35,10 @@
   without constraints.
   (0.3.0.4, 0.3.0.5)
 
+- In `fit_many()`, removed the printing of
+  expected CPU time because the estimate
+  is not reliable.
+  (0.3.0.6)
 
 # modelbpp 0.3.0
 

@@ -299,9 +299,10 @@ fit_many <- function(model_list,
       texp <-  1.2 * p_models * ft / length(cl)
       if (verbose) {
           message(paste0(length(cl), " processes started to run model fitting."))
-          message(paste0("The expected CPU time is about ",
-                          round(texp, 2),
-                          " second(s)."))
+          # # 2026-07-17: Disable the expected time because it is unreliable.
+          # message(paste0("The expected CPU time is about ",
+          #                 round(texp, 2),
+          #                 " second(s)."))
           utils::flush.console()
         }
       pkgs <- .packages()
