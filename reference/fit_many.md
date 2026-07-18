@@ -123,7 +123,7 @@ Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 ``` r
 
 library(lavaan)
-#> This is lavaan 0.6-21
+#> This is lavaan 0.7-2
 #> lavaan is FREE software! Please report any bugs.
 dat <- dat_path_model
 mod <-

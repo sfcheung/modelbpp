@@ -1,6 +1,6 @@
 # Changelog
 
-## modelbpp 0.3.0.5
+## modelbpp 0.4.0
 
 ### Miscellaneous
 
@@ -28,6 +28,11 @@
   `lavaan::update()`. Disabled by default. Enable it by setting the
   option `modelbpp.use_pt_add_only` to `TRUE`. Only applicable for
   models without constraints. (0.3.0.4, 0.3.0.5)
+
+- In
+  [`fit_many()`](https://sfcheung.github.io/modelbpp/reference/fit_many.md),
+  removed the printing of expected CPU time because the estimate is not
+  reliable. (0.3.0.6)
 
 ## modelbpp 0.3.0
 

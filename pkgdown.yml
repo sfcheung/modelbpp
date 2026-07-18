@@ -1,9 +1,9 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   modelbpp: modelbpp.html
-last_built: 2026-06-11T14:36Z
+last_built: 2026-07-18T03:07Z
 urls:
   reference: https://sfcheung.github.io/modelbpp/reference
   article: https://sfcheung.github.io/modelbpp/articles
