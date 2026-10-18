@@ -35,7 +35,8 @@ model_set(
   progress = TRUE,
   verbose = TRUE,
   skip_check_sem_out = FALSE,
-  drop_equivalent_models = TRUE
+  drop_equivalent_models = TRUE,
+  lav_options = list(se = "none", baseline = FALSE, verbose = FALSE)
 )
 
 gen_models(
@@ -302,6 +303,15 @@ conducted when no models are fitted
 in \code{\link[lavaan:lavaan]{lavaan::lavaan()}} with
 \code{fixed.x = TRUE} (which is the
 default of \code{\link[lavaan:sem]{lavaan::sem()}}).}
+
+\item{lav_options}{A named list of
+arguments to be passed to \code{\link[lavaan:lavaan]{lavaan::lavaan()}}
+when fitting a model. There values
+override values stored in \code{sem_out}.
+By default, \code{se} set to \code{"none"} and
+\code{baseline} set to \code{FALSE} to speed up
+the computation because they are not
+needed for computing the BPPs.}
 
 \item{output}{If \code{"model_set"},
 then the output is a \code{model_set}-class

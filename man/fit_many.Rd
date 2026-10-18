@@ -12,7 +12,8 @@ fit_many(
   ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
   make_cluster_args = list(),
   progress = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  lav_options = list(se = "none", baseline = FALSE, verbose = FALSE)
 )
 }
 \arguments{
@@ -68,6 +69,15 @@ is \code{TRUE}.}
 messages will be displayed, such
 as the expected processing time.
 Default is \code{TRUE}.}
+
+\item{lav_options}{A named list of
+arguments to be passed to \code{\link[lavaan:lavaan]{lavaan::lavaan()}}
+when fitting a model. There values
+override values stored in \code{sem_out}.
+By default, \code{se} set to \code{"none"} and
+\code{baseline} set to \code{FALSE} to speed up
+the computation because they are not
+needed for computing the BPPs.}
 }
 \value{
 An object of the class

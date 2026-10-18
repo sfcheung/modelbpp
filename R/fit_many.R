@@ -69,6 +69,15 @@
 #' as the expected processing time.
 #' Default is `TRUE`.
 #'
+#' @param lav_options A named list of
+#' arguments to be passed to [lavaan::lavaan()]
+#' when fitting a model. There values
+#' override values stored in `sem_out`.
+#' By default, `se` set to `"none"` and
+#' `baseline` set to `FALSE` to speed up
+#' the computation because they are not
+#' needed for computing the BPPs.
+#'
 #' @return An object of the class
 #' `sem_outs`, a list with the
 #' following major elements:
@@ -126,7 +135,8 @@ fit_many <- function(model_list,
                      ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
                      make_cluster_args = list(),
                      progress = TRUE,
-                     verbose = TRUE) {
+                     verbose = TRUE,
+                     lav_options = list(se = "none", baseline = FALSE, verbose = FALSE)) {
   if (missing(model_list)) stop("model_list is not supplied.")
   if (missing(sem_out)) stop("sem_out is not supplied.")
   if (!inherits(sem_out, "lavaan")) {
@@ -138,9 +148,14 @@ fit_many <- function(model_list,
   slot_opt <- sem_out@Options
   # slot_smp <- sem_out@SampleStats
   # slot_dat <- sem_out@Data
-  slot_opt$se <- "none"
-  slot_opt$baseline <- FALSE
-  slot_opt$verbose <- FALSE
+  slot_opt <- utils::modifyList(
+    slot_opt,
+    lav_options,
+    keep.null = TRUE
+  )
+  # slot_opt$se <- "none"
+  # slot_opt$baseline <- FALSE
+  # slot_opt$verbose <- FALSE
   has_groups <- lavaan::lavTech(sem_out, "ngroups") > 1
   if (has_groups) {
       group_var <- lavaan::lavTech(sem_out, "group")

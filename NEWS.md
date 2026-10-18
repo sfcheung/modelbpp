@@ -1,3 +1,13 @@
+# modelbpp 0.4.0.1
+
+## Miscellaneous
+
+- Added `lav_options` to `fit_many()`
+  and `model_set()`,
+  for overriding `lavaan` options if
+  so desired.
+  (0.4.0.1)
+
 # modelbpp 0.4.0
 
 ## Miscellaneous
