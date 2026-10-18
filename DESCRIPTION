@@ -47,4 +47,4 @@ VignetteBuilder: knitr
 URL: https://sfcheung.github.io/modelbpp/
 BugReports: https://github.com/sfcheung/modelbpp/issues
 LazyData: true
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.1
