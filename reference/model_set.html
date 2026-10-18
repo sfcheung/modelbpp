@@ -11,7 +11,7 @@ BIC posterior probabilities."><meta property="og:image" content="https://sfcheun
 
     <a class="navbar-brand me-2" href="../index.html">modelbpp</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@ BIC posterior probabilities."><meta property="og:image" content="https://sfcheun
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>BIC Posterior Probabilities of Neighboring Models</h1>
-      <small class="dont-index">Source: <a href="https://github.com/sfcheung/modelbpp/blob/v0.4.0/R/model_set.R" class="external-link"><code>R/model_set.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sfcheung/modelbpp/blob/main/R/model_set.R" class="external-link"><code>R/model_set.R</code></a></small>
       <div class="d-none name"><code>model_set.Rd</code></div>
     </div>
 
@@ -79,7 +79,8 @@ BIC posterior probabilities.</p>
 <span>  progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  skip_check_sem_out <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  drop_equivalent_models <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  drop_equivalent_models <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  lav_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>se <span class="op">=</span> <span class="st">"none"</span>, baseline <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">gen_models</span><span class="op">(</span></span>
@@ -407,6 +408,17 @@ conducted when no models are fitted
 in <code><a href="https://rdrr.io/pkg/lavaan/man/lavaan.html" class="external-link">lavaan::lavaan()</a></code> with
 <code>fixed.x = TRUE</code> (which is the
 default of <code><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">lavaan::sem()</a></code>).</p></dd>
+
+
+<dt id="arg-lav-options">lav_options<a class="anchor" aria-label="anchor" href="#arg-lav-options"></a></dt>
+<dd><p>A named list of
+arguments to be passed to <code><a href="https://rdrr.io/pkg/lavaan/man/lavaan.html" class="external-link">lavaan::lavaan()</a></code>
+when fitting a model. There values
+override values stored in <code>sem_out</code>.
+By default, <code>se</code> set to <code>"none"</code> and
+<code>baseline</code> set to <code>FALSE</code> to speed up
+the computation because they are not
+needed for computing the BPPs.</p></dd>
 
 
 <dt id="arg-output">output<a class="anchor" aria-label="anchor" href="#arg-output"></a></dt>

@@ -13,7 +13,8 @@ fit_many(
   ncores = max(parallel::detectCores(logical = FALSE) - 1, 1),
   make_cluster_args = list(),
   progress = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  lav_options = list(se = "none", baseline = FALSE, verbose = FALSE)
 )
 ```
 
@@ -75,6 +76,14 @@ fit_many(
   Whether additional messages will be displayed, such as the expected
   processing time. Default is `TRUE`.
 
+- lav_options:
+
+  A named list of arguments to be passed to
+  [`lavaan::lavaan()`](https://rdrr.io/pkg/lavaan/man/lavaan.html) when
+  fitting a model. There values override values stored in `sem_out`. By
+  default, `se` set to `"none"` and `baseline` set to `FALSE` to speed
+  up the computation because they are not needed for computing the BPPs.
+
 ## Value
 
 An object of the class `sem_outs`, a list with the following major
@@ -123,7 +132,7 @@ Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 ``` r
 
 library(lavaan)
-#> This is lavaan 0.7-2
+#> This is lavaan 0.7-3
 #> lavaan is FREE software! Please report any bugs.
 dat <- dat_path_model
 mod <-

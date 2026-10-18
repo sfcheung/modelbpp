@@ -35,7 +35,8 @@ model_set(
   progress = TRUE,
   verbose = TRUE,
   skip_check_sem_out = FALSE,
-  drop_equivalent_models = TRUE
+  drop_equivalent_models = TRUE,
+  lav_options = list(se = "none", baseline = FALSE, verbose = FALSE)
 )
 
 gen_models(
@@ -263,6 +264,14 @@ gen_models(
   [`lavaan::lavaan()`](https://rdrr.io/pkg/lavaan/man/lavaan.html) with
   `fixed.x = TRUE` (which is the default of
   [`lavaan::sem()`](https://rdrr.io/pkg/lavaan/man/sem.html)).
+
+- lav_options:
+
+  A named list of arguments to be passed to
+  [`lavaan::lavaan()`](https://rdrr.io/pkg/lavaan/man/lavaan.html) when
+  fitting a model. There values override values stored in `sem_out`. By
+  default, `se` set to `"none"` and `baseline` set to `FALSE` to speed
+  up the computation because they are not needed for computing the BPPs.
 
 - output:
 
