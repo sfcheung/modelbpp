@@ -38,6 +38,7 @@
 #' also be visualized using
 #' [model_graph()].
 #'
+#' @inheritParams fit_many
 #' @inheritParams get_add
 #' @inheritParams get_drop
 #'
@@ -350,7 +351,8 @@ model_set <- function(sem_out,
                       progress = TRUE,
                       verbose = TRUE,
                       skip_check_sem_out = FALSE,
-                      drop_equivalent_models = TRUE) {
+                      drop_equivalent_models = TRUE,
+                      lav_options = list(se = "none", baseline = FALSE, verbose = FALSE)) {
   # if (missing(sem_out)) stop("sem_out is not supplied.")
   user_fits <- FALSE
   if (!missing(sem_out)) {
@@ -441,7 +443,8 @@ model_set <- function(sem_out,
                       ncores = ncores,
                       make_cluster_args = make_cluster_args,
                       progress = progress,
-                      verbose = verbose)
+                      verbose = verbose,
+                      lav_options = lav_options)
     } else if (user_fits) {
       out <- lavaan_to_sem_outs(sem_out,
                                 original = original)
