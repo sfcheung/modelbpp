@@ -1,6 +1,6 @@
 # Changelog
 
-## modelbpp 0.4.0.1
+## modelbpp 0.4.0.2
 
 ### Miscellaneous
 
@@ -9,6 +9,10 @@
   and
   [`model_set()`](https://sfcheung.github.io/modelbpp/reference/model_set.md),
   for overriding `lavaan` options if so desired. (0.4.0.1)
+
+- Updated
+  [`fit_many()`](https://sfcheung.github.io/modelbpp/reference/fit_many.md)
+  to use `RAM` if `LISREL` fails. (0.4.0.2)
 
 ## modelbpp 0.4.0
 
