@@ -241,10 +241,22 @@ fit_many <- function(model_list,
                                              opt_args)
               # We need the raw data because the order
               # of variables may change
-              lavaan::lavaan(model = x,
-                             slotOptions = slot_opt1,
-                             group = group_var,
-                             data = raw_data)
+              out <- try(lavaan::lavaan(
+                              model = x,
+                              slotOptions = slot_opt1,
+                              group = group_var,
+                              data = raw_data
+                          ),
+                        silent = TRUE)
+              if (inherits(out, "try-error")) {
+                out <- auto_ram(
+                              model = x,
+                              slotOptions = slot_opt1,
+                              group = group_var,
+                              data = raw_data
+                           )
+              }
+              out
             }
         } else {
           fit_i <- function(x,
@@ -253,9 +265,20 @@ fit_many <- function(model_list,
                                              opt_args)
               # We need the raw data because the order
               # of variables may change
-              lavaan::lavaan(model = x,
+              out <- try(lavaan::lavaan(
+                            model = x,
                             slotOptions = slot_opt1,
-                            data = raw_data)
+                            data = raw_data
+                          ),
+                        silent = TRUE)
+              if (inherits(out, "try-error")) {
+                out <- auto_ram(
+                            model = x,
+                            slotOptions = slot_opt1,
+                            data = raw_data
+                          )
+              }
+              out
             }
         }
     } else {
@@ -263,14 +286,30 @@ fit_many <- function(model_list,
                         opt_args = list()) {
           slot_opt1 <- utils::modifyList(slot_opt,
                                          opt_args)
-          lavaan::lavaan(model = x,
+          out <- try(lavaan::lavaan(
+                         model = x,
                          slotOptions = slot_opt1,
                          sample.cov = sem_out_cov,
                          sample.mean = sem_out_mean,
                          sample.nobs = sem_out_nobs,
                          semple.th = sem_thresholds,
                          WLS.V = sem_out_WLS.V,
-                         NACOV = sem_out_NACOV)
+                         NACOV = sem_out_NACOV
+                      ),
+                    silent = TRUE)
+          if (inherits(out, "try-error")) {
+            out <- auto_ram(
+                         model = x,
+                         slotOptions = slot_opt1,
+                         sample.cov = sem_out_cov,
+                         sample.mean = sem_out_mean,
+                         sample.nobs = sem_out_nobs,
+                         semple.th = sem_thresholds,
+                         WLS.V = sem_out_WLS.V,
+                         NACOV = sem_out_NACOV
+                      )
+          }
+          out
         }
     }
 

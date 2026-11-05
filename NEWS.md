@@ -1,4 +1,4 @@
-# modelbpp 0.4.0.1
+# modelbpp 0.4.0.2
 
 ## Miscellaneous
 
@@ -7,6 +7,10 @@
   for overriding `lavaan` options if
   so desired.
   (0.4.0.1)
+
+- Updated `fit_many()` to use `RAM`
+ if `LISREL` fails.
+ (0.4.0.2)
 
 # modelbpp 0.4.0
 
